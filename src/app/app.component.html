@@ -1,14 +1,16 @@
 <mat-card class="mat-elevation-z2">
 
     <!-- Select -->
-    <mat-form-field>
+    <mat-form-field class="full-width">
         <mat-select placeholder="Dataset" (change)="changeTab($event.value)">
-            <mat-option value="new">Add set...</mat-option>
+            <!-- <mat-option value="new">Add set...</mat-option> -->
             <mat-option *ngFor="let title of tabTitles; let i = index" [value]="i">
                 {{ title }}
             </mat-option>
         </mat-select>
     </mat-form-field>
+
+    <p *ngIf="data" class="description">{{data.description}}</p>
 
     <div *ngIf="data">
     
@@ -25,7 +27,14 @@
                 </mat-expansion-panel-header>
             
                 <mat-form-field class="full-width">
-                    <textarea rows="15" cols="105" matInput placeholder="Triple data" [(ngModel)]="data.triples"></textarea>
+                    <textarea 
+                        rows="15" 
+                        cols="105" 
+                        matInput 
+                        placeholder="Triple data"
+                        onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"
+                        [(ngModel)]="data.triples">
+                    </textarea>
                 </mat-form-field>
 
             </mat-expansion-panel>
@@ -44,7 +53,14 @@
                 </mat-expansion-panel-header>
             
                 <mat-form-field class="full-width">
-                    <textarea rows="15" cols="105" matInput placeholder="Triple data" [(ngModel)]="data.query"></textarea>
+                    <textarea 
+                        rows="15" 
+                        cols="105" 
+                        matInput 
+                        placeholder="Triple data"
+                        onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"
+                        [(ngModel)]="data.query">
+                    </textarea>
                 </mat-form-field>
 
                 <button mat-button (click)="doQuery(data.query, data.triples)">Query</button>
@@ -54,7 +70,7 @@
 
         <!-- Query result -->
         <mat-accordion>
-            <mat-expansion-panel>
+            <mat-expansion-panel [expanded]="resultFieldExpanded">
                 <mat-expansion-panel-header>
                 <mat-panel-title>
                     Query

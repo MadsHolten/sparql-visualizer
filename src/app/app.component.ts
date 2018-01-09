@@ -12,8 +12,9 @@ import { DataService } from './data.service';
 export class AppComponent implements OnInit {
 
   private queryResult;
+  private resultFieldExpanded: boolean = false;
   private tabIndex: number = 0;
-  private tabTitles: string;
+  public tabTitles: string;
   public data;
 
   constructor(
@@ -30,6 +31,7 @@ export class AppComponent implements OnInit {
     this._qs.doQuery(query,data)
       .then(res => {
         this.queryResult = res;
+        this.resultFieldExpanded = true;
       }, err => console.log(err));
   }
 
