@@ -1,0 +1,46 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900);
+html, html * {
+    font-family: Roboto;
+}
+/* Nodes */
+:host ::ng-deep .node {
+    stroke: #fff;
+    fill:#ddd;
+    stroke-width: 1.5px;
+}
+:host ::ng-deep .class {
+    stroke: #fff;
+    fill:rgb(158, 0, 0);
+    stroke-width: 1.5px;
+}
+:host ::ng-deep .instance {
+    stroke: #fff;
+    fill:rgb(5, 167, 196);
+    stroke-width: 1.5px;
+}
+
+:host ::ng-deep .link {
+    fill: none;
+    stroke: #999;
+    stroke-opacity: .6;
+    stroke-width: 1px;
+}
+
+:host ::ng-deep marker {
+    stroke: #999;
+    fill:rgba(124,240,10,0);
+}
+
+:host ::ng-deep .node-text {
+    font: 11px Roboto;
+    fill:black;
+}
+
+:host ::ng-deep .link-text {
+    font: 9px Roboto;
+    fill:grey;
+}
+
+:host ::ng-deep svg{
+    border:1px solid black;
+}

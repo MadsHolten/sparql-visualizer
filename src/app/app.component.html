@@ -1,20 +1,75 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{title}}!
-  </h1>
-  <img width="300" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<mat-card class="mat-elevation-z2">
 
+    <!-- Select -->
+    <mat-form-field>
+        <mat-select placeholder="Dataset" (change)="changeTab($event.value)">
+            <mat-option value="new">Add set...</mat-option>
+            <mat-option *ngFor="let tab of tabs; let i = index" [value]="i">
+                {{ tab.title }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div *ngIf="data">
+    
+        <!-- Data -->
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Triples
+                </mat-panel-title>
+                <mat-panel-description>
+                    Turtle data to be queried
+                </mat-panel-description>
+                </mat-expansion-panel-header>
+            
+                <mat-form-field class="full-width">
+                    <textarea rows="15" cols="105" matInput placeholder="Triple data" [(ngModel)]="data.triples"></textarea>
+                </mat-form-field>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+
+        <!-- Query -->
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Query
+                </mat-panel-title>
+                <mat-panel-description>
+                    Query the data
+                </mat-panel-description>
+                </mat-expansion-panel-header>
+            
+                <mat-form-field class="full-width">
+                    <textarea rows="15" cols="105" matInput placeholder="Triple data" [(ngModel)]="data.query"></textarea>
+                </mat-form-field>
+
+                <button mat-button (click)="doQuery(data.query, data.triples)">Query</button>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+
+        <!-- Query result -->
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Query
+                </mat-panel-title>
+                <mat-panel-description>
+                    Query result
+                </mat-panel-description>
+                </mat-expansion-panel-header>
+            
+                <!-- Data visualization -->
+                <app-sparql-force *ngIf="queryResult" [data]="queryResult" [height]="600" [width]="800"></app-sparql-force>
+                <span *ngIf="!queryResult">No result to show</span>
+            </mat-expansion-panel>
+        </mat-accordion>
+    
+    </div>
+
+</mat-card>
