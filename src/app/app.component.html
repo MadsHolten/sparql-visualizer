@@ -4,8 +4,8 @@
     <mat-form-field>
         <mat-select placeholder="Dataset" (change)="changeTab($event.value)">
             <mat-option value="new">Add set...</mat-option>
-            <mat-option *ngFor="let tab of tabs; let i = index" [value]="i">
-                {{ tab.title }}
+            <mat-option *ngFor="let title of tabTitles; let i = index" [value]="i">
+                {{ title }}
             </mat-option>
         </mat-select>
     </mat-form-field>

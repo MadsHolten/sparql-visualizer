@@ -8,7 +8,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build-git": "ng build --prod --base-href https://madsholten.github.io/room-requirements/"
   },
   "private": true,
   "dependencies": {

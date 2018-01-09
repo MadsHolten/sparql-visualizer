@@ -1,75 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { QueryService } from './query.service';
+import { DataService } from './data.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [QueryService]
+  providers: [ QueryService, DataService ]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   private queryResult;
   private tabIndex: number = 0;
-  private data;
+  private tabTitles: string;
+  public data;
 
   constructor(
-    private qs: QueryService
+    private _qs: QueryService,
+    private _ds: DataService
   ) {}
 
-  private tabs = [
-    {
-      title: "Space requirement 1",
-      triples: `
-        @prefix bot:  <https://w3id.org/bot#> .
-        @prefix inst: <https://example.org/projectXX/> .
-        @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-        @prefix prop: <https://w3id.org/prop#> .
-        @prefix opm:  <https://w3id.org/opm#> .
-        @prefix prov: <http://www.w3.org/ns/prov#> .
-        @prefix cdt:  <http://w3id.org/lindt/custom_datatypes#> .
-        
-        inst:SpaceA a bot:Space , inst:TypeA ;
-            prop:area inst:PropA .
-        inst:SpaceB a bot:Space , inst:TypeA ;
-            prop:area inst:PropA .
-
-        inst:PropA a opm:Property ;
-            opm:hasState inst:PropStateA .
-        
-        inst:PropStateA a opm:Required ;
-            opm:minimumValue "12 m2" ;
-            prov:generatedAtTime "2012-04-03T13:35:23Z" .
-        `,
-      query: `
-        PREFIX inst:  <https://example.org/projectXX/>
-        CONSTRUCT
-        WHERE {
-          ?sp a inst:TypeA .
-        }
-      `
-    },
-    {
-      title: "Space requirement 2",
-      triples: `
-        @prefix bot:  <https://w3id.org/bot#> .
-        @prefix inst: <https://example.org/projectXX/> .
-        @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-        
-        inst:spA a bot:Space .`,
-      query: `  
-        PREFIX bot:  <https://w3id.org/bot#>
-        CONSTRUCT
-        WHERE {
-          ?sp a bot:Space .
-        }
-      `
-    }
-  ]
+  ngOnInit(){
+    this.tabTitles = this._ds.getTitles();
+    console.log(this._ds.getData());
+  }
 
   doQuery(query,data){
-    this.qs.doQuery(query,data)
+    this._qs.doQuery(query,data)
       .then(res => {
         this.queryResult = res;
       }, err => console.log(err));
@@ -79,7 +37,7 @@ export class AppComponent {
     if(i == 'new'){
       console.log('Add new dataset');
     }else{
-      this.data = this.tabs[i];
+      this.data = this._ds.getSingle(i);
       this.doQuery(this.data.query,this.data.triples);
     }
   }
