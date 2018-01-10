@@ -16,11 +16,11 @@ export class DataService {
     public data: Data[] = [
         {
           title: "Latest value of a certain property valid for all spaces of a certain type",
-          description: `
-OPM is used to model property states.
-The states are classified as opm:Requirements meaning that they hold a required value of the property.
-The latest state is classified as an opm:CurrentState. The query only returns properties valid for spaces of type inst:TypeA.
-`,
+          description: "\
+[OPM](https://github.com/w3c-lbd-cg/opm) is used to model property states.\n\n\
+The states are classified as `opm:Requirements` meaning that they hold a required value of the property.\n\n\
+The latest state is classified as an `opm:CurrentState`. The query only returns properties valid for spaces of type `inst:TypeA`.\
+",
           triples: `
 @prefix bot:  <https://w3id.org/bot#> .
 @prefix inst: <https://example.org/projectXX/> .

@@ -13,6 +13,9 @@ import { MatButtonModule,
          MatExpansionModule,
          MatIconModule } from '@angular/material';
 
+// Pipes
+import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
+
 // FxFlex
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -38,6 +41,7 @@ import { SparqlForceComponent } from './sparql-force/sparql-force.component';
     MatCardModule,
     MatExpansionModule,
     MatIconModule,
+    MarkdownToHtmlModule,
     FlexLayoutModule
   ],
   providers: [],

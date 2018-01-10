@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
 
   private queryResult;
   private resultFieldExpanded: boolean = false;
-  private tabIndex: number = 0;
+  public tabIndex: number = 0;
   public tabTitles: string;
   public data;
 

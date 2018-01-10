@@ -10,7 +10,9 @@
         </mat-select>
     </mat-form-field>
 
-    <p *ngIf="data" class="description">{{data.description}}</p>
+    <div *ngIf="data" class="description" [innerHTML]="data.description | MarkdownToHtml"></div>
+
+    <!-- <p *ngIf="data" class="description">{{data.description}}</p> -->
 
     <div *ngIf="data">
     
