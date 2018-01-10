@@ -2,7 +2,7 @@
 
     <!-- Select -->
     <mat-form-field class="full-width">
-        <mat-select placeholder="Dataset" (change)="changeTab($event.value)">
+        <mat-select placeholder="Dataset" (change)="changeTab($event.value)" [value]="tabIndex">
             <!-- <mat-option value="new">Add set...</mat-option> -->
             <mat-option *ngFor="let title of tabTitles; let i = index" [value]="i">
                 {{ title }}
@@ -99,7 +99,7 @@
                 </mat-expansion-panel-header>
             
                 <!-- Data visualization -->
-                <app-sparql-force *ngIf="queryResult" [data]="queryResult" [height]="600" [width]="800"></app-sparql-force>
+                <app-sparql-force class="full-width" *ngIf="queryResult" [data]="queryResult" [height]="600"></app-sparql-force>
                 <span *ngIf="!queryResult">No result to show</span>
             </mat-expansion-panel>
         </mat-accordion>

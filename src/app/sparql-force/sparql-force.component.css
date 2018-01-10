@@ -42,5 +42,6 @@ html, html * {
 }
 
 :host ::ng-deep svg{
-    border:1px solid black;
+    position: relative;
+    border: 1px solid black;
 }

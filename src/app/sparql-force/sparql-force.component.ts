@@ -43,17 +43,16 @@ export class SparqlForceComponent implements OnInit {
   private graph: Graph;
   private svg;
   private force;
+  private width: number;
 
   @ViewChild('chart') private chartContainer: ElementRef;
   @Input() private data: Array<any>;
   @Input() private height: number;
-  @Input() private width: number;
+  // @Input() private width: number;
   
   constructor() { }
 
   ngOnInit() {
-    if(!this.width) this.width = 800;
-    if(!this.height) this.height = 600;
     if(this.data){
       this.createChart();
     }
@@ -69,6 +68,9 @@ export class SparqlForceComponent implements OnInit {
 
   createChart() {
     const element = this.chartContainer.nativeElement;
+    var margins = 20;
+    this.width = element.clientWidth-margins;
+    if(!this.height) this.height = 600;
 
     this.svg = d3.select(element).append('svg')
                   .attr('width', this.width)

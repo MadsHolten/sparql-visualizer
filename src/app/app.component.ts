@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(){
     this.tabTitles = this._ds.getTitles();
-    console.log(this._ds.getData());
+    this.changeTab(0);
   }
 
   doQuery(query,data){
