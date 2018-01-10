@@ -35,11 +35,23 @@ export class AppComponent implements OnInit {
       }, err => console.log(err));
   }
 
+  resetTriples(){
+    let triples = this._ds.getSingle(this.tabIndex).triples;
+    this.data.triples = triples;
+  }
+
+  resetQuery(){
+    let query = this._ds.getSingle(this.tabIndex).query;
+    this.data.query = query;
+  }
+
   changeTab(i){
     if(i == 'new'){
       console.log('Add new dataset');
     }else{
-      this.data = this._ds.getSingle(i);
+      this.tabIndex = i;
+      let data = this._ds.getSingle(i);
+      this.data = Object.assign({}, data);
       this.doQuery(this.data.query,this.data.triples);
     }
   }

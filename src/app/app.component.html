@@ -37,6 +37,12 @@
                     </textarea>
                 </mat-form-field>
 
+                <button 
+                    mat-raised-button 
+                    (click)="resetTriples()">
+                    Reset <mat-icon>cached</mat-icon>
+                </button>
+
             </mat-expansion-panel>
         </mat-accordion>
 
@@ -63,7 +69,19 @@
                     </textarea>
                 </mat-form-field>
 
-                <button mat-button (click)="doQuery(data.query, data.triples)">Query</button>
+                <button 
+                    mat-raised-button 
+                    color="primary" 
+                    (click)="doQuery(data.query, data.triples)">
+                    Query <mat-icon>play_circle_outline</mat-icon>
+                </button>
+
+                <button 
+                    mat-raised-button 
+                    (click)="resetQuery()">
+                    Reset <mat-icon>cached</mat-icon>
+                </button>
+
 
             </mat-expansion-panel>
         </mat-accordion>

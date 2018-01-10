@@ -10,7 +10,8 @@ import { MatButtonModule,
          MatSelectModule,
          MatTabsModule,
          MatCardModule,
-         MatExpansionModule } from '@angular/material';
+         MatExpansionModule,
+         MatIconModule } from '@angular/material';
 
 // FxFlex
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -36,6 +37,7 @@ import { SparqlForceComponent } from './sparql-force/sparql-force.component';
     MatTabsModule,
     MatCardModule,
     MatExpansionModule,
+    MatIconModule,
     FlexLayoutModule
   ],
   providers: [],
