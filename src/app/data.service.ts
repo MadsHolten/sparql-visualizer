@@ -150,7 +150,51 @@ WHERE {
         },
         {
             title: "3: OPM realised",
-            description: "As the architect designs `inst:SpaceA`, an actual geometrically defined area exists. In the following it is illustrated how this can be attached to the graph. The query is to check if the requirement is fulfilled.",
+            description: "\
+As the architect designs `inst:SpaceA`, an actual geometrically defined area exists. In the following it is illustrated how this can be attached to the graph. The query is to check if the requirement is fulfilled.\n\
+```sparql\n\
+SELECT DISTINCT ?space ?minReqViolated ?maxReqViolated ?exactMatchViolated\n\
+WHERE {\n\
+\t?s a bot:Space .\n\
+\t# GET LATEST STATE OF ACTUAL AREA\n\
+\t{ SELECT ?area ?areaState WHERE {\n\
+\t\t?s prop:area ?area .\n\
+\t\t?area opm:hasState ?areaState .\n\
+\t\t?areaState a opm:CurrentState .\n\
+\t\tMINUS { ?area a opm:Requirement }\n\
+\t} }\n\
+\t# GET GET LATEST STATE OF REQUIRED AREA\n\
+\t{ SELECT ?areaReq ?reqState WHERE {\n\
+\t\t?s prop:area ?areaReq .\n\
+\t\t?areaReq opm:hasState ?reqState .\n\
+\t\t?reqState a opm:CurrentState .\n\
+\t\t?areaReq a opm:Requirement .\n\
+\t} }\n\
+\t# MATCH\n\
+\t?space prop:area ?area , ?areaReq .\n\
+\t# GET VALUES\n\
+\tOPTIONAL{\n\
+\t\t?areaState opm:value ?areaV\n\
+\t\tBIND(strbefore(str(?areaV), ' ') AS ?areaVal)\n\
+\t}\n\
+\tOPTIONAL{\n\
+\t\t?reqState opm:minimumValue ?minReq\n\
+\t\tBIND(strbefore(str(?minReq), ' ') AS ?minReqVal)\n\
+\t}\n\
+\tOPTIONAL{\n\
+\t\t?reqState opm:maximumValue ?maxReq\n\
+\t\tBIND(strbefore(str(?maxReq), ' ') AS ?maxReqVal)\n\
+\t}\n\
+\tOPTIONAL{\n\
+\t\t?reqState opm:value ?reqV\n\
+\t\tBIND(strbefore(str(?reqV), ' ') AS ?reqVal)\n\
+\t}\n\
+\t# DO THE MATH\n\
+\tBIND(?areaVal < ?minReqVal AS ?minReqViolated)\n\
+\tBIND(?areaVal > ?maxReqVal AS ?maxReqViolated)\n\
+\tBIND(?areaVal != ?reqVal AS ?exactMatchViolated)\n\
+}\
+```",
             triples: `
 @prefix bot:  <https://w3id.org/bot#> .
 @prefix inst: <https://example.org/projectXX/> .
@@ -203,9 +247,9 @@ PREFIX opm:  <https://w3id.org/opm#>
 
 CONSTRUCT
 WHERE {
-\t?s a inst:TypeA .
-\t?s ?property ?propURI .
-\t?propURI opm:hasState ?stateURI .
+\tinst:SpaceA ?property ?propURI .
+\t?propURI a ?propClass ;
+\t\topm:hasState ?stateURI .
 \t?stateURI a opm:CurrentState ;
 \t\t?key ?val .
 }`
