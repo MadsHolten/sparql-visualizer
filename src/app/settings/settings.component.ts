@@ -5,6 +5,7 @@ import { ProjectSettingsService } from '../services/project-settings.service';
 
 export interface ProjectSettings {
   endpoint: string;
+  database: string;
   username?: string;
   password?: string;
 }
@@ -18,7 +19,7 @@ export interface ProjectSettings {
 export class SettingsComponent implements OnInit {
 
   panelOpenState: boolean = false;
-  projectSettings: ProjectSettings = {endpoint: ''};
+  projectSettings: ProjectSettings = {endpoint: '', database: ''};
 
   constructor(
     private pss: ProjectSettingsService

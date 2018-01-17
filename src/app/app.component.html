@@ -28,11 +28,13 @@
                 <app-settings></app-settings>
                 <div class="button-row">
                     <button 
-                        mat-raised-button color="warn">
+                        mat-raised-button color="warn"
+                        (click)="wipeDB()">
                         Wipe database <mat-icon>delete_forever</mat-icon>
                     </button>
                     <button 
-                        mat-raised-button>
+                        mat-raised-button
+                        (click)="loadDataset()">
                         Load dataset <mat-icon>cloud_upload</mat-icon>
                     </button>
                 </div>

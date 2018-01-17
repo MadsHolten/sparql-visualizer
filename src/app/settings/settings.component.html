@@ -24,6 +24,14 @@
 
     <mat-form-field class="full-width">
         <input matInput 
+        type="text"
+        placeholder="Project database" 
+        [(ngModel)]="projectSettings.database" 
+        (input)="onDataChange()">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+        <input matInput 
         type="text" 
         placeholder="Username" 
         [(ngModel)]="projectSettings.username" 

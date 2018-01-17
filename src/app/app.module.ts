@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 // Local storage
 import { WebStorageModule } from 'ngx-store';
@@ -16,16 +15,14 @@ import { MatButtonModule,
          MatCardModule,
          MatExpansionModule,
          MatIconModule,
-         MatTooltipModule } from '@angular/material';
+         MatTooltipModule,
+         MatSnackBarModule } from '@angular/material';
 
 // Pipes
 import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
 
 // FxFlex
 import { FlexLayoutModule } from '@angular/flex-layout';
-
-// Interceptor
-import { AuthInterceptor } from './services/auth.interceptor';
 
 // App
 import { AppComponent } from './app.component';
@@ -43,7 +40,6 @@ import { SettingsComponent } from './settings/settings.component';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule,
     WebStorageModule,
     BrowserAnimationsModule,
     MatButtonModule,
@@ -54,16 +50,11 @@ import { SettingsComponent } from './settings/settings.component';
     MatExpansionModule,
     MatIconModule,
     MatTooltipModule,
+    MatSnackBarModule,
     MarkdownToHtmlModule,
     FlexLayoutModule
   ],
-  providers: [
-    {
-      provide : HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi   : true,
-    }
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
