@@ -35,7 +35,9 @@ export class AppComponent implements OnInit {
     this.changeTab(0);
   }
 
-  doQuery(query,data){
+  doQuery(){
+    const query = this.data.query
+    const data = this.data.triples
     // If in localstore mode
     if(this.localStore){
       this._qs.doQuery(query,data)
@@ -105,7 +107,7 @@ export class AppComponent implements OnInit {
       this.tabIndex = i;
       let data = this._ds.getSingle(i);
       this.data = Object.assign({}, data);
-      this.doQuery(this.data.query,this.data.triples);
+      this.doQuery();
     }
   }
 
@@ -132,6 +134,7 @@ export class AppComponent implements OnInit {
       .subscribe(res => {
         if(res.status == '200'){
           this.showSnackbar("Successfully loaded dataset");
+          this.doQuery();
         }else{
           this.showSnackbar(res.status+': '+res.statusText);
           console.log(res);
