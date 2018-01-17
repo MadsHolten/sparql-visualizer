@@ -56,7 +56,7 @@
         <div *ngIf="data">
         
             <!-- Data -->
-            <mat-accordion>
+            <mat-accordion *ngIf="localStore">
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
                     <mat-panel-title>

@@ -36,11 +36,51 @@ export class AppComponent implements OnInit {
   }
 
   doQuery(query,data){
-    this._qs.doQuery(query,data)
-      .then(res => {
-        this.queryResult = res;
-        this.resultFieldExpanded = true;
-      }, err => console.log(err));
+    // If in localstore mode
+    if(this.localStore){
+      this._qs.doQuery(query,data)
+        .then(res => {
+          this.queryResult = res;
+          this.resultFieldExpanded = true;
+        }, err => console.log(err));
+    }
+    // If in triplestore mode
+    else{
+      this._ss.query(query)
+        .subscribe(res => {
+          // show error if status 200 was not recieved
+          if(res.status != '200'){
+            this.showSnackbar(res.status+': '+res.statusText);
+            console.log(res);
+          }else{
+
+            // Get body content
+            var data = res.body;
+            console.log(data);
+
+            if(data == null){
+              // If it's an update query, it will not return a result. Just show snackbar
+              this.showSnackbar("Query successful");
+            }else{
+              // To parse the result to the correct format, we run a query on it
+              var query = "CONSTRUCT WHERE {?s ?p ?o}";
+              this._qs.doQuery(query,data)
+                .then(res => {
+                  if(res.length == 0){
+                    this.showSnackbar("Query returned no results. Did you load the correct dataset?");
+                  }else{
+                    this.queryResult = res;
+                    this.resultFieldExpanded = true;
+                  }
+                }, err => console.log(err));
+            }
+          }
+      
+        }, err => {
+          this.showSnackbar("Something went wrong");
+        });
+    }
+
   }
 
   resetTriples(){
@@ -74,14 +114,15 @@ export class AppComponent implements OnInit {
 
     this._ss.query(query)
       .subscribe(res => {
-        console.log(res);
         if(res.status == '200'){
           this.showSnackbar("Successfully wiped database");
         }else{
           this.showSnackbar(res.status+': '+res.statusText);
+          console.log(res);
         }
       }, err => {
         this.showSnackbar("Something went wrong");
+        console.log(err);
       })
   }
 
@@ -89,8 +130,14 @@ export class AppComponent implements OnInit {
     const triples = this.data.triples;
     this._ss.loadTriples(triples)
       .subscribe(res => {
-        console.log(res);
+        if(res.status == '200'){
+          this.showSnackbar("Successfully loaded dataset");
+        }else{
+          this.showSnackbar(res.status+': '+res.statusText);
+          console.log(res);
+        }
       }, err => {
+        this.showSnackbar("Something went wrong");
         console.log(err);
       })
   }

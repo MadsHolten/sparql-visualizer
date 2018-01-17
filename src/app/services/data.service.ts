@@ -51,6 +51,7 @@ inst:SpaceC a bot:Space ;
 \tprop:area "16 m2" .
 `,
             query: `
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX inst: <https://example.org/projectXX/>
 PREFIX bot:  <https://w3id.org/bot#>
 PREFIX prop: <https://w3id.org/prop#>
@@ -135,8 +136,13 @@ inst:PropB a opm:Requirement ;
 \t\tprov:generatedAtTime "2018-01-01T14:35:23Z" ] .
             `,
           query: `
+PREFIX bot:  <https://w3id.org/bot#>
 PREFIX inst: <https://example.org/projectXX/>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX prop: <https://w3id.org/prop#>
 PREFIX opm:  <https://w3id.org/opm#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>
 
 CONSTRUCT
 WHERE {
@@ -256,8 +262,13 @@ inst:PropD a opm:Property ;
 \t\tprov:generatedAtTime "2018-02-05T11:35:23Z" ] .
 `,
             query: `
+PREFIX bot:  <https://w3id.org/bot#>
 PREFIX inst: <https://example.org/projectXX/>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX prop: <https://w3id.org/prop#>
 PREFIX opm:  <https://w3id.org/opm#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>
 
 CONSTRUCT
 WHERE {
