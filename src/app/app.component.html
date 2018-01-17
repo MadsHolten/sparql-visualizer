@@ -2,7 +2,16 @@
     <div fxFlex="40%">
         <mat-card class="mat-elevation-z2">
 
-            <p>Select dataset</p>
+            <p>
+                <span fxFlex="60 %">Select dataset</span>
+                <span fxFlex="grow"></span>
+                <mat-icon 
+                    class="swap" 
+                    [matTooltip]="toggleTooltip"
+                    (click)="toggleStore()">
+                    swap_horiz
+                </mat-icon>
+            </p>
 
             <!-- Select -->
             <mat-form-field class="full-width">
@@ -13,6 +22,21 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+
+            <!-- Endpoint settings -->
+            <div *ngIf="!localStore">
+                <app-settings></app-settings>
+                <div class="button-row">
+                    <button 
+                        mat-raised-button color="warn">
+                        Wipe database <mat-icon>delete_forever</mat-icon>
+                    </button>
+                    <button 
+                        mat-raised-button>
+                        Load dataset <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                </div>
+            </div>
 
         </mat-card>
 

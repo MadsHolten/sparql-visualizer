@@ -1,0 +1,43 @@
+<mat-accordion>
+    
+    <!-- TRIPLESTORE -->
+    <mat-expansion-panel>
+
+    <!-- Closed -->
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+        Triplestore settings
+        </mat-panel-title>
+        <!-- <mat-panel-description>
+        What endpoint to communicate with
+        </mat-panel-description> -->
+    </mat-expansion-panel-header>
+
+    <!-- Open -->
+    <mat-form-field class="full-width">
+        <input matInput 
+        type="text"
+        placeholder="Project endpoint" 
+        [(ngModel)]="projectSettings.endpoint" 
+        (input)="onDataChange()">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+        <input matInput 
+        type="text" 
+        placeholder="Username" 
+        [(ngModel)]="projectSettings.username" 
+        (input)="onDataChange()">
+    </mat-form-field>
+    
+    <mat-form-field class="full-width">
+        <input matInput 
+        type="password" 
+        placeholder="Password"
+        [(ngModel)]="projectSettings.password" 
+        (input)="onDataChange()">
+    </mat-form-field>
+
+    </mat-expansion-panel>
+
+</mat-accordion>

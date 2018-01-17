@@ -1,6 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+
+// Local storage
+import { WebStorageModule } from 'ngx-store';
 
 // Material design
 import 'hammerjs';
@@ -11,7 +15,8 @@ import { MatButtonModule,
          MatTabsModule,
          MatCardModule,
          MatExpansionModule,
-         MatIconModule } from '@angular/material';
+         MatIconModule,
+         MatTooltipModule } from '@angular/material';
 
 // Pipes
 import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
@@ -19,20 +24,27 @@ import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
 // FxFlex
 import { FlexLayoutModule } from '@angular/flex-layout';
 
+// Interceptor
+import { AuthInterceptor } from './services/auth.interceptor';
+
 // App
 import { AppComponent } from './app.component';
 import { SparqlForceComponent } from './sparql-force/sparql-force.component';
+import { SettingsComponent } from './settings/settings.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    SparqlForceComponent
+    SparqlForceComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
+    WebStorageModule,
     BrowserAnimationsModule,
     MatButtonModule,
     MatInputModule,
@@ -41,10 +53,17 @@ import { SparqlForceComponent } from './sparql-force/sparql-force.component';
     MatCardModule,
     MatExpansionModule,
     MatIconModule,
+    MatTooltipModule,
     MarkdownToHtmlModule,
     FlexLayoutModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide : HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi   : true,
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

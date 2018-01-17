@@ -6,7 +6,17 @@ import * as N3 from 'n3';
 export interface Qres {
   actions?;
   duplicates?: Object[];
-  triples?: Object[];
+  triples?: Triple[];
+}
+
+export interface Triple {
+  subject: TripleComponent;
+  predicate: TripleComponent;
+  object: TripleComponent;
+}
+
+export interface TripleComponent {
+  nominalValue;
 }
 
 @Injectable()

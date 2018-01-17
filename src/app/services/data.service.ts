@@ -97,7 +97,7 @@ WHERE {\n\
 \t?propURI opm:hasState ?stateURI .\n\
 \tBIND(now() AS ?now)\n\
 }```\n\
-### Query\n\
+#### Query\n\
 The specified query retrieves all spaces of type `inst:TypeA` and the latest state of their properties.\
 ",
           triples: `
@@ -194,7 +194,13 @@ WHERE {\n\
 \tBIND(?areaVal > ?maxReqVal AS ?maxReqViolated)\n\
 \tBIND(?areaVal != ?reqVal AS ?exactMatchViolated)\n\
 }\
-```",
+```\n\
+Returns something like:\n\
+\n\
+space       | minReqViolated | maxReqViolated | exactMatchViolated\n\
+----------- | -------------- | -------------- | ---\n\
+inst:SpaceA | false          | -              | - \n\
+",
             triples: `
 @prefix bot:  <https://w3id.org/bot#> .
 @prefix inst: <https://example.org/projectXX/> .
@@ -233,12 +239,20 @@ inst:PropB a opm:Requirement ;
 ### ARCHITECT
 # SPACE INSTANCES
 inst:SpaceA prop:area inst:PropC .
+inst:SpaceB prop:area inst:PropD .
 
 # PROPERTY C
 inst:PropC a opm:Property ;
 \t# STATE 1
 \topm:hasState[ a opm:CurrentState ;
 \t\topm:value "15 m2" ;
+\t\tprov:generatedAtTime "2018-02-05T11:35:23Z" ] .
+
+# PROPERTY D
+inst:PropD a opm:Property ;
+\t# STATE 1
+\topm:hasState[ a opm:CurrentState ;
+\t\topm:value "13 m2" ;
 \t\tprov:generatedAtTime "2018-02-05T11:35:23Z" ] .
 `,
             query: `

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { QueryService } from './query.service';
-import { DataService } from './data.service';
+import { QueryService } from './services/query.service';
+import { DataService } from './services/data.service';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +14,12 @@ export class AppComponent implements OnInit {
   private queryResult;
   private resultFieldExpanded: boolean = false;
   public tabIndex: number = 0;
-  public tabTitles: string;
+  public tabTitles: string[];
   public data;
+
+  // Toggle store
+  public localStore: boolean = true;
+  public toggleTooltip: string = 'Switch to triplestore';
 
   constructor(
     private _qs: QueryService,
@@ -43,6 +47,12 @@ export class AppComponent implements OnInit {
   resetQuery(){
     let query = this._ds.getSingle(this.tabIndex).query;
     this.data.query = query;
+  }
+
+  toggleStore(){
+    this.localStore = this.localStore == false ? true : false;
+    this.toggleTooltip = this.toggleTooltip == 'Switch to datasets' ? 'Switch to triplestore' : 'Switch to datasets';
+    console.log("storeToggle");
   }
 
   changeTab(i){
