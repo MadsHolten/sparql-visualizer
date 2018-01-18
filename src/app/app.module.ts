@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 // Local storage
 import { WebStorageModule } from 'ngx-store';
@@ -17,7 +18,8 @@ import { MatButtonModule,
          MatIconModule,
          MatTooltipModule,
          MatSnackBarModule,
-         MatTableModule } from '@angular/material';
+         MatTableModule,
+         MatSlideToggleModule } from '@angular/material';
 
 // Pipes
 import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
@@ -43,6 +45,7 @@ import { SettingsComponent } from './settings/settings.component';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     WebStorageModule,
     BrowserAnimationsModule,
     MatButtonModule,
@@ -55,6 +58,7 @@ import { SettingsComponent } from './settings/settings.component';
     MatTooltipModule,
     MatSnackBarModule,
     MatTableModule,
+    MatSlideToggleModule,
     MarkdownToHtmlModule,
     FlexLayoutModule
   ],

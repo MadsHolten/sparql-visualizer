@@ -37,6 +37,11 @@
                         (click)="loadDataset()">
                         Load dataset <mat-icon>cloud_upload</mat-icon>
                     </button>
+                    <button
+                        mat-raised-button
+                        (click)="loadOntologies()">
+                        Load Ontology data
+                    </button>
                 </div>
             </div>
 
@@ -110,18 +115,23 @@
                         </textarea>
                     </mat-form-field>
 
-                    <button 
-                        mat-raised-button 
-                        color="primary" 
-                        (click)="doQuery()">
-                        Query <mat-icon>play_circle_outline</mat-icon>
-                    </button>
+                    <div class="full-width" fxLayout="row">
+                        <button 
+                            mat-raised-button 
+                            color="primary" 
+                            (click)="doQuery()">
+                            Query <mat-icon>play_circle_outline</mat-icon>
+                        </button>
 
-                    <button 
-                        mat-raised-button 
-                        (click)="resetQuery()">
-                        Reset <mat-icon>cached</mat-icon>
-                    </button>
+                        <button 
+                            mat-raised-button 
+                            (click)="resetQuery()">
+                            Reset <mat-icon>cached</mat-icon>
+                        </button>
+
+                        <div fxFlex="grow"></div>
+                        <mat-slide-toggle *ngIf="!localStore" [(ngModel)]="reasoning">Reasoning</mat-slide-toggle>
+                    </div>
 
 
                 </mat-expansion-panel>

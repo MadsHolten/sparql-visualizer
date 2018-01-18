@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
   public tabTitles: string[];
   public data;
   public queryType: string;
+  public reasoning: boolean;
 
   // Toggle store
   public localStore: boolean = true;
@@ -53,7 +54,7 @@ export class AppComponent implements OnInit {
     }
     // If in triplestore mode
     else{
-      this._ss.query(query)
+      this._ss.query(query,this.reasoning)
         .subscribe(res => {
           // show error if status 200 was not recieved
           if(res.status != '200'){
@@ -161,6 +162,25 @@ export class AppComponent implements OnInit {
     this.snackBar.open(message, 'close', {
       duration: 2000,
     });
+  }
+
+  loadOntologies(){
+    this._ss.getTriplesFromURL("https://w3id.org/bot")
+      .subscribe(res => {
+          this._ss.loadTriples(res.body, "https://bot")
+            .subscribe(res => {
+              if(res.status == '200' || res.status == '201'){
+                console.log(res);
+                this.showSnackbar("Successfully loaded BOT");
+              }else{
+                this.showSnackbar(res.status+': '+res.statusText);
+                console.log(res);
+              }
+            }, err => {
+              this.showSnackbar("Something went wrong");
+              console.log(err);
+            })
+      });
   }
 
   update(ev){
