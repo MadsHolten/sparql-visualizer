@@ -1,6 +1,6 @@
 # DataVis
 
-[Demo](https://madsholten.github.io/room-requirements/)
+[Demo](https://madsholten.github.io/sparql-visualizer/)
 
 This is a small project for visualising RDF-data in a D3 force diagram. The predefined tabs can not be changed by the user, as each of them are supposed to hold predefined data and queries to be communicated to the readers. Each tab consists of the following:
 
