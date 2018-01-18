@@ -20,7 +20,9 @@ This is where the result is illustrated
 
 I encourage you to do join the effort and contribute to the code base. Simply fork the project and run `npm install` to install the dependencies. Then run `ng serve` to run a local development server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-The data is currently served from the data-service located at `src/app/data.service.ts`.
+The tabs, descriptions, default datasets and queries are generated based on `assets/data.json`.
+
+The viewer can communicate with a Stardog triplestore - only tested locally.
 
 ## Acknowledgements
 

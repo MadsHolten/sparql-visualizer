@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 
 import { QueryService } from './services/query.service';
-import { DataService } from './services/data.service';
+import { DataService, Data } from './services/data.service';
 import { StardogService } from './services/stardog.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   private resultFieldExpanded: boolean = false;
   public tabIndex: number = 0;
   public tabTitles: string[];
-  public data;
+  public data: Data;
   public queryType: string;
   public reasoning: boolean;
 
@@ -33,7 +33,10 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(){
-    this.tabTitles = this._ds.getTitles();
+    this._ds.getTitles().subscribe(res => {
+      this.tabTitles = res;
+    });
+    
     this.changeTab(0);
   }
 
@@ -99,13 +102,17 @@ export class AppComponent implements OnInit {
   }
 
   resetTriples(){
-    let triples = this._ds.getSingle(this.tabIndex).triples;
-    this.data.triples = triples;
+    this._ds.getSingle(this.tabIndex)
+        .subscribe(x => {
+            this.data.triples = x.triples;
+        });
   }
 
   resetQuery(){
-    let query = this._ds.getSingle(this.tabIndex).query;
-    this.data.query = query;
+    this._ds.getSingle(this.tabIndex)
+    .subscribe(x => {
+        this.data.query = x.query;
+    });
   }
 
   toggleStore(){
@@ -118,9 +125,12 @@ export class AppComponent implements OnInit {
       console.log('Add new dataset');
     }else{
       this.tabIndex = i;
-      let data = this._ds.getSingle(i);
-      this.data = Object.assign({}, data);
-      this.doQuery();
+      this._ds.getSingle(i)
+        .subscribe(x => {
+            this.data = x;
+            this.doQuery();
+        });
+    
     }
   }
 
