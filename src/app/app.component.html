@@ -6,6 +6,7 @@
                 <span fxFlex="60 %">Select dataset</span>
                 <span fxFlex="grow"></span>
                 <mat-icon 
+                    *ngIf="triplestoreOption"
                     class="swap" 
                     [matTooltip]="toggleTooltip"
                     (click)="toggleStore()">

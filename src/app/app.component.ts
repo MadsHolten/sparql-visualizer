@@ -21,6 +21,9 @@ export class AppComponent implements OnInit {
   public queryType: string;
   public reasoning: boolean;
 
+  // Triplestore can easily be disabled
+  public triplestoreOption: boolean = true;
+
   // Toggle store
   public localStore: boolean = true;
   public toggleTooltip: string = 'Switch to triplestore';
