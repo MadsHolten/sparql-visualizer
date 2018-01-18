@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
   public tabIndex: number = 0;
   public tabTitles: string[];
   public data;
+  public queryType: string;
 
   // Toggle store
   public localStore: boolean = true;
@@ -38,6 +39,10 @@ export class AppComponent implements OnInit {
   doQuery(){
     const query = this.data.query
     const data = this.data.triples
+
+    // Get the query type
+    this.queryType = this._qs.getQuerytype(query);
+
     // If in localstore mode
     if(this.localStore){
       this._qs.doQuery(query,data)
@@ -58,12 +63,19 @@ export class AppComponent implements OnInit {
 
             // Get body content
             var data = res.body;
-            console.log(data);
 
             if(data == null){
               // If it's an update query, it will not return a result. Just show snackbar
               this.showSnackbar("Query successful");
+
+            // If it's a select query, just return the result as it is
+            }else if(this.queryType == 'select'){
+              this.queryResult = data;
+              this.resultFieldExpanded = true;
+            
+            // If it's a construct query, parse it first
             }else{
+
               // To parse the result to the correct format, we run a query on it
               var query = "CONSTRUCT WHERE {?s ?p ?o}";
               this._qs.doQuery(query,data)

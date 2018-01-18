@@ -1,0 +1,21 @@
+<div class="table-container mat-elevation-z8">
+    <div class="table-header" *ngIf="queryTime">
+        <span>{{resultLength}} results</span>
+        <!-- <span fxFlex="grow"></span> -->
+    </div>
+    <mat-table #table [dataSource]="dataSource">
+
+        <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+        
+        <div *ngFor="let col of displayedColumns">
+            <!-- Columns -->
+            <ng-container [matColumnDef]="col">
+            <mat-header-cell *matHeaderCellDef> {{col}} </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element[col]}} </mat-cell>
+            </ng-container>
+        </div>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+</div>

@@ -16,7 +16,8 @@ import { MatButtonModule,
          MatExpansionModule,
          MatIconModule,
          MatTooltipModule,
-         MatSnackBarModule } from '@angular/material';
+         MatSnackBarModule,
+         MatTableModule } from '@angular/material';
 
 // Pipes
 import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
@@ -27,6 +28,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 // App
 import { AppComponent } from './app.component';
 import { SparqlForceComponent } from './sparql-force/sparql-force.component';
+import { SparqlTableComponent } from './sparql-table/sparql-table.component';
 import { SettingsComponent } from './settings/settings.component';
 
 
@@ -34,6 +36,7 @@ import { SettingsComponent } from './settings/settings.component';
   declarations: [
     AppComponent,
     SparqlForceComponent,
+    SparqlTableComponent,
     SettingsComponent
   ],
   imports: [
@@ -51,6 +54,7 @@ import { SettingsComponent } from './settings/settings.component';
     MatIconModule,
     MatTooltipModule,
     MatSnackBarModule,
+    MatTableModule,
     MarkdownToHtmlModule,
     FlexLayoutModule
   ],

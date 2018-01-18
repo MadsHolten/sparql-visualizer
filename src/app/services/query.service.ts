@@ -31,6 +31,9 @@ export class QueryService {
 
     if(!mimeType) mimeType = 'text/turtle';
 
+    // Get query type
+    const queryType = this.getQuerytype(query);
+
     return this._createStore()
         .then(store => {
           this.store = store;
@@ -43,6 +46,11 @@ export class QueryService {
         })
         .then(res => {
           var data: Qres = res;
+          
+          // Reformat data if select query
+          if(queryType == 'select'){
+            return this.sparqlJSON(data).data;
+          }
 
           // Get prefixes
           return this.prefixesPromise.then(prefixes => {
@@ -69,6 +77,55 @@ export class QueryService {
 
         })
 
+  }
+
+  public getQuerytype(query){
+    // Get index of select and construct
+    var selIndex = query.toLowerCase().indexOf('select');
+    var consIndex = query.toLowerCase().indexOf('construct');
+
+    // If both are found in the string, take the one with the lowest index
+    // That means that we can still allow someone to for instance query for
+    // a string that has "select" in it
+    if(selIndex != -1 && consIndex !=-1){
+      return selIndex < consIndex ? 'select' : 'construct';
+    }
+    if(selIndex != -1) return 'select';
+    if(consIndex != -1) return 'construct';
+    // If it is an insert query or something else return null
+    return null;
+  }
+
+  public sparqlJSON(data){
+      // Get variable keys
+      var vars = _.keysIn(data[0]);
+      
+      // check that it doesn't return null results
+      if(data[0][vars[0]] == null){
+          return {status: 400, data: "Query returned no results"};
+      }
+
+      // Flatten object array
+      var b = _.flatMap(data);
+
+      // Rename keys according to below mapping table
+      var map = {
+          token: "type",
+          type: "datatype",
+          lang: "xml:lang"
+      };
+
+      // Loop over data to rename the keys
+      for(var i in b){
+          for(var key in vars){
+              b[i][vars[key]] = this._renameKeys(b[i][vars[key]], map)
+          }
+      }
+
+      // Re-format data
+      var reformatted = {head: {vars: vars}, results: {bindings: b}};
+
+      return {status: 200, data: reformatted};
   }
 
   private _createStore(){
@@ -162,6 +219,14 @@ export class QueryService {
       abrTriples.push({subject: s, predicate: p, object: o})
     });
     return abrTriples;
+  }
+
+  private _renameKeys(obj, newKeys) {
+      const keyValues = Object.keys(obj).map(key => {
+          const newKey = newKeys[key] || key;
+          return { [newKey]: obj[key] };
+      });
+      return Object.assign({}, ...keyValues);
   }
 
 }

@@ -128,7 +128,9 @@
             </mat-accordion>
 
             <!-- Query result -->
-            <mat-accordion>
+
+            <!-- CONSTRUCT -->
+            <mat-accordion *ngIf="queryType == 'construct'">
                 <mat-expansion-panel [expanded]="resultFieldExpanded">
                     <mat-expansion-panel-header>
                     <mat-panel-title>
@@ -141,6 +143,24 @@
                 
                     <!-- Data visualization -->
                     <app-sparql-force class="full-width" *ngIf="queryResult" [data]="queryResult" [height]="600"></app-sparql-force>
+                    <span *ngIf="!queryResult">No result to show</span>
+                </mat-expansion-panel>
+            </mat-accordion>
+
+            <!-- SELECT -->
+            <mat-accordion *ngIf="queryType == 'select'">
+                <mat-expansion-panel [expanded]="resultFieldExpanded">
+                    <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Query
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        Query result
+                    </mat-panel-description>
+                    </mat-expansion-panel-header>
+                
+                    <!-- Data visualization -->
+                    <sparql-table [queryResult]="queryResult"></sparql-table>
                     <span *ngIf="!queryResult">No result to show</span>
                 </mat-expansion-panel>
             </mat-accordion>
