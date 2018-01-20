@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
-import * as _ from 'underscore';
+import * as _ from 'lodash';
 import 'rxjs/add/observable/of';
 
 /**
