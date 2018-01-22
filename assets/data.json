@@ -1,5 +1,22 @@
 [
     {
+        "title": "0: Introduction",
+        "description": [
+            "This is a simple app to visualise and communicate the content of a knowledge base in the RDF format. The project is open source, and we welcome all who is interested in participated. Please find the Github repository [here](https://github.com/MadsHolten/sparql-visualizer).\n",
+            "The frontend of the is based on [Angular](https://angular.io/), [material design](https://material.angular.io/) and [D3](https://d3js.org/) and the default local triplestore is based on [rdfstore](https://github.com/antoniogarrote/rdfstore-js). Since rdfstore does not fully support SPARQL and has no reasoning capabilities, it is recomended to use a [Stardog](https://www.stardog.com/) based triplestore instead.",
+            "### Use a Stardog triplestore",
+            "To use the app with a Stardog tripestore this must either be available online, or this app must be run in a local environment. To do the latter, simply clone the repository, install the dependencies with `npm install` (requires [node.js](https://nodejs.org/en/)) and run a development server with `ng serve` (requires [Angular CLI](https://cli.angular.io/)).",
+            "With a local copy of the app running, make sure you have a Stardog running (defaults to port 5820) with an empty database (let's call it 'test'), so that you don't delete anything important. Then click the \"Switch to triplestore\" button and type in \"http://localhost:5820\" as endpoint and \"test\" as database. If you haven't changed the username and password they both default to \"admin\".",
+            "### Use local datasets",
+            "This will work, but beware that some queries will not run properly, and INSERT/DELETE will not be possible.",
+            "### Resources",
+            "*[Documentation](https://www.w3.org/TR/sparql11-query/)\n",
+            "*[Online course in Linked Data Engineering](https://open.hpi.de/courses/semanticweb2016)"
+        ],
+        "query": "",
+        "triples": ""
+    },
+    {
         "title": "1: Simple",
         "description": [
             "This is a simple way of describing requirements of a set of abstract spaces. Each space is assigned a space type as a string value, for querying for a specific type, or for updating/deleting/adding properties on a type level.",
