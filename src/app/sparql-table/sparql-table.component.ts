@@ -26,7 +26,7 @@ export class SparqlTableComponent implements OnChanges{
 
       //Extract results
       var bindings = changes.queryResult.currentValue.results.bindings;
-      data = _.map( bindings, i => _.mapObject(i, j => j.value) );
+      data = _.map( bindings, i => _.mapValues(i, j => j.value) );
 
       //Get number of results
       this.resultLength = data.length;
