@@ -62,7 +62,7 @@
         <div *ngIf="data">
         
             <!-- Data -->
-            <mat-accordion *ngIf="localStore">
+            <mat-accordion *ngIf="localStore && data.triples">
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
                     <mat-panel-title>
@@ -94,7 +94,7 @@
             </mat-accordion>
 
             <!-- Query -->
-            <mat-accordion>
+            <mat-accordion *ngIf="data.query">
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
                     <mat-panel-title>
