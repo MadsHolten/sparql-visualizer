@@ -31,7 +31,9 @@ export class SettingsComponent implements OnInit {
     if(data){
       this.projectSettings = data;
     }else{
-      this.projectSettings.endpoint = "";
+      this.projectSettings.endpoint = "http://localhost:5820"; //default
+      this.projectSettings.username = "admin"; //default
+      this.projectSettings.password = "admin"; //default
     }
   }
 
