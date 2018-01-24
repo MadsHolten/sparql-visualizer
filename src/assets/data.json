@@ -265,7 +265,11 @@
     {
         "title": "6.0: Proposal for inheritance of space type properties: introduction",
         "description": [
-            "Initial situation: multiple space types of which some are ordered hierarchical. The properties of the space types are only connected to themselves. In the next phases under tab 6, the properties will be inherited from the most generic space types to the most specific space types. In a final step, the properties of the space type assigned to a specific space, will be inherited by the space."
+            "In the next phases under tab 6, the properties will be inherited - step by step to demonstrate the algorithm - from the most generic space types to the most specific space types (unless a similar property already exists there). In a final step, the properties of the space type assigned to a specific space, will be inherited by the space.\n",
+            "In this tab the initial situation is visualized:",
+            "* multiple space types of which some are ordered hierarchical.",
+            "* The properties of the spaces and space types are only connected to themselves using `prop:hasProperty`.\n",
+            "#### Use the Stardog triplestore for the SPARQL queries to be executed. Load the example triples once before continuing."
         ],
         "triples": [
             "@prefix bot:  <https://w3id.org/bot#> .",
@@ -374,18 +378,230 @@
             "PREFIX prov: <http://www.w3.org/ns/prov#>",
             "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
 
-            "CONSTRUCT \n",
+            "CONSTRUCT {",
+                "\t?s a bot:Space .",
+                "\t?s prop:hasSpaceType ?connectedSpaceType .",
+                "\t?st1 a prop:SpaceType .",
+                "\t?st1 prop:subSpaceType ?st2 .",
+                "\t?all1 prop:hasProperty ?all1Props .",
+                "\t?all2 prop:hasInheritedProperty ?all2Props .",
+            "}\n",
 
             "WHERE {",
-                "\t?space a bot:Space .",
-                "# space types",
-                "?start a prop:SpaceType .",
-                "FILTER NOT EXISTS { ?otherSpaceType prop:subSpaceType ?start }\n",
-                "?end a prop:SpaceType .",
-                "FILTER NOT EXISTS { ?end prop:subSpaceType ?otherSpaceType2}\n",
-                "?start prop:subSpaceType+ ?mid .",
-                "?mid prop:subSpaceType* ?end .",
+                "\t?s a bot:Space .",
+                "\tOPTIONAL { ?s prop:hasSpaceType ?connectedSpaceType . }",
+                "\t?st1 a prop:SpaceType .",
+                "\tOPTIONAL { ?st1 prop:subSpaceType ?st2 . }",
+                "\t?all1 prop:hasProperty ?all1Props .",
+                "\tOPTIONAL { ?all2 prop:hasInheritedProperty ?all2Props . }",
             "}"
+        ]
+    },
+    {
+        "title": "6.1: Proposal for inheritance of space type properties: counting",
+        "description": [
+            "In this tab, the maximum number of `prop:hasSubSpaceType` relations between space types are counted. This number is equal to the maximum number of iterations that have to take place.\n",
+            "#### Use the Stardog triplestore for the SPARQL queries to be executed."
+        ],
+        "triples": [
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+
+            "SELECT ?start ?end (count(?mid) as ?length)\n",
+
+            "WHERE {",
+                "\t?start a prop:SpaceType .",
+                "\tFILTER NOT EXISTS { ?otherSpaceType prop:subSpaceType ?start }",
+                "\tOPTIONAL {",
+                    "\t\t?end a prop:SpaceType .",
+                    "\t\tFILTER NOT EXISTS { ?end prop:subSpaceType ?otherSpaceType2}",
+                    "\t\t?start prop:subSpaceType+ ?mid .",
+                    "\t\t?mid prop:subSpaceType* ?end .",
+                "\t}",
+            "}\n",
+
+            "GROUP BY ?start ?end\n",
+
+            "# only return highest path lenth",
+            "ORDER BY DESC(?length) LIMIT 1"
+        ]
+    },
+    {
+        "title": "6.2: Proposal for inheritance of space type properties: first round of inheritance",
+        "description": [
+            "In this tab, the properties inheritance starts from the most generic space types to the second most generic space types of a tree. Note that a lower (more specific) space type will only inherit a property from a higher (more generic) space type if the type of property does not yet exist on the lower level.\n",
+            "#### Use the Stardog triplestore for the SPARQL queries to be executed."
+        ],
+        "triples": [
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+
+            "INSERT { ?next prop:hasInheritedProperty ?prop .}\n",
+
+            "WHERE {",
+                "\t?start a prop:SpaceType .",
+                "\tFILTER NOT EXISTS { ?otherSpaceType prop:subSpaceType ?start }",
+                "\t?start prop:subSpaceType ?next .\n",
+                
+                "\t# properties related to most generic space types",
+                "\t?start prop:hasProperty ?propStart .",
+                "\t?propStart a ?propNameStart .",
+                "\tFILTER ( ?propNameStart != <https://w3id.org/opm#Requirement> )\n",
+            
+                "\t# properties related to second most generic space types",
+                "\tOPTIONAL { ",
+                    "\t\t?next prop:hasProperty ?propNext .",
+                    "\t\t?propNext a ?propNameNext .",
+                    "\t\tFILTER ( ?propNameNext != <https://w3id.org/opm#Requirement> )",
+                "\t}\n",
+                
+                "\tBIND ( EXISTS {?next prop:hasProperty ?propNext} as ?exists )\n",
+                
+                "\t# override properties of second most generic space type only if there's not already a similar property",
+                "\tBIND ( IF (?exists , IF (?propNameNext = ?propNameStart , ?propNext , ?propStart) , ?propStart) AS ?prop)",
+                "\tFILTER (?prop != ?propNext )",
+            "}"
+        ]
+    },
+    {
+        "title": "6.3: Proposal for inheritance of space type properties: second round of inheritance",
+        "description": [
+            "In this tab, the properties inheritance starts from the second most generic space types to the third most generic space types of a tree. Note that a lower (more specific) space type will only inherit a property from a higher (more generic) space type if the type of property does not yet exist on the lower level.\n",
+            "#### Use the Stardog triplestore for the SPARQL queries to be executed."
+        ],
+        "triples": [
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+
+            "INSERT { ?next prop:hasInheritedProperty ?prop .}\n",
+
+            "WHERE {",
+                "\t?start a prop:SpaceType .",
+                "\tFILTER NOT EXISTS { ?otherSpaceType prop:subSpaceType ?start }",
+                "\t?start prop:subSpaceType ?mid1 . #changed line (second loop)",
+                "\t?mid1 prop:subSpaceType ?next . #extra line (second loop)\n",
+
+                "\t# properties related to second most generic space types",
+                "\t?mid1 prop:hasProperty|prop:hasInheritedProperty ?propMid1 . #changed line (second loop)",
+                "\t?propMid1 a ?propNameMid1 . #changed line (second loop)",
+                "\tFILTER ( ?propNameMid1 != <https://w3id.org/opm#Requirement> ) #changed line (second loop)\n",
+            
+                "\t# properties related to third most generic space types",
+                "\tOPTIONAL { ",
+                    "\t\t?next prop:hasProperty ?propNext .",
+                    "\t\t?propNext a ?propNameNext .",
+                    "\t\tFILTER ( ?propNameNext != <https://w3id.org/opm#Requirement> )",
+                "\t}\n",
+                
+                "\tBIND ( EXISTS {?next prop:hasProperty ?propNext} as ?exists )\n",
+                
+                "\t# add properties to third most generic space type only if there's not already a similar property",
+                "\tBIND ( IF (?exists , IF (?propNameNext = ?propNameMid1 , ?propNext , ?propMid1) , ?propMid1) AS ?prop) #changed line (second loop)",
+                "\tFILTER (?prop != ?propNext )",
+            "}"
+        ]
+    },
+    {
+        "title": "6.4: Proposal for inheritance of space type properties: last round of inheritance",
+        "description": [
+            "In this tab, the properties inheritance starts from the space types to the connected spaces. Note that a space will only inherit a property from a connected space type if the type of property does not yet exist on the space.\n",
+            "#### Use the Stardog triplestore for the SPARQL queries to be executed."
+        ],
+        "triples": [
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+
+            "INSERT { ?space prop:hasInheritedProperty ?prop .}\n",
+
+            "WHERE {",
+                "\t?space a bot:Space ;",
+                    "\t\tprop:hasSpaceType ?spaceType .\n",
+            
+                "\t# properties related to space types",
+                "\t?spaceType prop:hasProperty|prop:hasInheritedProperty ?propSpaceType .",
+                "\t?propSpaceType a ?propNameSpaceType .",
+                "\tFILTER ( ?propNameSpaceType != <https://w3id.org/opm#Requirement> )\n",
+            
+                "\t# properties directly related to a specific space",
+                "\tOPTIONAL { ",
+                    "\t\t?space prop:hasProperty ?propSpace .",
+                    "\t\t?propSpace a ?propNameSpace .",
+                    "\t\tFILTER ( ?propNameSpace != <https://w3id.org/opm#Requirement> )",
+                "\t}\n",
+                
+                "\tBIND ( EXISTS {?space prop:hasProperty ?propSpace} as ?exists )\n",
+            
+                "\t# add properties from space type only if there's no similar property on space level",
+                "\tBIND ( IF (?exists , IF (?propNameSpace = ?propNameSpaceType , ?propSpace , ?propSpaceType) , ?propSpaceType) AS ?prop)",
+                "\tFILTER (?prop != ?propSpace )",
+            "}"
+        ]
+    },
+    {
+        "title": "6.5: Proposal for inheritance of space type properties: overview",
+        "description": [
+            "In this tab, an overview on the standard properties (`prop:hasProperty`) and the inherited properties (`prop:hasInheritedProperty`) is given. Note that a space will only inherit a property from a connected space type if the type of property does not yet exist on the space.\n",
+            "#### Use the Stardog triplestore for the SPARQL queries to be executed."
+        ],
+        "triples": [
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+
+            "SELECT *\n",
+
+            "WHERE {",
+                "\t{SELECT * WHERE{",
+                    "\t\t?spaces_spaceTypes prop:hasProperty ?instanceProp .",
+                    "\t\t?instanceProp a ?instancePropType .",
+                    "\t\tFILTER ( ?instancePropType != <https://w3id.org/opm#Requirement> )",
+                    "\t\t}",
+                "\t}\n",
+              
+                "\tUNION\n",
+            
+                "\t{SELECT * WHERE{",
+                    "\t\t?spaces_spaceTypes prop:hasInheritedProperty ?inheritedProp .",
+                    "\t\t?inheritedProp a ?inheritedPropType .",
+                    "\t\tFILTER ( ?inheritedPropType != <https://w3id.org/opm#Requirement> )",
+                    "\t\t}",
+                "\t}",
+            "}",
+            "ORDER by ?spaces_spaceTypes"
         ]
     }
 ]
