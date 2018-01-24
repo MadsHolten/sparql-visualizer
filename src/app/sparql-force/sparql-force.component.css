@@ -15,7 +15,17 @@ html, html * {
 }
 :host ::ng-deep .instance {
     stroke: #fff;
-    fill:rgb(5, 167, 196);
+    fill:rgb(32,178,170);
+    stroke-width: 1.5px;
+}
+:host ::ng-deep .instance-space {
+    stroke: #fff;
+    fill:rgb(0,191,255);
+    stroke-width: 1.5px;
+}
+:host ::ng-deep .instance-spaceType {
+    stroke: #fff;
+    fill:rgb(0,0,139);
     stroke-width: 1.5px;
 }
 

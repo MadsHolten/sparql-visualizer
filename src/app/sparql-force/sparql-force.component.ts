@@ -11,6 +11,8 @@ export interface Node {
   weight: number;
   type: string;
   owlClass?: boolean;
+  instSpace?: boolean; //MB
+  instSpaceType?: boolean; //MB
 }
 
 export interface Link {
@@ -156,7 +158,11 @@ export class SparqlForceComponent implements OnInit {
                   var inst = d.id.indexOf("inst:") !== -1 || d.id.indexOf("<http") !== -1;
 
                   if(d.owlClass){
-                    return "class"; 	
+                    return "class" 
+                  }else if(d.instSpace){ //MB
+                    return "instance-space" //MB
+                  }else if(d.instSpaceType){ //MB
+                    return "instance-spaceType"	//MB
                   }else if(inst){
                     return "instance"
                   }else{
@@ -167,7 +173,7 @@ export class SparqlForceComponent implements OnInit {
                   // It is an instance if it begins with inst: or if it's a full URI
                   var inst = d.id.indexOf("inst:") !== -1 || d.id.indexOf("<http") !== -1;
                   
-                  if(inst){
+                  if(inst || d.instSpace || d.instSpaceType){ //MB
                     return 12; 	
                   }else if(d.owlClass){
                     return 10;
@@ -240,9 +246,13 @@ export class SparqlForceComponent implements OnInit {
 
       if(subjNode==null){
         subjNode = {id:subjId, label:subjId, weight:1, type:"node"};
+        // MB: here I made some mistake. The objNode.label cannot be found as it is only introduced in the next if
+        if(objNode.label == "bot:Space"){subjNode.instSpace = true} //MB
+        else if(objNode.label == "prop:SpaceType"){subjNode.instSpaceType = true} //MB
+        else{} //MB
         graph.nodes.push(subjNode);
       }
-      
+
       if(objNode==null){
         objNode = {id:objId, label:objId, weight:1, type:"node"};
         // If the predicate is rdf:type, the node is an OWL Class
