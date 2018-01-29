@@ -1,5 +1,5 @@
 {
-  "name": "bot-visualizer",
+  "name": "sparql-visualizer",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-git": "ng build --prod --base-href https://madsholten.github.io/bot-visualizer/"
+    "build-git": "ng build --prod --base-href https://madsholten.github.io/sparql-visualizer/"
   },
   "private": true,
   "dependencies": {

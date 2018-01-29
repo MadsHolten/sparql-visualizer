@@ -11,8 +11,8 @@ export interface Node {
   weight: number;
   type: string;
   owlClass?: boolean;
-  instSpace?: boolean; //MB
-  instSpaceType?: boolean; //MB
+  //instSpace?: boolean; //MB
+  //instSpaceType?: boolean; //MB
 }
 
 export interface Link {
@@ -159,10 +159,10 @@ export class SparqlForceComponent implements OnInit {
 
                   if(d.owlClass){
                     return "class" 
-                  }else if(d.instSpace){ //MB
-                    return "instance-space" //MB
-                  }else if(d.instSpaceType){ //MB
-                    return "instance-spaceType"	//MB
+                  //}else if(d.instSpace){ //MB
+                    //return "instance-space" //MB
+                  //}else if(d.instSpaceType){ //MB
+                    //return "instance-spaceType"	//MB
                   }else if(inst){
                     return "instance"
                   }else{
@@ -247,9 +247,9 @@ export class SparqlForceComponent implements OnInit {
       if(subjNode==null){
         subjNode = {id:subjId, label:subjId, weight:1, type:"node"};
         // MB: here I made some mistake. The objNode.label cannot be found as it is only introduced in the next if
-        if(objNode.label == "bot:Space"){subjNode.instSpace = true} //MB
-        else if(objNode.label == "prop:SpaceType"){subjNode.instSpaceType = true} //MB
-        else{} //MB
+        //if(objNode.label == "bot:Space"){subjNode.instSpace = true} //MB
+        //else if(objNode.label == "prop:SpaceType"){subjNode.instSpaceType = true} //MB
+        //else{} //MB
         graph.nodes.push(subjNode);
       }
 
