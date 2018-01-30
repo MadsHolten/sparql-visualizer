@@ -84,11 +84,20 @@
                         </textarea>
                     </mat-form-field>
 
-                    <button 
-                        mat-raised-button 
-                        (click)="resetTriples()">
-                        Reset <mat-icon>cached</mat-icon>
-                    </button>
+                    <div class="full-width" fxLayout="row">
+                        <button 
+                            mat-raised-button 
+                            color="primary" 
+                            (click)="doQuery()">
+                            Update <mat-icon>play_circle_outline</mat-icon>
+                        </button>
+
+                        <button 
+                            mat-raised-button 
+                            (click)="resetTriples()">
+                            Reset <mat-icon>cached</mat-icon>
+                        </button>
+                    </div>
 
                 </mat-expansion-panel>
             </mat-accordion>

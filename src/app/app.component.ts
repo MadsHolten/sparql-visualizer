@@ -43,13 +43,16 @@ export class AppComponent implements OnInit {
 
     this.route.queryParams.subscribe(map => {
       // If a file path is specified, use this instead of the default
-      if(map.file )this.filePath = map.file;
+      if(map.file) this.filePath = map.file;
+
+      // If a tab is specified, use this instead of the default
+      if(map.tab) this.tabIndex = parseInt(map.tab);
       
       this._ds.getTitles(this.filePath).subscribe(res => {
         this.tabTitles = res;
       });
 
-      this.changeTab(0);
+      this.changeTab(this.tabIndex);
     });
   
   }
