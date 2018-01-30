@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
 
 // Local storage
 import { WebStorageModule } from 'ngx-store';
@@ -33,6 +34,9 @@ import { SparqlForceComponent } from './sparql-force/sparql-force.component';
 import { SparqlTableComponent } from './sparql-table/sparql-table.component';
 import { SettingsComponent } from './settings/settings.component';
 
+const appRoutes: Routes = [
+  { path: '**', component: AppComponent }
+];
 
 @NgModule({
   declarations: [
@@ -46,6 +50,10 @@ import { SettingsComponent } from './settings/settings.component';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: false } // <-- debugging purposes only
+    ),
     WebStorageModule,
     BrowserAnimationsModule,
     MatButtonModule,

@@ -5,6 +5,7 @@ import * as N3 from 'n3';
 import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/map';
+import * as existsFile from 'exists-file';
 
 export interface Data {
     title: string;
@@ -20,19 +21,20 @@ export class DataService {
         public http: HttpClient
     ) { }
 
-    getData(){
-        return this.http.get<Data[]>("./assets/data.json");
+    getData(path){
+        return this.http.get<Data[]>(path);
     }
 
-    getTitles(){
-        return this.http.get<Data[]>("./assets/data.json")
+    getTitles(path){
+        // Should check if file actually exists
+        return this.http.get<Data[]>(path)
             .map(x => {
                 return _.map(x, d => d.title);
             });
     }
 
-    getSingle(index){
-        return this.http.get<Data[]>("./assets/data.json")
+    getSingle(path, index){
+        return this.http.get<Data[]>(path)
             .map(x => {
                 return x[index];
             })

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
 import { QueryService } from './services/query.service';
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit {
   public data: Data;
   public queryType: string;
   public reasoning: boolean;
+  private filePath: string = './assets/data.json';
 
   // Triplestore can easily be disabled
   public triplestoreOption: boolean = true;
@@ -32,15 +34,24 @@ export class AppComponent implements OnInit {
     private _qs: QueryService,
     private _ds: DataService,
     private _ss: StardogService,
+    private route: ActivatedRoute,
     public snackBar: MatSnackBar
   ) {}
 
   ngOnInit(){
-    this._ds.getTitles().subscribe(res => {
-      this.tabTitles = res;
-    });
     
-    this.changeTab(0);
+
+    this.route.queryParams.subscribe(map => {
+      // If a file path is specified, use this instead of the default
+      if(map.file )this.filePath = map.file;
+      
+      this._ds.getTitles(this.filePath).subscribe(res => {
+        this.tabTitles = res;
+      });
+
+      this.changeTab(0);
+    });
+  
   }
 
   doQuery(){
@@ -105,14 +116,14 @@ export class AppComponent implements OnInit {
   }
 
   resetTriples(){
-    this._ds.getSingle(this.tabIndex)
+    this._ds.getSingle(this.filePath, this.tabIndex)
         .subscribe(x => {
             this.data.triples = x.triples;
         });
   }
 
   resetQuery(){
-    this._ds.getSingle(this.tabIndex)
+    this._ds.getSingle(this.filePath, this.tabIndex)
     .subscribe(x => {
         this.data.query = x.query;
     });
@@ -128,7 +139,7 @@ export class AppComponent implements OnInit {
       console.log('Add new dataset');
     }else{
       this.tabIndex = i;
-      this._ds.getSingle(i)
+      this._ds.getSingle(this.filePath, i)
         .subscribe(x => {
             this.data = x;
             this.doQuery();
