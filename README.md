@@ -36,34 +36,34 @@ The tabs (and their title, descriptions, default datasets and queries) are gener
 
 ## Detailed installation guide
 The following instructions assume at least some experience with a terminal (Mac/Linux) or command line interface (Windows).
-1) Before installing node.js and Angular CLI, it is recommended to install a node version manager, such as [nvm](https://github.com/creationix/nvm) for Mac/Linux or [nvm-windows](https://github.com/coreybutler/nvm-windows) for Windows. Follow the instructions mentioned there. In what follows, we assumed Windows and nvm-windows.
-2) Install node.js v6.9.0 (other versions my work as well, but this is not tested): 
-`nvm install 6.9.0`
-3) Install angular/cli v1.5.0 globally: 
-`npm install -g @angular/cli@1.5.0`
-4) Check if the correct version of Angular-cli is installed: 
+1) OPTIONAL: Before installing node.js and Angular CLI, it is recommended to install a node version manager, such as [nvm](https://github.com/creationix/nvm) for Mac/Linux or [nvm-windows](https://github.com/coreybutler/nvm-windows) for Windows. Follow the instructions mentioned there. In what follows, we assumed Windows and nvm-windows.
+2) Install most recent node.js (other versions might work as well, but this is not tested. Tested on node 6.9.0 and 9.4.0): 
+`nvm install latest`
+3) OPTIONAL: Install most recent angular/cli globally (tested on v1.6.6): 
+`npm install -g @angular/cli`
+4) Check if the correct version of angular/cli is installed: 
 `ng -v`.
 If the computer is complaining that the angular-devkit/core is missing, you should install it: 
-`npm install -D @angular-devkit/core@0.0.28`.<br />
+`npm install -D @angular-devkit/core@0.0.29`.<br />
 Check the version of angular/cli again (should be allright now): 
 `ng -v`
 5) Make sure [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) is installed on your machine. Copy this repository to the folder of your choice: 
 `git clone https://github.com/MadsHolten/sparql-visualizer.git`<br />
 or make a [fork](https://guides.github.com/activities/forking/) (if you want to contribute), and clone the forked repository: 
 `git clone https://github.com/YOUR-USERNAME/sparql-visualizer.git`
-6) Move inside the sparql-visualizer folder and install angular/cli v1.5.0 locally: 
-`npm install @angular/cli@1.5.0`
-7) Install the project's dependencies while still remaining in the folder: 
+6) Install the project's dependencies while still remaining in the folder (includes angular/cli v1.6.6): 
 `npm install`
-8) Control the local version of angular/cli from the same folder: 
+7) Control the local version of angular/cli from the same folder: 
 `ng -v`.<br />
 If the computer is again complaining that the angular-devkit/core is missing, you should also install it here: 
-`npm install -D @angular-devkit/core@0.0.28`
-9) Run the app from the same folder. The app will start automatically in your browser: 
+`npm install -D @angular-devkit/core@0.0.29`. <br />
+Check the version of angular/cli again (should be allright now): 
+`ng -v`
+8) Run the app from the same folder. The app will start automatically in your browser: 
 `ng serve --open`.<br />
-If the app does not open directly, you can try to navigate to localhost:4200 in your browser
-10) OPTIONAL: Start Stardog Server
-11) OPTIONAL: If changes are made, you can get the most recent version, by using git: 
+If the app does not open directly, you can try to navigate manually to localhost:4200 in your browser
+9) OPTIONAL: Start Stardog Server
+10) OPTIONAL: If changes are made, you can get the most recent version, by using git: 
 `git pull origin`<br />
 Or if you made a fork of this repository, and want to get the latest updates of this repository:<br />
 `git remote add upstream https://github.com/MadsHolten/sparql-visualizer.git`<br />
@@ -72,6 +72,6 @@ if necessary, you can merge the local master branch with your local development 
 
 ## Acknowledgements
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.0.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.6.
 
 The force graph used for visualising the results is built with [D3](https://d3js.org/). The implementation is based on [a project by Rathachai](https://github.com/Rathachai/d3rdf).
