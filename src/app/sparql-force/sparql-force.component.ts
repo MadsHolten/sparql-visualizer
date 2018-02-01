@@ -254,7 +254,7 @@ export class SparqlForceComponent implements OnInit {
         objNode = {id:objId, label:objId, weight:1, type:"node"};
         // If the predicate is rdf:type, the node is an OWL Class
         // Then the domain is an instance
-        if(predNode.label == "rdf:type"){
+        if(predNode.label == "rdf:type" || predNode.label == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"){
           objNode.owlClass = true;
           subjNode.instance = true;
         }
