@@ -11,6 +11,7 @@ export interface Node {
   weight: number;
   type: string;
   owlClass?: boolean;
+  instance?: boolean;
   //instSpace?: boolean; //MB
   //instSpaceType?: boolean; //MB
 }
@@ -154,29 +155,24 @@ export class SparqlForceComponent implements OnInit {
               .append("circle")
                 // .attr("class", "node")
                 .attr("class", d => {
-                  // It is an instance if it begins with inst: or if it's a full URI
-                  var inst = d.id.indexOf("inst:") !== -1 || d.id.indexOf("<http") !== -1;
-
                   if(d.owlClass){
                     return "class" 
                   //}else if(d.instSpace){ //MB
                     //return "instance-space" //MB
                   //}else if(d.instSpaceType){ //MB
                     //return "instance-spaceType"	//MB
-                  }else if(inst){
+                  }else if(d.instance){
                     return "instance"
                   }else{
                     return "node"
                   }
                 })
                 .attr("r", d => {
-                  // It is an instance if it begins with inst: or if it's a full URI
-                  var inst = d.id.indexOf("inst:") !== -1 || d.id.indexOf("<http") !== -1;
-                  
-                  if(inst || d.instSpace || d.instSpaceType){ //MB
-                    return 12; 	
+                  //MB if(d.instance || d.instSpace || d.instSpaceType){            
+                  if(d.instance){
+                    return 10; 	
                   }else if(d.owlClass){
-                    return 10;
+                    return 9;
                   }else{
                     return 8;
                   }
@@ -250,14 +246,17 @@ export class SparqlForceComponent implements OnInit {
         //if(objNode.label == "bot:Space"){subjNode.instSpace = true} //MB
         //else if(objNode.label == "prop:SpaceType"){subjNode.instSpaceType = true} //MB
         //else{} //MB
+        console.log(subjNode);
         graph.nodes.push(subjNode);
       }
 
       if(objNode==null){
         objNode = {id:objId, label:objId, weight:1, type:"node"};
         // If the predicate is rdf:type, the node is an OWL Class
+        // Then the domain is an instance
         if(predNode.label == "rdf:type"){
           objNode.owlClass = true;
+          subjNode.instance = true;
         }
         graph.nodes.push(objNode);
       }
