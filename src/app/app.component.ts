@@ -78,8 +78,13 @@ export class AppComponent implements OnInit {
         .subscribe(res => {
           // show error if status 200 was not recieved
           if(res.status != '200'){
-            this.showSnackbar(res.status+': '+res.statusText);
+            if(res.body && res.body.message){
+              this.showSnackbar(res.body.code+': '+res.body.message, 10000);
+            }else{
+              this.showSnackbar(res.status+': '+res.statusText);
+            }
             console.log(res);
+            console.log("her")
           }else{
 
             // Get body content
@@ -185,9 +190,10 @@ export class AppComponent implements OnInit {
       })
   }
 
-  showSnackbar(message){
+  showSnackbar(message, duration?){
+    if(!duration) duration = 2000
     this.snackBar.open(message, 'close', {
-      duration: 2000,
+      duration: duration,
     });
   }
 
