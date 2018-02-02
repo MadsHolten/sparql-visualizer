@@ -161,7 +161,7 @@ export class SparqlForceComponent implements OnInit {
                     //return "instance-space" //MB
                   //}else if(d.instSpaceType){ //MB
                     //return "instance-spaceType"	//MB
-                  }else if(d.instance){
+                  }else if(d.instance || d.label.indexOf("inst:") != -1){
                     return "instance"
                   }else{
                     return "node"
@@ -246,7 +246,6 @@ export class SparqlForceComponent implements OnInit {
         //if(objNode.label == "bot:Space"){subjNode.instSpace = true} //MB
         //else if(objNode.label == "prop:SpaceType"){subjNode.instSpaceType = true} //MB
         //else{} //MB
-        console.log(subjNode);
         graph.nodes.push(subjNode);
       }
 
