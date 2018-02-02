@@ -161,17 +161,22 @@ export class SparqlForceComponent implements OnInit {
                     //return "instance-space" //MB
                   //}else if(d.instSpaceType){ //MB
                     //return "instance-spaceType"	//MB
+                  }else if(d.label.indexOf("_:") != -1){
+                    return "blank"
                   }else if(d.instance || d.label.indexOf("inst:") != -1){
                     return "instance"
-                  }else{
+                  }
+                  else{
                     return "node"
                   }
                 })
                 .attr("r", d => {
                   //MB if(d.instance || d.instSpace || d.instSpaceType){            
-                  if(d.instance){
-                    return 10; 	
-                  }else if(d.owlClass){
+                  if(d.label.indexOf("_:") != -1){
+                    return 7; 	
+                  }else if(d.instance || d.label.indexOf("inst:") != -1){
+                    return 10;
+                  }else if(d.owlClass || d.label.indexOf("inst:") != -1){
                     return 9;
                   }else{
                     return 8;

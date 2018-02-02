@@ -70,7 +70,12 @@ export class AppComponent implements OnInit {
         .then(res => {
           this.queryResult = res;
           this.resultFieldExpanded = true;
-        }, err => console.log(err));
+        }).catch(err => {
+          console.log(err);
+          if(err.message && err.name){
+            this.showSnackbar(err.name+': '+err.message, 10000);
+          }
+        });
     }
     // If in triplestore mode
     else{
@@ -84,7 +89,6 @@ export class AppComponent implements OnInit {
               this.showSnackbar(res.status+': '+res.statusText);
             }
             console.log(res);
-            console.log("her")
           }else{
 
             // Get body content

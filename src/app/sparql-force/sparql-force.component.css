@@ -8,6 +8,16 @@ html, html * {
     fill:#ddd;
     stroke-width: 1.5px;
 }
+:host ::ng-deep .blank {
+    stroke: #fff;
+    fill: #000 !important;
+    stroke-width: 1.5px;
+}
+:host ::ng-deep .blank.instance {
+    stroke: #fff;
+    fill: #000;
+    stroke-width: 1.5px;
+}
 :host ::ng-deep .class {
     stroke: #fff;
     fill:rgb(158, 0, 0);
