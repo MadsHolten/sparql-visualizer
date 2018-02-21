@@ -93,9 +93,10 @@
                 <span *ngIf="!editDescription" class="description" [innerHTML]="data.description | MarkdownToHtml"></span>
 
                 <!-- Edit description -->
-                <div>
+                <div *ngIf="editDescription">
                     <mat-form-field class="full-width">
                         <textarea
+                            class="description"
                             [value]="data.description"
                             (input)="newDescription = $event.target.value"
                             matInput 
