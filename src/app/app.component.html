@@ -64,6 +64,8 @@
                 <p>
                     <span fxFlex="60 %">Description</span>
                     <span fxFlex="grow"></span>
+
+                    <!-- Buttons -->
                     <mat-icon 
                         *ngIf="!editDescription"
                         class="iconbutton smallicon"
@@ -87,21 +89,24 @@
                     </mat-icon>
                 </p>
 
+                <!-- Description -->
                 <span *ngIf="!editDescription" class="description" [innerHTML]="data.description | MarkdownToHtml"></span>
 
-                <mat-form-field *ngIf="editDescription" class="full-width">
-                <textarea
-                    #xxxx
-                    [value]="data.description"
-                    (input)="newDescription = $event.target.value"
-                    matInput 
-                    placeholder="Autosize textarea" 
-                    matTextareaAutosize 
-                    matAutosizeMinRows="2"
-                    matAutosizeMaxRows="20">
-                </textarea>
-                </mat-form-field>
-
+                <!-- Edit description -->
+                <div>
+                    <mat-form-field class="full-width">
+                        <textarea
+                            [value]="data.description"
+                            (input)="newDescription = $event.target.value"
+                            matInput 
+                            placeholder="Edit description" 
+                            matTextareaAutosize 
+                            matAutosizeMinRows="2"
+                            matAutosizeMaxRows="20">
+                        </textarea>
+                    </mat-form-field>
+                    <a style="font-size: 12px" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown cheatsheet</a>
+                </div>
             </div>
 
         </mat-card>
