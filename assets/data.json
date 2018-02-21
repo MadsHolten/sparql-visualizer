@@ -2,12 +2,12 @@
     {
         "title": "0: Introduction",
         "description": [
-            "This is a simple app to visualise and communicate the content of a knowledge base in the RDF format. The project is open source, and we welcome all who is interested in participated. Please find the Github repository [here](https://github.com/MadsHolten/sparql-visualizer).\n",
-            "The frontend of the is based on [Angular](https://angular.io/), [material design](https://material.angular.io/) and [D3](https://d3js.org/) and the default local triplestore is based on [rdfstore](https://github.com/antoniogarrote/rdfstore-js). Since rdfstore does not fully support SPARQL and has no reasoning capabilities, it is recomended to use a [Stardog](https://www.stardog.com/) based triplestore instead.",
+            "This is a simple app to visualize and communicate the content of a knowledge base in the RDF format. The project is open source, and we welcome all who is interested to participate. Please find the Github repository [here](https://github.com/MadsHolten/sparql-visualizer).\n",
+            "The frontend of the app is based on [Angular](https://angular.io/), [material design](https://material.angular.io/) and [D3](https://d3js.org/) and the default local triplestore is based on [rdfstore](https://github.com/antoniogarrote/rdfstore-js). Since rdfstore does not fully support SPARQL 1.1 and has no reasoning capabilities, it is recomended to use a [Stardog](https://www.stardog.com/) based triplestore instead.",
             "### Use a Stardog triplestore",
-            "To use the app with a Stardog tripestore this must either be available online, or this app must be run in a local environment. To do the latter, simply clone the repository, install the dependencies with `npm install` (requires [node.js](https://nodejs.org/en/)) and run a development server with `ng serve` (requires [Angular CLI](https://cli.angular.io/)).",
+            "To use the app with a Stardog triplestore this sparql-visualizer app must either be available online, or it must run in a local environment. You can find the instructions for installing a local version of this app under [Detailed installation guide](https://github.com/MadsHolten/sparql-visualizer)",
             "With a local copy of the app running, make sure you have a Stardog running (defaults to port 5820) with an empty database (let's call it 'test'), so that you don't delete anything important. Then click the \"Switch to triplestore\" button and type in \"http://localhost:5820\" as endpoint and \"test\" as database. If you haven't changed the username and password they both default to \"admin\".",
-            "### Use local datasets",
+            "### Use the default local triplestore",
             "This will work, but beware that some queries will not run properly, and INSERT/DELETE will not be possible.",
             "### Resources",
             "*[Documentation](https://www.w3.org/TR/sparql11-query/)\n",
