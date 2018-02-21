@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
   private queryResult;
   private resultFieldExpanded: boolean = false;
   public tabIndex: number = 0;
+  public showJSON: boolean = false;
   public tabTitles: string[];
   public data: Data;
   public queryType: string;
@@ -218,6 +219,15 @@ export class AppComponent implements OnInit {
               console.log(err);
             })
       });
+  }
+
+  downloadJSON(){
+    this.showJSON = true;
+    var theJSON = JSON.stringify(this.data);
+  }
+
+  generateDownloadJsonUri(){
+    
   }
 
   update(ev){

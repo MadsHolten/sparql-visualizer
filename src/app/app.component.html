@@ -7,7 +7,7 @@
                 <span fxFlex="grow"></span>
                 <mat-icon 
                     *ngIf="triplestoreOption"
-                    class="swap" 
+                    class="iconbutton" 
                     [matTooltip]="toggleTooltip"
                     (click)="toggleStore()">
                     swap_horiz
@@ -44,6 +44,16 @@
                         Load Ontology data
                     </button>
                 </div>
+            </div>
+
+            <div>
+                <span fxFlex="grow"></span>
+                <mat-icon 
+                    class="iconbutton smallicon"
+                    matTooltip="download JSON"
+                    (click)="downloadJSON()">
+                    file_download
+                </mat-icon>
             </div>
 
         </mat-card>
@@ -186,4 +196,18 @@
             </mat-accordion>
         </div>
     </div>
+
+    <!-- <mat-card class="json-container" *ngIf="showJSON">
+        <div class="icon-bar">
+            <mat-icon (click)="showJSON = !showJSON">close</mat-icon>
+        </div>
+    </mat-card> -->
+
+    <mat-card class="json-container" *ngIf="showJSON">
+        <div class="icon-bar">
+            <mat-icon (click)="showJSON = !showJSON">close</mat-icon>
+        </div>
+        <pre>{{data | json}}</pre>
+    </mat-card>
+
 </div>

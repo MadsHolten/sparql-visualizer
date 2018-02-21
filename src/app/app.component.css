@@ -7,10 +7,30 @@
 .mat-card {
     margin-bottom: 10px;
 }
-.swap:hover {
+.iconbutton:hover {
     opacity: 0.5;
     cursor: pointer;
 }
+.smallicon {
+    font-size: 18px;
+    color: #aaa;
+}
 .button-row {
     margin-top: 10px;
+}
+.json-container {
+    opacity: 0.9;
+    position: absolute;
+    width: 80%;
+    left: 10%;
+    top: 10%;
+}
+.icon-bar {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+.icon-bar > mat-icon:hover {
+    cursor: pointer;
+    color: red;
 }
