@@ -18,6 +18,8 @@ export class AppComponent implements OnInit {
   private resultFieldExpanded: boolean = false;
   public tabIndex: number = 0;
   public showJSON: boolean = false;
+  public editDescription: boolean = false; // true if in edit mode
+  public newDescription: string; // Holds description changes
   public tabTitles: string[];
   public data: Data;
   public queryType: string;
@@ -221,13 +223,12 @@ export class AppComponent implements OnInit {
       });
   }
 
-  downloadJSON(){
-    this.showJSON = true;
-    var theJSON = JSON.stringify(this.data);
-  }
-
-  generateDownloadJsonUri(){
-    
+  saveDescription(){
+    // If changes received
+    if(this.newDescription){
+      this.data.description = this.newDescription;
+    }
+    this.editDescription = false;
   }
 
   update(ev){
