@@ -4,7 +4,7 @@
 
 This is a simple app to visualize and communicate the content of a knowledge base in the RDF format. The project is open source and we welcome all who is interested to participate.
 
-When starting the application, a series of predefined tabs will be generated based on a JSON file located in `src/assets/data.json`. These tabs and their content can be modified by the user directly in the application, but also by modifying and saving the data.json file directly. If you follow the first approach, don't forget to **copy the JSON string** into a seperate JSON file on your computer **before** you leave the modified tab. The tabs hold four components that can be modified:
+When starting the application, a series of predefined tabs will be generated based on a JSON file located in `src/assets/data.json`. These tabs and their content can be modified by the user directly in the application, but also by modifying and saving the data.json file when you've installed this app locally. If you follow the first approach, don't forget to **copy the JSON string** ("Select dataset" component, lower right bottom) into a seperate JSON file on your computer **before** you leave the modified tab (otherwise your changes will be lost). The tabs hold four components that can be modified:
 
 ### Title component
 
