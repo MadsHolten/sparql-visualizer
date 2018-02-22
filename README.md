@@ -27,7 +27,7 @@ As an alternative, you can also connect to a local Stardog triplestore to load t
 2) Make sure you have a Stardog running (defaults to port 5820) with an empty database (let's call it 'test'), so that you don't delete anything important. 
 3) Then click the \"Switch to triplestore\" button (upper right hand corner of the \"Select dataset\" component) and type in "http://localhost:5820" as endpoint and "test" as database. If you haven't changed the username and password they both default to "admin".
 4) Click "Load dataset" to send the sample triples from the "Triples" component to the Stardog database.
-5) Execute the query. Note that Stardog does not allow a shorthanded SPARQL CONSTRUCT for the moment, as mentioned [here](https://community.stardog.com/t/stardog-does-not-support-short-sparql-construct/824).
+5) Execute the query and see the results.
 
 ### Query result component
 
