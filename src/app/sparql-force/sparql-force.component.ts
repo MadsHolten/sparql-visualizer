@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, Input } from '@angular/core';
 import * as N3 from 'n3';
 import * as _ from 'lodash';
+import * as screenfull from 'screenfull';
 
 //Tell TS D3 exists as a variable/object somewhere globally
 declare const d3: any;
@@ -47,6 +48,7 @@ export class SparqlForceComponent implements OnInit {
   private svg;
   private force;
   private width: number;
+  private fs: boolean = false;  //Fullscreen on?
 
   @ViewChild('chart') private chartContainer: ElementRef;
   @Input() private data: Array<any>;
@@ -58,6 +60,22 @@ export class SparqlForceComponent implements OnInit {
   ngOnInit() {
     if(this.data){
       this.createChart();
+    }
+  }
+
+  fullscreen(){
+    this.fs = this.fs ? false : true;
+    // if(this.fs){
+    //   console.log(this.chartContainer)
+    //   this.width = this.chartContainer.nativeElement.clientWidth;
+    //   this.height = this.chartContainer.nativeElement.clientHeight;
+    // }
+    // this.width = this.chartContainer.nativeElement
+    var el = this.chartContainer.nativeElement;
+    if (screenfull.enabled) {
+      // d3.selectAll("svg").remove();
+      // this.createChart();
+      screenfull.toggle(el);
     }
   }
 
@@ -104,6 +122,10 @@ export class SparqlForceComponent implements OnInit {
   cleanGraph(){
     // Remove everything below the SVG element
     d3.selectAll("svg > *").remove();
+    // var el = this.chartContainer.nativeElement.childNodes[3];
+    // if(el){
+    //   el.remove();
+    // }
   }
 
   updateChart() {
