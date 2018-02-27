@@ -5,20 +5,39 @@
     [ngStyle]="{'height': height}"
     #chart>
 
-    <div class="icon-bar" [ngStyle]="{'right': fs ? '40px' : '0px', 'top': fs ? '20px' : '0px'}">
+    <div class="icon-bar" fxLayout="row" [ngStyle]="{'top': fs ? '20px' : '0px'}">
+        <!-- Spacer -->
         <span fxFlex="grow"></span>
+
+        <!-- Save SVG -->
+        <mat-icon 
+            [ngStyle]="{'font-size': fs ? '40px' : '30px'}"
+            matTooltip="download SVG"
+            (click)="saveSVG()">
+            file_download
+        </mat-icon>
+
+        <!-- Spacer -->
+        <span *ngIf="fs" fxFlex="15px"></span>
+        <span *ngIf="!fs" fxFlex="5px"></span>
+
+        <!-- Fullscreen -->
         <mat-icon 
             *ngIf="!fs"
+            matTooltip="enter fullscreen mode"
             style="font-size: 30px;"
             (click)="fullscreen()">
             fullscreen
         </mat-icon>
         <mat-icon 
             *ngIf="fs"
+            matTooltip="exit fullscreen mode"
             style="font-size: 40px;"
             (click)="fullscreen()">
             fullscreen_exit
         </mat-icon>
+
+        <span *ngIf="fs" fxFlex="40px"></span>
     </div>
 
 </div>

@@ -2,6 +2,7 @@ import { Component, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, Inp
 import * as N3 from 'n3';
 import * as _ from 'lodash';
 import * as screenfull from 'screenfull';
+import * as d3_save_svg from 'd3-save-svg';
 
 //Tell TS D3 exists as a variable/object somewhere globally
 declare const d3: any;
@@ -47,14 +48,14 @@ export class SparqlForceComponent implements OnInit {
   private graph: Graph;
   private svg;
   private force;
-  private fs: boolean = false;  //Fullscreen on?
+  public fs: boolean = false;  //Fullscreen on?
 
   private divWidth;
   private divHeight;
 
   @ViewChild('chart') private chartContainer: ElementRef;
   @Input() private data: Array<any>;
-  @Input() private height: number;
+  @Input() public height: number;
   // @Input() private width: number;
   
   constructor() { }
@@ -98,6 +99,13 @@ export class SparqlForceComponent implements OnInit {
       d3.selectAll("svg").remove();
       this.createChart();
     }
+  }
+
+  saveSVG() {
+    var config = {
+      filename: 'sparql-viz-graph',
+    }
+    d3_save_svg.save(d3.select('svg').node(), config);
   }
 
   createChart() {

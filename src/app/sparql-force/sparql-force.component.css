@@ -68,9 +68,8 @@ html, html * {
 
 :host ::ng-deep #svg-body > .icon-bar {
     position: absolute;
+    width: 100%;
     z-index: 10;
-    right: 0px;
-    top: 0px;
 }
 
 #svg-body > .icon-bar > .mat-icon:hover {
