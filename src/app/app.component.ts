@@ -157,7 +157,12 @@ export class AppComponent implements OnInit {
       this._ds.getSingle(this.filePath, i)
         .subscribe(x => {
             this.data = x;
-            this.doQuery();
+            //Perform the query if the tab has a query assigned
+            if(this.data.query){
+              this.doQuery();
+            }else{
+              this.queryResult = null;
+            }
         });
     
     }
