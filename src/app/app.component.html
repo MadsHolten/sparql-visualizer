@@ -1,9 +1,9 @@
-<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-around start">
-    <div fxFlex="40%">
+<div fxFlex fxLayout="column" fxLayout.sm="row" fxLayout.md="row" fxLayout.lg="row" fxLayoutAlign="space-around">
+    <div fxFlex="100%" fxFlex.gt-xs="100%" fxFlex.gt-sm="100%" fxFlex.gt-md="40%" fxFlex.gt-lg="40%">
         <mat-card class="mat-elevation-z2">
 
             <p>
-                <span fxFlex="60 %">Select dataset</span>
+                <span fxFlex="60%">Select dataset</span>
                 <span fxFlex="grow"></span>
                 <mat-icon 
                     *ngIf="triplestoreOption"
@@ -112,7 +112,8 @@
 
         </mat-card>
     </div>
-    <div fxFlex="55%">
+    <!-- <div fxFlex="grow"></div> -->
+    <div fxFlex="100%" fxFlex.gt-xs="100%" fxFlex.gt-sm="100%" fxFlex.gt-md="55%" fxFlex.gt-lg="55%">
 
         <div *ngIf="data">
         
