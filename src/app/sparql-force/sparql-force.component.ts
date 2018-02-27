@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, Input, HostListener } from '@angular/core';
 import * as N3 from 'n3';
 import * as _ from 'lodash';
 import * as screenfull from 'screenfull';
@@ -47,8 +47,10 @@ export class SparqlForceComponent implements OnInit {
   private graph: Graph;
   private svg;
   private force;
-  private width: number;
   private fs: boolean = false;  //Fullscreen on?
+
+  private divWidth;
+  private divHeight;
 
   @ViewChild('chart') private chartContainer: ElementRef;
   @Input() private data: Array<any>;
@@ -59,22 +61,20 @@ export class SparqlForceComponent implements OnInit {
 
   ngOnInit() {
     if(this.data){
+      // set initial height
+      if(this.height){
+        this.divHeight = this.height;
+      }else{
+        this.divHeight = 500; //default to 500px
+      }
       this.createChart();
     }
   }
 
   fullscreen(){
     this.fs = this.fs ? false : true;
-    // if(this.fs){
-    //   console.log(this.chartContainer)
-    //   this.width = this.chartContainer.nativeElement.clientWidth;
-    //   this.height = this.chartContainer.nativeElement.clientHeight;
-    // }
-    // this.width = this.chartContainer.nativeElement
     var el = this.chartContainer.nativeElement;
     if (screenfull.enabled) {
-      // d3.selectAll("svg").remove();
-      // this.createChart();
       screenfull.toggle(el);
     }
   }
@@ -87,23 +87,35 @@ export class SparqlForceComponent implements OnInit {
     }
   }
 
+  // Redraw on resize
+  @HostListener('window:resize') onResize() {
+    // guard against resize before view is rendered
+    if(this.chartContainer) {
+      this.divWidth = this.chartContainer.nativeElement.clientWidth;
+      this.divHeight = this.fs ? this.chartContainer.nativeElement.clientHeight : this.height;
+
+      // Redraw
+      d3.selectAll("svg").remove();
+      this.createChart();
+    }
+  }
+
   createChart() {
     const element = this.chartContainer.nativeElement;
-    var margins = 20;
-    this.width = element.clientWidth-margins;
-    if(!this.height) this.height = 600;
+
+    // Get container width
+    if(!this.divWidth) this.divWidth = element.clientWidth;
+    if(!this.divHeight) this.divHeight = element.clientHeight;
 
     this.svg = d3.select(element).append('svg')
-                  .attr('width', this.width)
-                  .attr('height', this.height);
-        
-    // this.force = d3.layout.force().size([this.width, this.height]);
+                  .attr('width', this.divWidth)
+                  .attr('height', this.divHeight);
 
     this.attachData();
   }
 
   attachData(){
-    this.force = d3.layout.force().size([this.width, this.height]);
+    this.force = d3.layout.force().size([this.divWidth, this.divHeight]);
     // If type of data is text/turtle (not array)
     // the triples must be parsed to objects instead
     if( typeof this.data === 'string' ) {
@@ -122,10 +134,6 @@ export class SparqlForceComponent implements OnInit {
   cleanGraph(){
     // Remove everything below the SVG element
     d3.selectAll("svg > *").remove();
-    // var el = this.chartContainer.nativeElement.childNodes[3];
-    // if(el){
-    //   el.remove();
-    // }
   }
 
   updateChart() {

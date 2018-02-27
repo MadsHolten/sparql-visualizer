@@ -61,17 +61,18 @@ html, html * {
     fill:grey;
 }
 
-:host ::ng-deep svg{
+:host ::ng-deep #svg-body {
     position: relative;
-    border: 1px solid black;
+    width: 100%;
 }
 
 :host ::ng-deep #svg-body > .icon-bar {
-    position: relative;
-    z-index: 2;
-    right: 15px;
-    top: 30px;
+    position: absolute;
+    z-index: 10;
+    right: 0px;
+    top: 0px;
 }
+
 #svg-body > .icon-bar > .mat-icon:hover {
     cursor: pointer;
     opacity: 0.7;

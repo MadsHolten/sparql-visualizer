@@ -2,10 +2,23 @@
     id="svg-body" 
     class="panel-body"
     [ngClass]="{'fullscreen': fs}"
+    [ngStyle]="{'height': height}"
     #chart>
-    <div class="icon-bar">
+
+    <div class="icon-bar" [ngStyle]="{'right': fs ? '40px' : '0px', 'top': fs ? '20px' : '0px'}">
         <span fxFlex="grow"></span>
-        <mat-icon *ngIf="!fs" (click)="fullscreen()">fullscreen</mat-icon>
-        <mat-icon *ngIf="fs" (click)="fullscreen()">fullscreen_exit</mat-icon>
+        <mat-icon 
+            *ngIf="!fs"
+            style="font-size: 30px;"
+            (click)="fullscreen()">
+            fullscreen
+        </mat-icon>
+        <mat-icon 
+            *ngIf="fs"
+            style="font-size: 40px;"
+            (click)="fullscreen()">
+            fullscreen_exit
+        </mat-icon>
     </div>
+
 </div>
