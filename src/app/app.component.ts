@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
 import { QueryService } from './services/query.service';
-import { DataService, Data } from './services/data.service';
+import { DataService, TabsData, ProjectData } from './services/data.service';
 import { StardogService } from './services/stardog.service';
 
 @Component({
@@ -16,12 +16,13 @@ export class AppComponent implements OnInit {
 
   private queryResult;
   private resultFieldExpanded: boolean = false;
-  public tabIndex: number = 0;
+  public tabIndex: number;
   public showJSON: boolean = false;
   public editDescription: boolean = false; // true if in edit mode
   public newDescription: string; // Holds description changes
   public tabTitles: string[];
-  public data: Data;
+  public data: TabsData;
+  public projectData: ProjectData;
   public queryType: string;
   public reasoning: boolean;
   private filePath: string = './assets/data.json';
@@ -48,12 +49,14 @@ export class AppComponent implements OnInit {
       // If a file path is specified, use this instead of the default
       if(map.file) this.filePath = map.file;
 
-      // If a tab is specified, use this instead of the default
-      if(map.tab) this.tabIndex = parseInt(map.tab);
+      // If a tab is specified, use this. Else default to first tab
+      this.tabIndex = map.tab ? parseInt(map.tab) : 0;
       
-      this._ds.getTitles(this.filePath).subscribe(res => {
-        this.tabTitles = res;
-      });
+      // Get tab titles
+      this._ds.getTabTitles(this.filePath).subscribe(res => this.tabTitles = res);
+
+      // Get project data
+      this._ds.getProjectData(this.filePath).subscribe(res => this.projectData = res);
 
       this.changeTab(this.tabIndex);
     });

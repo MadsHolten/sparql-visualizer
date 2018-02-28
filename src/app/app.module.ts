@@ -20,7 +20,10 @@ import { MatButtonModule,
          MatTooltipModule,
          MatSnackBarModule,
          MatTableModule,
-         MatSlideToggleModule } from '@angular/material';
+         MatSlideToggleModule,
+         MatMenuModule,
+         MatToolbarModule,
+         MatDialogModule } from '@angular/material';
 
 // Pipes
 import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
@@ -33,6 +36,7 @@ import { AppComponent } from './app.component';
 import { SparqlForceComponent } from './sparql-force/sparql-force.component';
 import { SparqlTableComponent } from './sparql-table/sparql-table.component';
 import { SettingsComponent } from './settings/settings.component';
+import { ToolbarComponent, AboutDialog } from './toolbar/toolbar.component'
 
 const appRoutes: Routes = [
   { path: '**', component: AppComponent }
@@ -43,7 +47,9 @@ const appRoutes: Routes = [
     AppComponent,
     SparqlForceComponent,
     SparqlTableComponent,
-    SettingsComponent
+    SettingsComponent,
+    ToolbarComponent,
+    AboutDialog
   ],
   imports: [
     BrowserModule,
@@ -67,10 +73,14 @@ const appRoutes: Routes = [
     MatSnackBarModule,
     MatTableModule,
     MatSlideToggleModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MatDialogModule,
     MarkdownToHtmlModule,
     FlexLayoutModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ AboutDialog ]
 })
 export class AppModule { }

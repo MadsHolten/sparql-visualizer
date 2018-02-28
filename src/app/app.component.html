@@ -1,255 +1,266 @@
-<div fxFlex fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-around">
-    <div fxFlex="100%" fxFlex.md="40%" fxFlex.lg="40%" fxFlex.xl="40%">
-        <mat-card class="mat-elevation-z2">
+<div class="container-toolbar">
+    <visualizer-toolbar 
+        fxFlex="100%"
+        *ngIf="projectData"
+        [title]="projectData.title"
+        [creator]="projectData.creator">
+    </visualizer-toolbar>
+</div>
 
-            <p>
-                <span fxFlex="60%">Select dataset</span>
-                <span fxFlex="grow"></span>
-                <mat-icon 
-                    *ngIf="triplestoreOption"
-                    class="iconbutton" 
-                    [matTooltip]="toggleTooltip"
-                    (click)="toggleStore()">
-                    swap_horiz
-                </mat-icon>
-            </p>
+<div class="container-content">
+    <div fxFlex fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-around">
+        <div fxFlex="100%" fxFlex.md="40%" fxFlex.lg="40%" fxFlex.xl="40%">
+            <mat-card class="mat-elevation-z2">
 
-            <!-- Select -->
-            <mat-form-field class="full-width">
-                <mat-select placeholder="Dataset" (change)="changeTab($event.value)" [value]="tabIndex">
-                    <!-- <mat-option value="new">Add set...</mat-option> -->
-                    <mat-option *ngFor="let title of tabTitles; let i = index" [value]="i">
-                        {{ title }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-
-            <!-- Endpoint settings -->
-            <div *ngIf="!localStore">
-                <app-settings></app-settings>
-                <div class="button-row">
-                    <button 
-                        mat-raised-button color="warn"
-                        (click)="wipeDB()">
-                        Wipe database <mat-icon>delete_forever</mat-icon>
-                    </button>
-                    <button 
-                        mat-raised-button
-                        (click)="loadDataset()">
-                        Load dataset <mat-icon>cloud_upload</mat-icon>
-                    </button>
-                    <button
-                        mat-raised-button
-                        (click)="loadOntologies()">
-                        Load Ontology data
-                    </button>
-                </div>
-            </div>
-
-            <div>
-                <span fxFlex="grow"></span>
-                <mat-icon 
-                    class="iconbutton smallicon"
-                    matTooltip="download JSON"
-                    (click)="showJSON = !showJSON">
-                    file_download
-                </mat-icon>
-            </div>
-
-        </mat-card>
-
-        <mat-card class="mat-elevation-z2">
-            
-            <div *ngIf="data">
                 <p>
-                    <span fxFlex="60 %">Description</span>
+                    <span fxFlex="60%">Select dataset</span>
                     <span fxFlex="grow"></span>
-
-                    <!-- Buttons -->
                     <mat-icon 
-                        *ngIf="!editDescription"
-                        class="iconbutton smallicon"
-                        matTooltip="edit description"
-                        (click)="editDescription = !editDescription">
-                        edit
-                    </mat-icon>
-                    <mat-icon 
-                        *ngIf="editDescription"
-                        class="iconbutton smallicon"
-                        matTooltip="finish edit"
-                        (click)="saveDescription()">
-                        check_circle
-                    </mat-icon>
-                    <mat-icon 
-                        *ngIf="editDescription"
-                        class="iconbutton smallicon"
-                        matTooltip="cancel edit"
-                        (click)="editDescription = !editDescription">
-                        cancel
+                        *ngIf="triplestoreOption"
+                        class="iconbutton" 
+                        [matTooltip]="toggleTooltip"
+                        (click)="toggleStore()">
+                        swap_horiz
                     </mat-icon>
                 </p>
 
-                <!-- Description -->
-                <span *ngIf="!editDescription" class="description" [innerHTML]="data.description | MarkdownToHtml"></span>
+                <!-- Select -->
+                <mat-form-field class="full-width">
+                    <mat-select placeholder="Dataset" (change)="changeTab($event.value)" [value]="tabIndex">
+                        <!-- <mat-option value="new">Add set...</mat-option> -->
+                        <mat-option *ngFor="let title of tabTitles; let i = index" [value]="i">
+                            {{ title }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
 
-                <!-- Edit description -->
-                <div *ngIf="editDescription">
-                    <mat-form-field class="full-width">
-                        <textarea
-                            class="description"
-                            [value]="data.description"
-                            (input)="newDescription = $event.target.value"
-                            matInput 
-                            placeholder="Edit description" 
-                            matTextareaAutosize 
-                            matAutosizeMinRows="2"
-                            matAutosizeMaxRows="20">
-                        </textarea>
-                    </mat-form-field>
-                    <a style="font-size: 12px" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown cheatsheet</a>
+                <!-- Endpoint settings -->
+                <div *ngIf="!localStore">
+                    <app-settings></app-settings>
+                    <div class="button-row">
+                        <button 
+                            mat-raised-button color="warn"
+                            (click)="wipeDB()">
+                            Wipe database <mat-icon>delete_forever</mat-icon>
+                        </button>
+                        <button 
+                            mat-raised-button
+                            (click)="loadDataset()">
+                            Load dataset <mat-icon>cloud_upload</mat-icon>
+                        </button>
+                        <button
+                            mat-raised-button
+                            (click)="loadOntologies()">
+                            Load Ontology data
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <span fxFlex="grow"></span>
+                    <mat-icon 
+                        class="iconbutton smallicon"
+                        matTooltip="download JSON"
+                        (click)="showJSON = !showJSON">
+                        file_download
+                    </mat-icon>
+                </div>
+
+            </mat-card>
+
+            <mat-card class="mat-elevation-z2">
+                
+                <div *ngIf="data">
+                    <p>
+                        <span fxFlex="60 %">Description</span>
+                        <span fxFlex="grow"></span>
+
+                        <!-- Buttons -->
+                        <mat-icon 
+                            *ngIf="!editDescription"
+                            class="iconbutton smallicon"
+                            matTooltip="edit description"
+                            (click)="editDescription = !editDescription">
+                            edit
+                        </mat-icon>
+                        <mat-icon 
+                            *ngIf="editDescription"
+                            class="iconbutton smallicon"
+                            matTooltip="finish edit"
+                            (click)="saveDescription()">
+                            check_circle
+                        </mat-icon>
+                        <mat-icon 
+                            *ngIf="editDescription"
+                            class="iconbutton smallicon"
+                            matTooltip="cancel edit"
+                            (click)="editDescription = !editDescription">
+                            cancel
+                        </mat-icon>
+                    </p>
+
+                    <!-- Description -->
+                    <span *ngIf="!editDescription" class="description" [innerHTML]="data.description | MarkdownToHtml"></span>
+
+                    <!-- Edit description -->
+                    <div *ngIf="editDescription">
+                        <mat-form-field class="full-width">
+                            <textarea
+                                class="description"
+                                [value]="data.description"
+                                (input)="newDescription = $event.target.value"
+                                matInput 
+                                placeholder="Edit description" 
+                                matTextareaAutosize 
+                                matAutosizeMinRows="2"
+                                matAutosizeMaxRows="20">
+                            </textarea>
+                        </mat-form-field>
+                        <a style="font-size: 12px" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown cheatsheet</a>
+                    </div>
+                </div>
+
+            </mat-card>
+        </div>
+        <!-- <div fxFlex="grow"></div> -->
+        <div fxFlex="100%" fxFlex.md="55%" fxFlex.lg="55%" fxFlex.xl="55%">
+
+            <div *ngIf="data">
+            
+                <!-- Data -->
+                <mat-accordion *ngIf="localStore && data.triples">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Triples
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            Turtle data to be queried
+                        </mat-panel-description>
+                        </mat-expansion-panel-header>
+                    
+                        <mat-form-field class="full-width">
+                            <textarea 
+                                rows="15" 
+                                cols="105" 
+                                matInput 
+                                placeholder="Triple data"
+                                onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"
+                                [(ngModel)]="data.triples">
+                            </textarea>
+                        </mat-form-field>
+
+                        <div class="full-width" fxLayout="row">
+                            <button 
+                                mat-raised-button 
+                                color="primary" 
+                                (click)="doQuery()">
+                                Update <mat-icon>play_circle_outline</mat-icon>
+                            </button>
+
+                            <button 
+                                mat-raised-button 
+                                (click)="resetTriples()">
+                                Reset <mat-icon>cached</mat-icon>
+                            </button>
+                        </div>
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+                <!-- Query -->
+                <mat-accordion *ngIf="data.query">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Query
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            Query the data
+                        </mat-panel-description>
+                        </mat-expansion-panel-header>
+                    
+                        <mat-form-field class="full-width">
+                            <textarea 
+                                rows="15" 
+                                cols="105" 
+                                matInput 
+                                placeholder="Triple data"
+                                onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"
+                                [(ngModel)]="data.query">
+                            </textarea>
+                        </mat-form-field>
+
+                        <div class="full-width" fxLayout="row">
+                            <button 
+                                mat-raised-button 
+                                color="primary" 
+                                (click)="doQuery()">
+                                Query <mat-icon>play_circle_outline</mat-icon>
+                            </button>
+
+                            <button 
+                                mat-raised-button 
+                                (click)="resetQuery()">
+                                Reset <mat-icon>cached</mat-icon>
+                            </button>
+
+                            <div fxFlex="grow"></div>
+                            <mat-slide-toggle *ngIf="!localStore" [(ngModel)]="reasoning">Reasoning</mat-slide-toggle>
+                        </div>
+
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+                <!-- Query result -->
+                <div *ngIf="queryResult">
+
+                    <!-- CONSTRUCT -->
+                    <mat-accordion *ngIf="queryType == 'construct'">
+                        <mat-expansion-panel [expanded]="resultFieldExpanded">
+                            <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Query
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                Query result
+                            </mat-panel-description>
+                            </mat-expansion-panel-header>
+                        
+                            <!-- Data visualization -->
+                            <app-sparql-force class="full-width" *ngIf="queryResult" [data]="queryResult" [height]="500"></app-sparql-force>
+                            <span *ngIf="!queryResult">No result to show</span>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+                    <!-- SELECT -->
+                    <mat-accordion *ngIf="queryType == 'select'">
+                        <mat-expansion-panel [expanded]="resultFieldExpanded">
+                            <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Query
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                Query result
+                            </mat-panel-description>
+                            </mat-expansion-panel-header>
+                        
+                            <!-- Data visualization -->
+                            <sparql-table [queryResult]="queryResult"></sparql-table>
+                            <span *ngIf="!queryResult">No result to show</span>
+                        </mat-expansion-panel>
+                    </mat-accordion>
                 </div>
             </div>
+        </div>
 
-        </mat-card>
-    </div>
-    <!-- <div fxFlex="grow"></div> -->
-    <div fxFlex="100%" fxFlex.md="55%" fxFlex.lg="55%" fxFlex.xl="55%">
-
-        <div *ngIf="data">
-        
-            <!-- Data -->
-            <mat-accordion *ngIf="localStore && data.triples">
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        Triples
-                    </mat-panel-title>
-                    <mat-panel-description>
-                        Turtle data to be queried
-                    </mat-panel-description>
-                    </mat-expansion-panel-header>
-                
-                    <mat-form-field class="full-width">
-                        <textarea 
-                            rows="15" 
-                            cols="105" 
-                            matInput 
-                            placeholder="Triple data"
-                            onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"
-                            [(ngModel)]="data.triples">
-                        </textarea>
-                    </mat-form-field>
-
-                    <div class="full-width" fxLayout="row">
-                        <button 
-                            mat-raised-button 
-                            color="primary" 
-                            (click)="doQuery()">
-                            Update <mat-icon>play_circle_outline</mat-icon>
-                        </button>
-
-                        <button 
-                            mat-raised-button 
-                            (click)="resetTriples()">
-                            Reset <mat-icon>cached</mat-icon>
-                        </button>
-                    </div>
-
-                </mat-expansion-panel>
-            </mat-accordion>
-
-            <!-- Query -->
-            <mat-accordion *ngIf="data.query">
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        Query
-                    </mat-panel-title>
-                    <mat-panel-description>
-                        Query the data
-                    </mat-panel-description>
-                    </mat-expansion-panel-header>
-                
-                    <mat-form-field class="full-width">
-                        <textarea 
-                            rows="15" 
-                            cols="105" 
-                            matInput 
-                            placeholder="Triple data"
-                            onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"
-                            [(ngModel)]="data.query">
-                        </textarea>
-                    </mat-form-field>
-
-                    <div class="full-width" fxLayout="row">
-                        <button 
-                            mat-raised-button 
-                            color="primary" 
-                            (click)="doQuery()">
-                            Query <mat-icon>play_circle_outline</mat-icon>
-                        </button>
-
-                        <button 
-                            mat-raised-button 
-                            (click)="resetQuery()">
-                            Reset <mat-icon>cached</mat-icon>
-                        </button>
-
-                        <div fxFlex="grow"></div>
-                        <mat-slide-toggle *ngIf="!localStore" [(ngModel)]="reasoning">Reasoning</mat-slide-toggle>
-                    </div>
-
-
-                </mat-expansion-panel>
-            </mat-accordion>
-
-            <!-- Query result -->
-            <div *ngIf="queryResult">
-
-                <!-- CONSTRUCT -->
-                <mat-accordion *ngIf="queryType == 'construct'">
-                    <mat-expansion-panel [expanded]="resultFieldExpanded">
-                        <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            Query
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            Query result
-                        </mat-panel-description>
-                        </mat-expansion-panel-header>
-                    
-                        <!-- Data visualization -->
-                        <app-sparql-force class="full-width" *ngIf="queryResult" [data]="queryResult" [height]="500"></app-sparql-force>
-                        <span *ngIf="!queryResult">No result to show</span>
-                    </mat-expansion-panel>
-                </mat-accordion>
-
-                <!-- SELECT -->
-                <mat-accordion *ngIf="queryType == 'select'">
-                    <mat-expansion-panel [expanded]="resultFieldExpanded">
-                        <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            Query
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            Query result
-                        </mat-panel-description>
-                        </mat-expansion-panel-header>
-                    
-                        <!-- Data visualization -->
-                        <sparql-table [queryResult]="queryResult"></sparql-table>
-                        <span *ngIf="!queryResult">No result to show</span>
-                    </mat-expansion-panel>
-                </mat-accordion>
+        <mat-card class="json-container" *ngIf="showJSON">
+            <div class="icon-bar">
+                <mat-icon (click)="showJSON = !showJSON">close</mat-icon>
             </div>
-        </div>
+            <pre>{{data | json}}</pre>
+        </mat-card>
+
     </div>
-
-    <mat-card class="json-container" *ngIf="showJSON">
-        <div class="icon-bar">
-            <mat-icon (click)="showJSON = !showJSON">close</mat-icon>
-        </div>
-        <pre>{{data | json}}</pre>
-    </mat-card>
-
 </div>

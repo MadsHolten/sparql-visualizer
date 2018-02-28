@@ -1,0 +1,26 @@
+<mat-toolbar>
+    <!-- <img src="../../assets/niras-logo.svg" height="40 px"/> -->
+    <span class="title">SPARQL-visualizer | {{title}}</span>
+    <span fxFlex="grow"></span>
+    <span *ngIf="creator" class="creator">By {{creator}}</span>
+  
+    <!-- Menu -->
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>fullscreen</mat-icon>
+        <span>Switch to fullscreen</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>file_download</mat-icon>
+        <span>Download JSON</span>
+      </button>
+      <button mat-menu-item (click)="showAbout()">
+        <mat-icon>info_outline</mat-icon>
+        <span>About</span>
+      </button>
+    </mat-menu>
+    
+</mat-toolbar>
