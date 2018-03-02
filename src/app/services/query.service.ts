@@ -188,7 +188,7 @@ export class QueryService {
     
   }
 
-  private _abbreviateTriples(triples,prefixes){
+  public _abbreviateTriples(triples,prefixes){
 
     var abrTriples = [];
       

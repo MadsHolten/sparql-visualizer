@@ -20,6 +20,7 @@ export class StardogService  extends ProjectSettingsService {
     }
 
     loadTriples(triples,graphURI?){
+        if(!graphURI) graphURI = undefined;
         // const data = this._toJSONLD(triples)
         const conn = this._getConn();
         const database = this._getDB();

@@ -1,6 +1,8 @@
 import { Component, Input, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
+import { SettingsDialog } from './settings-dialog/settings-dialog.component';
+
 @Component({
   selector: 'visualizer-toolbar',
   templateUrl: './toolbar.component.html',
@@ -39,6 +41,13 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
         height: '300px',
         width: '500px',
         data: {title: "WIP", message: "This feature is yet to be implemented."}
+    });
+  }
+
+  showSettings(){
+    let dialogRef = this.dialog.open(SettingsDialog, {
+        height: '300px',
+        width: '500px'
     });
   }
 

@@ -1,0 +1,25 @@
+<div class="container">
+    <h4 mat-dialog-title>{{title}}</h4>
+    <div mat-dialog-content>
+        <div fxLayout="row">
+            <span fxFlex="60%">File-based</span>
+            <span fxFlex="grow"></span>
+            <mat-slide-toggle
+                [checked]="fileMode"
+                (change)="toggleFileMode()">
+            </mat-slide-toggle>
+        </div>
+        <mat-form-field *ngIf="fileMode">
+            <input matInput placeholder="File path" [(ngModel)]="filePath">
+        </mat-form-field>
+        <p>NB! Files only work in triplestore mode</p>
+    </div>
+
+    <div mat-dialog-actions>
+        <div fxLayout="row">
+            <button mat-raised-button (click)="saveSettings()">Save</button>
+            <button mat-raised-button (click)="onNoClick()">Cancel</button>
+        </div>
+    </div>
+</div>
+    

@@ -139,30 +139,32 @@
                         </mat-panel-description>
                         </mat-expansion-panel-header>
                     
-                        <mat-form-field class="full-width">
-                            <textarea 
-                                rows="15" 
-                                cols="105" 
-                                matInput 
-                                placeholder="Triple data"
-                                onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"
-                                [(ngModel)]="data.triples">
-                            </textarea>
-                        </mat-form-field>
+                        <div>
+                            <mat-form-field class="full-width">
+                                <textarea 
+                                    rows="15" 
+                                    cols="105" 
+                                    matInput 
+                                    placeholder="Triple data"
+                                    onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"
+                                    [(ngModel)]="data.triples">
+                                </textarea>
+                            </mat-form-field>
 
-                        <div class="full-width" fxLayout="row">
-                            <button 
-                                mat-raised-button 
-                                color="primary" 
-                                (click)="doQuery()">
-                                Update <mat-icon>play_circle_outline</mat-icon>
-                            </button>
+                            <div class="full-width" fxLayout="row">
+                                <button 
+                                    mat-raised-button 
+                                    color="primary" 
+                                    (click)="doQuery()">
+                                    Update <mat-icon>play_circle_outline</mat-icon>
+                                </button>
 
-                            <button 
-                                mat-raised-button 
-                                (click)="resetTriples()">
-                                Reset <mat-icon>cached</mat-icon>
-                            </button>
+                                <button 
+                                    mat-raised-button 
+                                    (click)="resetTriples()">
+                                    Reset <mat-icon>cached</mat-icon>
+                                </button>
+                            </div>
                         </div>
 
                     </mat-expansion-panel>
@@ -261,6 +263,11 @@
             </div>
             <pre>{{data | json}}</pre>
         </mat-card>
+
+        <div *ngIf="loading" class="loading-spinner">
+            <mat-spinner></mat-spinner>
+            <p *ngIf="loadingMessage">{{loadingMessage}}</p>
+        </div>
 
     </div>
 </div>

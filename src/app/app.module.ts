@@ -8,7 +8,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { WebStorageModule } from 'ngx-store';
 
 // Material design
-import 'hammerjs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule,
          MatInputModule,
@@ -23,7 +22,8 @@ import { MatButtonModule,
          MatSlideToggleModule,
          MatMenuModule,
          MatToolbarModule,
-         MatDialogModule } from '@angular/material';
+         MatDialogModule,
+         MatProgressSpinnerModule } from '@angular/material';
 
 // Pipes
 import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
@@ -36,7 +36,14 @@ import { AppComponent } from './app.component';
 import { SparqlForceComponent } from './sparql-force/sparql-force.component';
 import { SparqlTableComponent } from './sparql-table/sparql-table.component';
 import { SettingsComponent } from './settings/settings.component';
-import { ToolbarComponent, AboutDialog } from './toolbar/toolbar.component'
+
+// Toolbar and menus
+import { ToolbarComponent, AboutDialog } from './toolbar/toolbar.component';
+import { SettingsDialog } from './toolbar/settings-dialog/settings-dialog.component';
+
+// Services
+import { ProjectSettingsService } from './services/project-settings.service';
+
 
 const appRoutes: Routes = [
   { path: '**', component: AppComponent }
@@ -49,7 +56,8 @@ const appRoutes: Routes = [
     SparqlTableComponent,
     SettingsComponent,
     ToolbarComponent,
-    AboutDialog
+    AboutDialog,
+    SettingsDialog
   ],
   imports: [
     BrowserModule,
@@ -77,10 +85,14 @@ const appRoutes: Routes = [
     MatToolbarModule,
     MatDialogModule,
     MarkdownToHtmlModule,
+    MatProgressSpinnerModule,
     FlexLayoutModule
   ],
-  providers: [],
+  providers: [ ProjectSettingsService ],
   bootstrap: [AppComponent],
-  entryComponents: [ AboutDialog ]
+  entryComponents: [ 
+    AboutDialog, 
+    SettingsDialog 
+  ]
 })
 export class AppModule { }

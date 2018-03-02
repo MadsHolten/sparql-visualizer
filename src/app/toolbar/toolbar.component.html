@@ -9,13 +9,17 @@
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>
+      <button mat-menu-item (click)="showWIP()">
         <mat-icon>fullscreen</mat-icon>
         <span>Switch to fullscreen</span>
       </button>
-      <button mat-menu-item>
+      <button mat-menu-item (click)="showWIP()">
         <mat-icon>file_download</mat-icon>
         <span>Download JSON</span>
+      </button>
+      <button mat-menu-item (click)="showSettings()">
+        <mat-icon>settings</mat-icon>
+        <span>Settings</span>
       </button>
       <button mat-menu-item (click)="showAbout()">
         <mat-icon>info_outline</mat-icon>
