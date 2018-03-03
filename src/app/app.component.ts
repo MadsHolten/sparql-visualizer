@@ -206,7 +206,8 @@ export class AppComponent implements OnInit {
   loadDataset(){
     // Get filePath if a source is defined
     this._ds.getProjectSettings().subscribe(settings => {
-      if(settings.filePath){
+      console.log(settings);
+      if(settings && settings.filePath){
 
         // Load from external source
         var url = settings.filePath;

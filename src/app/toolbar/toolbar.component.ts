@@ -1,6 +1,6 @@
 import { Component, Input, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, DOCUMENT  } from '@angular/platform-browser';
 
 import { SettingsDialog } from './settings-dialog/settings-dialog.component';
 
@@ -31,7 +31,8 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
 
   constructor(
       public dialog: MatDialog,
-      private _sanitizer: DomSanitizer) {}
+      private _sanitizer: DomSanitizer,
+      @Inject(DOCUMENT) private document: any) {}
 
   change(ev){
     console.log(ev.target.value)
@@ -44,6 +45,10 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
         width: '500px',
         data: {title: "About", message: this.about}
       });
+  }
+
+  downloadApp(){
+    this.document.location.href = 'https://github.com/MadsHolten/sparql-visualizer/blob/master/sparql-viz.zip?raw=true';
   }
 
   showVideo(videoId){
