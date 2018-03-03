@@ -38,7 +38,7 @@ import { SparqlTableComponent } from './sparql-table/sparql-table.component';
 import { SettingsComponent } from './settings/settings.component';
 
 // Toolbar and menus
-import { ToolbarComponent, AboutDialog } from './toolbar/toolbar.component';
+import { ToolbarComponent, AboutDialog, VideoDialog } from './toolbar/toolbar.component';
 import { SettingsDialog } from './toolbar/settings-dialog/settings-dialog.component';
 
 // Services
@@ -57,6 +57,7 @@ const appRoutes: Routes = [
     SettingsComponent,
     ToolbarComponent,
     AboutDialog,
+    VideoDialog,
     SettingsDialog
   ],
   imports: [
@@ -91,7 +92,8 @@ const appRoutes: Routes = [
   providers: [ ProjectSettingsService, Title ],
   bootstrap: [AppComponent],
   entryComponents: [ 
-    AboutDialog, 
+    AboutDialog,
+    VideoDialog,
     SettingsDialog 
   ]
 })

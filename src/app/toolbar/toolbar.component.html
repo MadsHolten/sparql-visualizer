@@ -21,9 +21,20 @@
         <mat-icon>settings</mat-icon>
         <span>Settings</span>
       </button>
+      <button mat-menu-item [matMenuTriggerFor]="submenu">
+        <mat-icon>school</mat-icon>
+        <span>Tutorials</span>
+      </button>
       <button mat-menu-item (click)="showAbout()">
         <mat-icon>info_outline</mat-icon>
         <span>About</span>
+      </button>
+    </mat-menu>
+
+    <!-- sub-menu tutorials -->
+    <mat-menu #submenu="matMenu">
+      <button mat-menu-item *ngFor="let video of videos" (click)="showVideo(video.id)">
+        <span>{{video.title}}</span>
       </button>
     </mat-menu>
     

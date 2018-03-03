@@ -1,5 +1,6 @@
 import { Component, Input, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { SettingsDialog } from './settings-dialog/settings-dialog.component';
 
@@ -12,6 +13,11 @@ export class ToolbarComponent {
 
   @Input() title: string;
   @Input() creator: string;
+
+  videos = [
+      {title: "1: The basics", id:"ixrhgKHKXDY"}
+  ]
+
   about = `
 The development of this tool was initiated by [Mads Holten Rasmussen](researchgate.net/profile/Mads_Holten_Rasmussen) and is distributed under the [GNU General Public License](https://www.gnu.org/licenses/gpl.txt).
 
@@ -21,7 +27,11 @@ Please join the effort in further developing the tool so ontology designers can 
 
 A special thanks to [Niras](https://www.niras.com/) for co-funding the Industrial PhD-project under which the tool has been developed.`;
 
-  constructor(public dialog: MatDialog) {}
+
+
+  constructor(
+      public dialog: MatDialog,
+      private _sanitizer: DomSanitizer) {}
 
   change(ev){
     console.log(ev.target.value)
@@ -33,6 +43,15 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
         height: '300px',
         width: '500px',
         data: {title: "About", message: this.about}
+      });
+  }
+
+  showVideo(videoId){
+      var safeURL = this._sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${videoId}?autoplay=1`);
+      let dialogRef = this.dialog.open(VideoDialog, {
+        height: '80%',
+        width: '70%',
+        data: {url: safeURL}
       });
   }
 
@@ -53,7 +72,7 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
 
 }
 
-// Dialog
+// About Dialog
 @Component({
     selector: 'about-dialog',
     template: `<h4>{{data.title}}</h4>
@@ -69,6 +88,31 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
     `]
 })
 export class AboutDialog {
+
+    constructor(
+        public dialogRef: MatDialogRef<AboutDialog>,
+        @Inject(MAT_DIALOG_DATA) public data: any) { }
+
+    // Close when clicking outside
+    onNoClick(): void {
+        this.dialogRef.close();
+    }
+
+}
+
+// Video Dialog
+@Component({
+    selector: 'video-dialog',
+    template: `
+    <iframe [src]='data.url' frameborder='0' allow='autoplay; encrypted-media' allowfullscreen></iframe>`,
+    styles: [`
+    iframe{
+        width: 100%;
+        height: 95%;
+    }
+    `]
+})
+export class VideoDialog {
 
     constructor(
         public dialogRef: MatDialogRef<AboutDialog>,
