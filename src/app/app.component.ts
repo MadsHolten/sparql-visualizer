@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
+import { Title } from '@angular/platform-browser'; // To override title
 
 import { QueryService } from './services/query.service';
 import { DataService, TabsData, ProjectData } from './services/data.service';
@@ -41,7 +42,8 @@ export class AppComponent implements OnInit {
     private _ds: DataService,
     private _ss: StardogService,
     private route: ActivatedRoute,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private titleService: Title
   ) {}
 
   ngOnInit(){   
@@ -53,7 +55,11 @@ export class AppComponent implements OnInit {
       this._ds.getTabTitles().subscribe(res => this.tabTitles = res);
 
       // Get project data
-      this._ds.getProjectData().subscribe(res => this.projectData = res);
+      this._ds.getProjectData().subscribe(res => {
+        this.projectData = res;
+        // Change page title
+        this.titleService.setTitle(this.projectData.title);
+      });
 
       this.changeTab(this.tabIndex);
     });
