@@ -52,6 +52,7 @@ export class SparqlForceComponent implements OnInit {
 
   private divWidth;
   private divHeight;
+  private widthBeforeResize;
 
   @ViewChild('chart') private chartContainer: ElementRef;
   @Input() private data: Array<any>;
@@ -75,6 +76,10 @@ export class SparqlForceComponent implements OnInit {
   fullscreen(){
     this.fs = this.fs ? false : true;
     var el = this.chartContainer.nativeElement;
+
+    //Record initial screen width when changing to fullscreen
+    if(this.fs) this.widthBeforeResize = el.clientWidth;    
+
     if (screenfull.enabled) {
       screenfull.toggle(el);
     }
@@ -90,10 +95,19 @@ export class SparqlForceComponent implements OnInit {
 
   // Redraw on resize
   @HostListener('window:resize') onResize() {
+    var el = this.chartContainer.nativeElement;
+  
     // guard against resize before view is rendered
     if(this.chartContainer) {
-      this.divWidth = this.chartContainer.nativeElement.clientWidth;
-      this.divHeight = this.fs ? this.chartContainer.nativeElement.clientHeight : this.height;
+      // When changing from fullscreen the recorded width before resize is used
+      if(!this.fs && this.widthBeforeResize){
+        this.divWidth = this.widthBeforeResize;
+        this.widthBeforeResize = null;
+      }else{
+        this.divWidth = el.clientWidth;
+      }
+
+      this.divHeight = this.fs ? el.clientHeight : this.height;
 
       // Redraw
       d3.selectAll("svg").remove();

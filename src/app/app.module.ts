@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -88,7 +88,7 @@ const appRoutes: Routes = [
     MatProgressSpinnerModule,
     FlexLayoutModule
   ],
-  providers: [ ProjectSettingsService ],
+  providers: [ ProjectSettingsService, Title ],
   bootstrap: [AppComponent],
   entryComponents: [ 
     AboutDialog, 
