@@ -50,6 +50,9 @@ export class AppComponent implements OnInit {
     this.route.queryParams.subscribe(map => {
       // If a tab is specified, use this. Else default to first tab
       this.tabIndex = map.tab ? parseInt(map.tab) : 0;
+
+      // If triplestore mode is defined, use this
+      this.localStore = map.local == 'true' ? true : false;
       
       // Get tab titles
       this._ds.getTabTitles().subscribe(res => this.tabTitles = res);
