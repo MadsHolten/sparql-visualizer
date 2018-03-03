@@ -15,7 +15,8 @@ export class ToolbarComponent {
   @Input() creator: string;
 
   videos = [
-      {title: "1: The basics", id:"ixrhgKHKXDY"}
+      {title: "1: The basics", id:"ixrhgKHKXDY"},
+      {title: "2: Running locally", id: "KgtAgyzwEpk"}
   ]
 
   about = `
@@ -113,7 +114,7 @@ export class AboutDialog {
     styles: [`
     iframe{
         width: 100%;
-        height: 95%;
+        height: 98%;
     }
     `]
 })
