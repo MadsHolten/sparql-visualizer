@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
       this.tabIndex = map.tab ? parseInt(map.tab) : 0;
 
       // If triplestore mode is defined, use this
-      this.localStore = map.local == 'true' ? true : false;
+      this.localStore = map.local == 0 ? false : true;
       
       // Get tab titles
       this._ds.getTabTitles().subscribe(res => this.tabTitles = res);
