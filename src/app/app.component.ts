@@ -206,8 +206,8 @@ export class AppComponent implements OnInit {
   loadDataset(){
     // Get filePath if a source is defined
     this._ds.getProjectSettings().subscribe(settings => {
-      console.log(settings);
-      if(settings){
+
+      if(settings && settings.filePath){
         // Load from external source
         var url = settings.filePath;
         return this.loadExternal(url);
@@ -216,6 +216,7 @@ export class AppComponent implements OnInit {
 
         // Load user defined triples
         const triples = this.data.triples;
+        console.log(triples);
         this._ss.loadTriples(triples)
           .subscribe(res => {
             if(res.status == '200'){

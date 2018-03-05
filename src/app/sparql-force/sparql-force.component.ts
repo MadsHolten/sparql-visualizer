@@ -88,6 +88,7 @@ export class SparqlForceComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.data.currentValue) {
       this.data = changes.data.currentValue;
+      console.log(this.data);
       this.cleanGraph();
       this.attachData();
     }
