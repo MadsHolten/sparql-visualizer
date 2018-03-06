@@ -186,6 +186,16 @@ export class AppComponent implements OnInit {
     }
   }
 
+  tableClick(URI){
+    var query = `SELECT *\nWHERE {\n\tBIND(<${URI}> AS ?el)\n\tOPTIONAL { \n\t\tGRAPH ?graph {\n\t\t\t?el ?key ?value .\n\t\t}\n\t}\n\tOPTIONAL { ?el ?key ?value . }\n}`;
+    this.data.query = query;
+    this.doQuery();
+  }
+
+  graphClick(URI){
+    console.log(URI);
+  }
+
   wipeDB(){
     const query = "DELETE WHERE { ?s ?p ?o }";
 

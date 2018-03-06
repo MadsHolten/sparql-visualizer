@@ -23,10 +23,13 @@ import { MatButtonModule,
          MatMenuModule,
          MatToolbarModule,
          MatDialogModule,
-         MatProgressSpinnerModule } from '@angular/material';
+         MatProgressSpinnerModule,
+         MatChipsModule } from '@angular/material';
 
 // Pipes
 import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
+import { PrefixPipe } from './pipes/prefix.pipe';
+import { PrefixSimplePipe } from './pipes/prefix-simple.pipe'
 
 // FxFlex
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -58,7 +61,9 @@ const appRoutes: Routes = [
     ToolbarComponent,
     AboutDialog,
     VideoDialog,
-    SettingsDialog
+    SettingsDialog,
+    PrefixPipe,
+    PrefixSimplePipe
   ],
   imports: [
     BrowserModule,
@@ -87,6 +92,7 @@ const appRoutes: Routes = [
     MatDialogModule,
     MarkdownToHtmlModule,
     MatProgressSpinnerModule,
+    MatChipsModule,
     FlexLayoutModule
   ],
   providers: [ ProjectSettingsService, Title ],

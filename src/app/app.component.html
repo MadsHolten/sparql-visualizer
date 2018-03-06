@@ -231,7 +231,7 @@
                             </mat-expansion-panel-header>
                         
                             <!-- Data visualization -->
-                            <app-sparql-force class="full-width" *ngIf="queryResult" [data]="queryResult" [height]="500"></app-sparql-force>
+                            <app-sparql-force class="full-width" *ngIf="queryResult" (clickedURI)="graphClick($event)" [data]="queryResult" [height]="500"></app-sparql-force>
                             <span *ngIf="!queryResult">No result to show</span>
                         </mat-expansion-panel>
                     </mat-accordion>
@@ -249,7 +249,7 @@
                             </mat-expansion-panel-header>
                         
                             <!-- Data visualization -->
-                            <sparql-table [queryResult]="queryResult"></sparql-table>
+                            <sparql-table [queryResult]="queryResult" (clickedURI)="tableClick($event)"></sparql-table>
                             <span *ngIf="!queryResult">No result to show</span>
                         </mat-expansion-panel>
                     </mat-accordion>

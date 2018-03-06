@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import * as N3 from 'n3';
@@ -24,6 +24,7 @@ export class SparqlTableComponent implements OnChanges, OnInit{
   resultLength: number;
   prefixes: object;
   @Input() queryResult: Object;
+  @Output() clickedURI = new EventEmitter<string>();
 
   constructor(
     private ds: DataService
@@ -45,21 +46,13 @@ export class SparqlTableComponent implements OnChanges, OnInit{
       //Extract results
       var bindings = changes.queryResult.currentValue.results.bindings;
 
-      //Abbreviate using prefixes
-      this.ds.getPrefixes().subscribe(prefixes => {      
-        data = _.map( bindings, i => _.mapValues(i, j => {
-          if(j.type == 'uri'){
-            var abbreviated = this._abbreviate(j.value,prefixes);
-            return abbreviated ? abbreviated : j.value;
-          }else{
-            return j.value;
-          }
-        }) );
-        this.resultLength = data.length;
+      data = bindings;
 
-        //Load data source
-        this.dataSource = new ExampleDataSource();
-      })
+      this.resultLength = data.length;
+      
+      //Load data source
+      this.dataSource = new ExampleDataSource();
+
       
     // If no result has been returned
     }else{
@@ -71,18 +64,11 @@ export class SparqlTableComponent implements OnChanges, OnInit{
     }
   }
 
-  private _abbreviate(foi,prefixes){
-    var newVal: string;
-    // Loop over prefixes
-    _.each(prefixes, p => {
-      var prefix = p.prefix;
-      var uri = p.uri;
-      if(foi.indexOf(uri) !== -1){
-        newVal = foi.replace(uri, prefix+':');
-      }
-    })
-    return newVal;
-  } 
+  clickElement(el){
+    if(el.type == 'uri'){
+      this.clickedURI.emit(el.value);
+    }
+  }
 
 }
 

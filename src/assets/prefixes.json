@@ -9,5 +9,6 @@
     {"prefix": "bot", "uri": "https://w3id.org/bot#"},
     {"prefix": "cdt", "uri": "http://w3id.org/lindt/custom_datatypes#"},
     {"prefix": "props", "uri": "https://w3id.org/product/props#"},
-    {"prefix": "inst", "uri": "https://www.niras.dk/proj100/"}
+    {"prefix": "inst", "uri": "https://www.niras.dk/proj100/"},
+    {"prefix": "owl", "uri": "http://www.w3.org/2002/07/owl#"}
 ]

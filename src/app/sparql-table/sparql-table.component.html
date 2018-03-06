@@ -12,7 +12,18 @@
             <!-- Columns -->
             <ng-container [matColumnDef]="col">
             <mat-header-cell *matHeaderCellDef> {{col}} </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element[col]}} </mat-cell>
+            <mat-cell
+                *matCellDef="let element"
+                [ngClass]="element[col] && element[col].type == 'uri' ? 'link' : 'text'"
+                (click)="clickElement(element[col])">
+                <!-- {{element[col].value}} -->
+                {{element[col] | prefix}}
+                <span fxFlex="grow"></span>
+                <span *ngIf="element[col].type == 'literal'">
+                    <mat-chip *ngIf="element[col]['xml:lang']">{{element[col]['xml:lang']}}</mat-chip>
+                    <mat-chip *ngIf="element[col].datatype">{{element[col].datatype | prefixstring}}</mat-chip>
+                </span>
+            </mat-cell>
             </ng-container>
         </div>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

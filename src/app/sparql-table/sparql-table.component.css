@@ -22,3 +22,8 @@
     border-bottom-color: rgba(0, 0, 0, 0.12);
     font-family: Roboto,Helvetica Neue,sans-serif;
 }
+
+.link:hover {
+    cursor: pointer;
+    opacity: 0.7;
+}

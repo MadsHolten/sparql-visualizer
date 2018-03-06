@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, Input, HostListener } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import * as N3 from 'n3';
 import * as _ from 'lodash';
 import * as screenfull from 'screenfull';
@@ -54,10 +54,14 @@ export class SparqlForceComponent implements OnInit {
   private divHeight;
   private widthBeforeResize;
 
+  //Time
+  private timeEnter: number;
+  private timeOut: number;
+
   @ViewChild('chart') private chartContainer: ElementRef;
   @Input() private data: Array<any>;
   @Input() public height: number;
-  // @Input() private width: number;
+  @Output() clickedURI = new EventEmitter<string>();
   
   constructor() { }
 
@@ -154,6 +158,12 @@ export class SparqlForceComponent implements OnInit {
     }
   }
 
+  public clicked(d) {
+    if (d3.event.defaultPrevented) return; // dragged
+
+    this.clickedURI.emit(d);
+  }
+
   cleanGraph(){
     // Remove everything below the SVG element
     d3.selectAll("svg > *").remove();
@@ -223,6 +233,7 @@ export class SparqlForceComponent implements OnInit {
                     return "node"
                   }
                 })
+                .attr("id", d => d.label)
                 .attr("r", d => {
                   //MB if(d.instance || d.instSpace || d.instSpaceType){            
                   if(d.label.indexOf("_:") != -1){
@@ -234,6 +245,9 @@ export class SparqlForceComponent implements OnInit {
                   }else{
                     return 8;
                   }
+                })
+                .on("click", (d) => {
+                    this.clicked(d);
                 })
                 .call(this.force.drag);//nodes
 
