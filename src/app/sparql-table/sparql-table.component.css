@@ -13,9 +13,8 @@
 .table-header {
     min-height: 30px;
     display: flex;
-    align-items: baseline;
+    align-items: center;
     margin: 8px 24px 8px 24px;
-    font-size: 16px;
     justify-content: space-between;
     border-bottom-style: solid;
     border-bottom-color: rgba(0, 0, 0, 0.12);
@@ -25,6 +24,16 @@
 .mat-cell, .mat-header-cell{
     position: relative;
     padding-right: 5px;
+    height:100%;
+}
+
+.table-header > .mat-icon {
+    font-size: 16x;
+    padding-right: 10px;
+}
+.table-header > .mat-icon:hover {
+    cursor: pointer;
+    color: #7ca37f;
 }
 
 .colRest {
@@ -36,19 +45,22 @@
     opacity: 0.7;
 }
 
+.mat-cell:hover .cp {
+    display: inline;
+}
 #mat-checkbox-1 > label > span {
     font-size: 14px;
 }
 .cp{
+    display: none;
     position: absolute;
-    opacity: 0.7;
+    cursor: pointer;
     text-align: right;
-    right: 0px;
+    right: 1px;
+    top: 1px;
     font-size: 18px;
     z-index: 10;
 }
 .cp:hover {
-    cursor: pointer;
-    font-size: 24px;
     color: #7ca37f;
 }

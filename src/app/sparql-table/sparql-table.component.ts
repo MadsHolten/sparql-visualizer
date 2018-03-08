@@ -4,9 +4,13 @@ import { Observable } from 'rxjs/Observable';
 import * as N3 from 'n3';
 import * as _ from 'lodash';
 import 'rxjs/add/observable/of';
-import { MatPaginator, MatTableDataSource, MatSnackBar } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
+
+import { Angular2Csv } from 'angular2-csv/Angular2-csv';
 
 import { DataService } from '../services/data.service';
+
+import { SelectDialogComponent } from '../dialogs/select-dialog.component';
 
 /**
  * @title Table with filtering
@@ -33,7 +37,8 @@ export class SparqlTableComponent implements OnChanges, OnInit{
 
   constructor(
     private ds: DataService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ){}
 
   ngOnInit(){
@@ -70,6 +75,7 @@ export class SparqlTableComponent implements OnChanges, OnInit{
       var data: Element[] = [];
       this.resultLength = data.length;
     }
+    
     //Load data source
     this.dataSource = new MatTableDataSource<Element>(data);
     
@@ -81,6 +87,45 @@ export class SparqlTableComponent implements OnChanges, OnInit{
     if(el.type == 'uri'){
       this.clickedURI.emit(el.value);
     }
+  }
+
+  showExportCsv(){
+
+    let dialogRef = this.dialog.open(SelectDialogComponent, {
+      height: '300px',
+      width: '500px',
+      data: {
+        title: "Export to CSV", 
+        description: "Please choose seperator",
+        selectText: "seperator",
+        list: [",", ";"]}
+    });
+
+    dialogRef.afterClosed().subscribe(separator => {
+      this.exportCsv(separator);
+    });
+
+  }
+
+  exportCsv(separator){
+
+    // If ; used as separator, comma is used as decimal separator
+    var decimalseparator = separator == ";" ? "," : ".";
+
+    var options = { 
+      fieldSeparator: separator,
+      quoteStrings: '"',
+      decimalseparator: decimalseparator,
+      showLabels: true, 
+      showTitle: false,
+      useBom: true
+    };
+
+    var data = _.map(this.dataSource.data, x => {
+      return _.mapValues(x, y => y.value);
+    });
+    
+    new Angular2Csv(data, 'SPARQL-viz export', options);
   }
 
   showSnackbar(message, duration?){

@@ -2,6 +2,7 @@
     <div class="table-header">
         <span fxFlex="40%">{{resultLength}} results<span *ngIf="queryTime"> in {{queryTime/1000}} seconds</span></span>
         <span fxFlex="grow"></span>
+        <mat-icon matTooltip="download CSV" (click)="showExportCsv()">file_download</mat-icon>
         <span><mat-checkbox [(ngModel)]="showDatatypes">Show datatypes</mat-checkbox></span>
     </div>
     <mat-table #table [dataSource]="dataSource" class="centered">

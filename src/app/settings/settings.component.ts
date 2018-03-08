@@ -77,7 +77,9 @@ export class SettingsComponent implements OnInit, OnChanges {
       });
   
       dialogRef.afterClosed().subscribe(uri => {
-        this.loadDataset(uri);
+        if(uri){
+          this.loadDataset(uri);
+        }
       });
   }
 
