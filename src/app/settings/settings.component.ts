@@ -8,8 +8,8 @@ import { StardogService } from '../services/stardog.service';
 import { DataService } from '../services/data.service';
 
 // Dialogs
-import { InputDialog } from '../dialogs/input-dialog.component';
-import { SelectDialog } from '../dialogs/select-dialog.component';
+import { InputDialogComponent } from '../dialogs/input-dialog.component';
+import { SelectDialogComponent } from '../dialogs/select-dialog.component';
 
 export interface ProjectSettings {
   endpoint: string;
@@ -67,7 +67,7 @@ export class SettingsComponent implements OnInit, OnChanges {
   }
 
   showLoadToNamed(){
-      let dialogRef = this.dialog.open(InputDialog, {
+      let dialogRef = this.dialog.open(InputDialogComponent, {
         height: '300px',
         width: '500px',
         data: {
@@ -84,7 +84,7 @@ export class SettingsComponent implements OnInit, OnChanges {
   showWipeNamed(){
     this._ss.getNamedGraphs().subscribe(namedGraphs => {
 
-      let dialogRef = this.dialog.open(SelectDialog, {
+      let dialogRef = this.dialog.open(SelectDialogComponent, {
         height: '300px',
         width: '500px',
         data: {

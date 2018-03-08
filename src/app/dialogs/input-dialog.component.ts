@@ -34,7 +34,7 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
         }
     `]
 })
-export class InputDialog implements OnInit {
+export class InputDialogComponent implements OnInit {
 
     title: string;
     inputString: string;
@@ -42,7 +42,7 @@ export class InputDialog implements OnInit {
     inputText: string;
 
     constructor(
-        public dialogRef: MatDialogRef<InputDialog>,
+        public dialogRef: MatDialogRef<InputDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) { }
     
     ngOnInit(){

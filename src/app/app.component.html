@@ -44,7 +44,9 @@
                     <mat-icon 
                         class="iconbutton smallicon"
                         matTooltip="download JSON"
-                        (click)="showJSON = !showJSON">
+                        ngxClipboard 
+                        [cbContent]="data | json"
+                        (click)="showSnackbar('Copied JSON to clipboard', 2000)">
                         file_download
                     </mat-icon>
                 </div>
@@ -207,13 +209,6 @@
                 </div>
             </div>
         </div>
-
-        <mat-card class="json-container" *ngIf="showJSON">
-            <div class="icon-bar">
-                <mat-icon (click)="showJSON = !showJSON">close</mat-icon>
-            </div>
-            <pre>{{data | json}}</pre>
-        </mat-card>
 
         <div *ngIf="loading" class="loading-spinner">
             <mat-spinner></mat-spinner>

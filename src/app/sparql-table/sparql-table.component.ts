@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import * as N3 from 'n3';
 import * as _ from 'lodash';
 import 'rxjs/add/observable/of';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSnackBar } from '@angular/material';
 
 import { DataService } from '../services/data.service';
 
@@ -32,7 +32,8 @@ export class SparqlTableComponent implements OnChanges, OnInit{
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
-    private ds: DataService
+    private ds: DataService,
+    private snackBar: MatSnackBar
   ){}
 
   ngOnInit(){
@@ -80,6 +81,13 @@ export class SparqlTableComponent implements OnChanges, OnInit{
     if(el.type == 'uri'){
       this.clickedURI.emit(el.value);
     }
+  }
+
+  showSnackbar(message, duration?){
+    if(!duration) duration = 2000
+    this.snackBar.open(message, 'close', {
+      duration: duration,
+    });
   }
 
 }

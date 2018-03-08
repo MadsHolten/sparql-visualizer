@@ -3,8 +3,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DomSanitizer, DOCUMENT  } from '@angular/platform-browser';
 
 import { SettingsDialog } from './settings-dialog/settings-dialog.component';
-import { MessageDialog } from '../dialogs/message-dialog.component';
-import { VideoDialog } from '../dialogs/video-dialog.component';
+import { MessageDialogComponent } from '../dialogs/message-dialog.component';
+import { VideoDialogComponent } from '../dialogs/video-dialog.component';
 
 @Component({
   selector: 'visualizer-toolbar',
@@ -43,7 +43,7 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
   }
 
   showAbout(){
-      let dialogRef = this.dialog.open(MessageDialog, {
+      let dialogRef = this.dialog.open(MessageDialogComponent, {
         height: '300px',
         width: '500px',
         data: {title: "About", message: this.about}
@@ -56,7 +56,7 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
 
   showVideo(videoId){
       var safeURL = this._sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${videoId}?autoplay=1`);
-      let dialogRef = this.dialog.open(VideoDialog, {
+      let dialogRef = this.dialog.open(VideoDialogComponent, {
         height: '80%',
         width: '70%',
         data: {url: safeURL}
@@ -64,7 +64,7 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
   }
 
   showWIP(){
-    let dialogRef = this.dialog.open(MessageDialog, {
+    let dialogRef = this.dialog.open(MessageDialogComponent, {
         height: '300px',
         width: '500px',
         data: {title: "WIP", message: "This feature is yet to be implemented."}

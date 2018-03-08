@@ -12,10 +12,10 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
     }
     `]
 })
-export class VideoDialog {
+export class VideoDialogComponent {
 
     constructor(
-        public dialogRef: MatDialogRef<VideoDialog>,
+        public dialogRef: MatDialogRef<VideoDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) { }
 
     // Close when clicking outside

@@ -39,6 +39,12 @@ export class PrefixPipe implements PipeTransform {
       if(abr) val = abr;
     }
 
+    if(value.type == 'literal'){
+      if(parseFloat(val)){
+        val = parseFloat(val).toFixed(2)
+      }
+    }
+
     return val;
   }
 

@@ -39,6 +39,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 // Codemirror
 import { CodemirrorModule } from 'ng2-codemirror';
 
+// Clipboard
+import { ClipboardModule } from 'ngx-clipboard';
+
 // App
 import { AppComponent } from './app.component';
 import { QueryFieldComponent } from './query-field/query-field.component';
@@ -51,10 +54,10 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { SettingsDialog } from './toolbar/settings-dialog/settings-dialog.component';
 
 // Dialogs
-import { MessageDialog } from './dialogs/message-dialog.component';
-import { VideoDialog } from './dialogs/video-dialog.component';
-import { InputDialog } from './dialogs/input-dialog.component';
-import { SelectDialog } from './dialogs/select-dialog.component';
+import { MessageDialogComponent } from './dialogs/message-dialog.component';
+import { VideoDialogComponent } from './dialogs/video-dialog.component';
+import { InputDialogComponent } from './dialogs/input-dialog.component';
+import { SelectDialogComponent } from './dialogs/select-dialog.component';
 
 // Services
 import { ProjectSettingsService } from './services/project-settings.service';
@@ -73,11 +76,11 @@ const appRoutes: Routes = [
     SparqlTableComponent,
     SettingsComponent,
     ToolbarComponent,
-    VideoDialog,
-    InputDialog,
-    SelectDialog,
+    VideoDialogComponent,
+    InputDialogComponent,
+    SelectDialogComponent,
     SettingsDialog,
-    MessageDialog,
+    MessageDialogComponent,
     PrefixPipe,
     PrefixSimplePipe
   ],
@@ -91,6 +94,7 @@ const appRoutes: Routes = [
       { enableTracing: false } // <-- debugging purposes only
     ),
     CodemirrorModule,
+    ClipboardModule,
     WebStorageModule,
     BrowserAnimationsModule,
     MatButtonModule,
@@ -117,10 +121,10 @@ const appRoutes: Routes = [
   providers: [ ProjectSettingsService, Title, DataService ],
   bootstrap: [AppComponent],
   entryComponents: [
-    MessageDialog,
-    VideoDialog,
-    InputDialog,
-    SelectDialog,
+    MessageDialogComponent,
+    VideoDialogComponent,
+    InputDialogComponent,
+    SelectDialogComponent,
     SettingsDialog 
   ]
 })

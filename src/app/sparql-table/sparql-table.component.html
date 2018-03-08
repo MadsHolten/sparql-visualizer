@@ -1,8 +1,8 @@
 <div class="table-container mat-elevation-z8">
     <div class="table-header">
-        <span fxFlex="30%">{{resultLength}} results<span *ngIf="queryTime"> in {{queryTime/1000}} seconds</span></span>
+        <span fxFlex="40%">{{resultLength}} results<span *ngIf="queryTime"> in {{queryTime/1000}} seconds</span></span>
         <span fxFlex="grow"></span>
-        <span><mat-checkbox (click)="showDatatypes = !showDatatypes">Show datatypes</mat-checkbox></span>
+        <span><mat-checkbox [(ngModel)]="showDatatypes">Show datatypes</mat-checkbox></span>
     </div>
     <mat-table #table [dataSource]="dataSource" class="centered">
 
@@ -13,17 +13,30 @@
             <!-- Columns -->
             <ng-container [matColumnDef]="col">
             <mat-header-cell *matHeaderCellDef> {{col}} </mat-header-cell>
-            <mat-cell
-                *matCellDef="let element"
-                [ngClass]="element[col] && element[col].type == 'uri' ? 'link' : 'text'"
-                (click)="clickElement(element[col])">
+            <mat-cell *matCellDef="let element">
                 <!-- {{element[col].value}} -->
-                {{element[col] | prefix}}
+                <span 
+                    [ngClass]="element[col] && element[col].type == 'uri' ? 'link' : 'text'"
+                    (click)="clickElement(element[col])">
+                    {{element[col] | prefix}}
+                </span>
                 <span fxFlex="grow"></span>
                 <span *ngIf="element[col].type == 'literal'">
                     <mat-chip *ngIf="element[col]['xml:lang']">{{element[col]['xml:lang']}}</mat-chip>
                     <mat-chip *ngIf="element[col].datatype && showDatatypes">{{element[col].datatype | prefixstring}}</mat-chip>
                 </span>
+                <mat-icon 
+                    *ngIf="element[col].type == 'uri'" 
+                    class="cp" 
+                    ngxClipboard
+                    (click)="showSnackbar('Copied URI to clipboard', 2000)"
+                    [cbContent]="element[col].value">
+                    content_copy
+                </mat-icon>
+                <!-- <span *ngIf="element[col].type == 'uri'">
+                    <mat-icon class="cp">content_copy</mat-icon>
+                </span> -->
+                
             </mat-cell>
             </ng-container>
         </div>

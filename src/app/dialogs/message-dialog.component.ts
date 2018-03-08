@@ -15,10 +15,10 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
         }
     `]
 })
-export class MessageDialog {
+export class MessageDialogComponent {
 
     constructor(
-        public dialogRef: MatDialogRef<MessageDialog>,
+        public dialogRef: MatDialogRef<MessageDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) { }
 
     // Close when clicking outside

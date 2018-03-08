@@ -38,7 +38,7 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
         }
     `]
 })
-export class SelectDialog implements OnInit {
+export class SelectDialogComponent implements OnInit {
 
     title: string;
     inputString: string;
@@ -48,7 +48,7 @@ export class SelectDialog implements OnInit {
     selected;
 
     constructor(
-        public dialogRef: MatDialogRef<SelectDialog>,
+        public dialogRef: MatDialogRef<SelectDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) { }
     
     ngOnInit(){
