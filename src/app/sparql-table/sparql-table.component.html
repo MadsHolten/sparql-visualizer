@@ -9,22 +9,26 @@
         <!--- Note that these columns can be defined in any order.
                 The actual rendered columns are set as a property on the row definition" -->
         
-        <div *ngFor="let col of displayedColumns">
+        <div *ngFor="let col of displayedColumns; let i = index">
             <!-- Columns -->
             <ng-container [matColumnDef]="col">
-            <mat-header-cell *matHeaderCellDef> {{col}} </mat-header-cell>
-            <mat-cell *matCellDef="let element">
-                <!-- {{element[col].value}} -->
+            <mat-header-cell *matHeaderCellDef [ngClass]="i == 0 ? 'colFirst' : 'colRest'">{{col}}</mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="i == 0 ? 'colFirst' : 'colRest'">
+
+                <!-- Content -->
                 <span 
                     [ngClass]="element[col] && element[col].type == 'uri' ? 'link' : 'text'"
                     (click)="clickElement(element[col])">
                     {{element[col] | prefix}}
                 </span>
-                <span fxFlex="grow"></span>
-                <span *ngIf="element[col].type == 'literal'">
+
+                <!-- Datatype / language -->
+                <span *ngIf="element[col].type == 'literal'" style="padding-left: 2px;">
                     <mat-chip *ngIf="element[col]['xml:lang']">{{element[col]['xml:lang']}}</mat-chip>
                     <mat-chip *ngIf="element[col].datatype && showDatatypes">{{element[col].datatype | prefixstring}}</mat-chip>
                 </span>
+
+                <!-- Copy-icon -->
                 <mat-icon 
                     *ngIf="element[col].type == 'uri'" 
                     class="cp" 
