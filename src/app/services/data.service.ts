@@ -4,8 +4,10 @@ import * as rdfstore from 'rdfstore';
 import * as _ from 'lodash';
 import * as N3 from 'n3';
 import { HttpClient } from '@angular/common/http';
+import { DomSanitizer, DOCUMENT  } from '@angular/platform-browser';
 
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import * as existsFile from 'exists-file';
@@ -39,14 +41,21 @@ export class DataService {
     constructor(
         public http: HttpClient,
         private route: ActivatedRoute,
-        private pss: ProjectSettingsService
+        private pss: ProjectSettingsService,
+        private sanitizer: DomSanitizer
     ) { }
 
     getPath(): Observable<string>{
         //Get URL parameters
         return this.route.queryParams.map(x => {
             // If a file path is specified, use this instead of the default
-            return x.file ? x.file : './assets/data.json';
+            var path = './assets/data.json';
+            if(x.file){
+                // convert improperly formatted dropbox link
+                path = x.file.replace('www.dropbox', 'dl.dropboxusercontent');
+            }
+
+            return path;
         });
     }
 
@@ -121,6 +130,23 @@ export class DataService {
 
     getPrefixes(){
         return this.http.get<any>(this.prefixPath);
+    }
+
+    // SHARED SERVICES
+    private loadingSource = new BehaviorSubject<boolean>(false);
+    public loadingStatus = this.loadingSource.asObservable();
+
+    setLoaderStatus(status: boolean){
+        this.loadingSource.next(status);
+        console.log(status);
+    }
+
+    private loadingMsgSource = new BehaviorSubject<string>("loading...");
+    public loadingMessage = this.loadingMsgSource.asObservable();
+
+    setLoadingMessage(msg: string){
+        this.loadingMsgSource.next(msg);
+        console.log(msg);
     }
 
     private isOldJSONFormat(data){

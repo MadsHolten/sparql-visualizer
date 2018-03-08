@@ -24,6 +24,7 @@ import { MatButtonModule,
          MatToolbarModule,
          MatDialogModule,
          MatProgressSpinnerModule,
+         MatCheckboxModule,
          MatChipsModule } from '@angular/material';
 
 // Pipes
@@ -34,18 +35,29 @@ import { PrefixSimplePipe } from './pipes/prefix-simple.pipe'
 // FxFlex
 import { FlexLayoutModule } from '@angular/flex-layout';
 
+// Codemirror
+import { CodemirrorModule } from 'ng2-codemirror';
+
 // App
 import { AppComponent } from './app.component';
+import { QueryFieldComponent } from './query-field/query-field.component';
 import { SparqlForceComponent } from './sparql-force/sparql-force.component';
 import { SparqlTableComponent } from './sparql-table/sparql-table.component';
 import { SettingsComponent } from './settings/settings.component';
 
 // Toolbar and menus
-import { ToolbarComponent, AboutDialog, VideoDialog } from './toolbar/toolbar.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 import { SettingsDialog } from './toolbar/settings-dialog/settings-dialog.component';
+
+// Dialogs
+import { MessageDialog } from './dialogs/message-dialog.component';
+import { VideoDialog } from './dialogs/video-dialog.component';
+import { InputDialog } from './dialogs/input-dialog.component';
+import { SelectDialog } from './dialogs/select-dialog.component';
 
 // Services
 import { ProjectSettingsService } from './services/project-settings.service';
+import { DataService } from './services/data.service';
 
 
 const appRoutes: Routes = [
@@ -56,12 +68,15 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     SparqlForceComponent,
+    QueryFieldComponent,
     SparqlTableComponent,
     SettingsComponent,
     ToolbarComponent,
-    AboutDialog,
     VideoDialog,
+    InputDialog,
+    SelectDialog,
     SettingsDialog,
+    MessageDialog,
     PrefixPipe,
     PrefixSimplePipe
   ],
@@ -74,6 +89,7 @@ const appRoutes: Routes = [
       appRoutes,
       { enableTracing: false } // <-- debugging purposes only
     ),
+    CodemirrorModule,
     WebStorageModule,
     BrowserAnimationsModule,
     MatButtonModule,
@@ -93,13 +109,16 @@ const appRoutes: Routes = [
     MarkdownToHtmlModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    MatCheckboxModule,
     FlexLayoutModule
   ],
-  providers: [ ProjectSettingsService, Title ],
+  providers: [ ProjectSettingsService, Title, DataService ],
   bootstrap: [AppComponent],
-  entryComponents: [ 
-    AboutDialog,
+  entryComponents: [
+    MessageDialog,
     VideoDialog,
+    InputDialog,
+    SelectDialog,
     SettingsDialog 
   ]
 })

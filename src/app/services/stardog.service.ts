@@ -3,6 +3,7 @@ import { HttpResponse } from '@angular/common/http';
 import { LocalStorageService } from 'ngx-store';
 import { Connection, query, db, HTTP } from 'stardog';
 import { HttpClient } from '@angular/common/http';
+import * as _ from 'lodash';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
@@ -32,7 +33,7 @@ export class StardogService  extends ProjectSettingsService {
         // return Observable.fromPromise(db.graph.doGet(this.conn, 'test'));
     }
 
-    query(q,reasoning?){
+    query(q,reasoning?): Observable<any>{
         if(!reasoning) reasoning = false;
         const conn = this._getConn();
         const database = this._getDB();
@@ -40,6 +41,28 @@ export class StardogService  extends ProjectSettingsService {
             query.execute(conn, database, q, undefined, {reasoning: reasoning})
             // query.execute(conn, database, q)
         );
+    }
+
+    getNamedGraphs(): Observable<any>{
+        var q = 'SELECT DISTINCT ?g WHERE { GRAPH ?g { ?s ?p ?o}}';
+        return this.query(q).map(res => {
+            if(res.status == '200'){
+                return _.map(res.body.results.bindings, obj => {
+                    var x: any = obj;
+                    return x.g.value;
+                });
+            }
+            return null;
+        });
+    }
+
+    wipeDB(namedGraph?){
+        if(!namedGraph){
+            var q = "DELETE WHERE { ?s ?p ?o }";
+        }else{
+            var q = `DELETE WHERE { Graph <${namedGraph}> { ?s ?p ?o }}`;
+        }
+        return this.query(q);
     }
 
     getTriplesFromURL(url){

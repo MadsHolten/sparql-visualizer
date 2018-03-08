@@ -13,8 +13,7 @@ import { DataService } from '../services/data.service';
 @Component({
   selector: 'sparql-table',
   styleUrls: ['sparql-table.component.css'],
-  templateUrl: 'sparql-table.component.html',
-  providers: [DataService]
+  templateUrl: 'sparql-table.component.html'
 })
 
 export class SparqlTableComponent implements OnChanges, OnInit{
@@ -23,6 +22,7 @@ export class SparqlTableComponent implements OnChanges, OnInit{
   dataSource;
   resultLength: number;
   prefixes: object;
+  showDatatypes: boolean = false;
   @Input() queryResult: Object;
   @Output() clickedURI = new EventEmitter<string>();
 

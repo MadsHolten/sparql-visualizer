@@ -1,8 +1,10 @@
 import { Component, Input, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DomSanitizer, DOCUMENT  } from '@angular/platform-browser';
 
 import { SettingsDialog } from './settings-dialog/settings-dialog.component';
+import { MessageDialog } from '../dialogs/message-dialog.component';
+import { VideoDialog } from '../dialogs/video-dialog.component';
 
 @Component({
   selector: 'visualizer-toolbar',
@@ -41,7 +43,7 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
   }
 
   showAbout(){
-      let dialogRef = this.dialog.open(AboutDialog, {
+      let dialogRef = this.dialog.open(MessageDialog, {
         height: '300px',
         width: '500px',
         data: {title: "About", message: this.about}
@@ -62,7 +64,7 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
   }
 
   showWIP(){
-    let dialogRef = this.dialog.open(AboutDialog, {
+    let dialogRef = this.dialog.open(MessageDialog, {
         height: '300px',
         width: '500px',
         data: {title: "WIP", message: "This feature is yet to be implemented."}
@@ -75,58 +77,5 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
         width: '500px'
     });
   }
-
-}
-
-// About Dialog
-@Component({
-    selector: 'about-dialog',
-    template: `<h4>{{data.title}}</h4>
-    <p [innerHTML]="data.message | MarkdownToHtml"></p>`,
-    styles: [`
-        h4 {
-            font-family: Roboto;
-        }
-        p {
-            font-family: Roboto;
-            font-size: 12px;
-        }
-    `]
-})
-export class AboutDialog {
-
-    constructor(
-        public dialogRef: MatDialogRef<AboutDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: any) { }
-
-    // Close when clicking outside
-    onNoClick(): void {
-        this.dialogRef.close();
-    }
-
-}
-
-// Video Dialog
-@Component({
-    selector: 'video-dialog',
-    template: `
-    <iframe [src]='data.url' frameborder='0' allow='autoplay; encrypted-media' allowfullscreen></iframe>`,
-    styles: [`
-    iframe{
-        width: 100%;
-        height: 98%;
-    }
-    `]
-})
-export class VideoDialog {
-
-    constructor(
-        public dialogRef: MatDialogRef<AboutDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: any) { }
-
-    // Close when clicking outside
-    onNoClick(): void {
-        this.dialogRef.close();
-    }
 
 }

@@ -1,0 +1,51 @@
+<mat-accordion *ngIf="query">
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+        <mat-panel-title>
+            Query
+        </mat-panel-title>
+        <mat-panel-description>
+            Query the data
+        </mat-panel-description>
+        </mat-expansion-panel-header>
+    
+        <!-- <mat-form-field class="full-width">
+            <textarea
+                class="query-field"
+                rows="15" 
+                cols="105" 
+                matInput 
+                placeholder="Triple data"
+                onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"
+                (input)="onChange($event.target.value)"
+                [value]="query">
+            </textarea>
+        </mat-form-field> -->
+
+        <codemirror 
+            [(ngModel)]="query"
+            (change)="onChange(query)"
+            [config]="cmConfig">
+        </codemirror>
+
+        <div class="full-width" fxLayout="row">
+            <button 
+                mat-raised-button 
+                color="primary" 
+                (click)="fireQuery()">
+                Query <mat-icon>play_circle_outline</mat-icon>
+            </button>
+
+            <button 
+                mat-raised-button 
+                (click)="resetQuery()">
+                Reset <mat-icon>cached</mat-icon>
+            </button>
+
+            <div fxFlex="grow"></div>
+            <mat-slide-toggle *ngIf="!localStore" [(ngModel)]="reasoning">Reasoning</mat-slide-toggle>
+        </div>
+
+
+    </mat-expansion-panel>
+</mat-accordion>

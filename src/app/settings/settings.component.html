@@ -49,3 +49,40 @@
     </mat-expansion-panel>
 
 </mat-accordion>
+
+<div class="button-row">
+    <button 
+        mat-raised-button color="warn"
+        [matMenuTriggerFor]="wipeMenu">
+        Wipe graph <mat-icon>delete_forever</mat-icon>
+    </button>
+    <button 
+        mat-raised-button
+        [matMenuTriggerFor]="loadMenu">
+        Load dataset <mat-icon>cloud_upload</mat-icon>
+    </button>
+    <button
+        mat-raised-button
+        (click)="loadOntologies()">
+        Load BOT
+    </button>
+
+    <mat-menu #loadMenu="matMenu">
+        <button mat-menu-item (click)="loadDataset()">
+            <span>To main graph</span>
+        </button>
+        <button mat-menu-item (click)="showLoadToNamed()">
+            <span>To named graph</span>
+        </button>
+    </mat-menu>
+
+    <mat-menu #wipeMenu="matMenu">
+        <button mat-menu-item (click)="wipeDB()">
+            <span>Main graph</span>
+        </button>
+        <button mat-menu-item (click)="showWipeNamed()">
+            <span>Named graph</span>
+        </button>
+    </mat-menu>
+
+</div>

@@ -11,19 +11,24 @@
 }
 
 .table-header {
-    min-height: 20px;
+    min-height: 24px;
     display: flex;
     align-items: baseline;
-    padding: 8px 24px 10px;
-    font-size: 14px;
+    padding: 8px 24px 8px 24px;
+    font-size: 16px;
     justify-content: space-between;
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-bottom-color: rgba(0, 0, 0, 0.12);
     font-family: Roboto,Helvetica Neue,sans-serif;
+    background: #f5f5f5;
 }
 
 .link:hover {
     cursor: pointer;
     opacity: 0.7;
+}
+
+#mat-checkbox-1 > label > span {
+    font-size: 14px;
 }

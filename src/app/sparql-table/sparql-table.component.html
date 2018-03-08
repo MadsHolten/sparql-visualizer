@@ -1,9 +1,10 @@
 <div class="table-container mat-elevation-z8">
     <div class="table-header">
-        <span>{{resultLength}} results</span>
-        <!-- <span fxFlex="grow"></span> -->
+        <span fxFlex="30%">{{resultLength}} results</span>
+        <span fxFlex="grow"></span>
+        <span><mat-checkbox (click)="showDatatypes = !showDatatypes">Show datatypes</mat-checkbox></span>
     </div>
-    <mat-table #table [dataSource]="dataSource">
+    <mat-table #table [dataSource]="dataSource" class="centered">
 
         <!--- Note that these columns can be defined in any order.
                 The actual rendered columns are set as a property on the row definition" -->
@@ -21,7 +22,7 @@
                 <span fxFlex="grow"></span>
                 <span *ngIf="element[col].type == 'literal'">
                     <mat-chip *ngIf="element[col]['xml:lang']">{{element[col]['xml:lang']}}</mat-chip>
-                    <mat-chip *ngIf="element[col].datatype">{{element[col].datatype | prefixstring}}</mat-chip>
+                    <mat-chip *ngIf="element[col].datatype && showDatatypes">{{element[col].datatype | prefixstring}}</mat-chip>
                 </span>
             </mat-cell>
             </ng-container>

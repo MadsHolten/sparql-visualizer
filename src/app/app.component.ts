@@ -11,7 +11,7 @@ import { StardogService } from './services/stardog.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [ QueryService, DataService, StardogService ]
+  providers: [ QueryService, StardogService ]
 })
 export class AppComponent implements OnInit {
 
@@ -46,7 +46,8 @@ export class AppComponent implements OnInit {
     private titleService: Title
   ) {}
 
-  ngOnInit(){   
+  ngOnInit(){
+    
     this.route.queryParams.subscribe(map => {
       // If a tab is specified, use this. Else default to first tab
       this.tabIndex = map.tab ? parseInt(map.tab) : 0;
@@ -66,7 +67,14 @@ export class AppComponent implements OnInit {
 
       this.changeTab(this.tabIndex);
     });
+
+    // Inject shared services
+    this._ds.loadingStatus.subscribe(loading => this.loading = loading);
+    this._ds.loadingMessage.subscribe(msg => this.loadingMessage = msg);
+  }
   
+  changeMsg(){
+    this._ds.setLoadingMessage("Loading triples in store");
   }
 
   doQuery(){
@@ -85,6 +93,10 @@ export class AppComponent implements OnInit {
       this.queryTriplestore(query);
     }
 
+  }
+
+  log(ev){
+    console.log(ev);
   }
 
   queryLocalstore(query,data){
@@ -155,13 +167,6 @@ export class AppComponent implements OnInit {
         });
   }
 
-  resetQuery(){
-    this._ds.getSingle(this.tabIndex)
-    .subscribe(x => {
-        this.data.query = x.query;
-    });
-  }
-
   toggleStore(){
     this.localStore = this.localStore == false ? true : false;
     this.toggleTooltip = this.toggleTooltip == 'Switch to datasets' ? 'Switch to triplestore' : 'Switch to datasets';
@@ -200,94 +205,11 @@ export class AppComponent implements OnInit {
     console.log(URI);
   }
 
-  wipeDB(){
-    const query = "DELETE WHERE { ?s ?p ?o }";
-
-    this._ss.query(query)
-      .subscribe(res => {
-        if(res.status == '200'){
-          this.showSnackbar("Successfully wiped database");
-        }else{
-          this.showSnackbar(res.status+': '+res.statusText);
-          console.log(res);
-        }
-      }, err => {
-        this.showSnackbar("Something went wrong");
-        console.log(err);
-      })
-  }
-
-  loadDataset(){
-    // Get filePath if a source is defined
-    this._ds.getProjectSettings().subscribe(settings => {
-
-      if(settings && settings.filePath){
-        // Load from external source
-        var url = settings.filePath;
-        return this.loadExternal(url);
-
-      }else{
-
-        // Load user defined triples
-        const triples = this.data.triples;
-        console.log(triples);
-        this._ss.loadTriples(triples)
-          .subscribe(res => {
-            if(res.status == '200'){
-              this.showSnackbar("Successfully loaded dataset");
-              this.doQuery();
-            }else{
-              this.showSnackbar(res.status+': '+res.statusText);
-              console.log(res);
-            }
-          }, err => {
-            this.showSnackbar("Something went wrong");
-            console.log(err);
-          })
-
-      }
-    });
-  }
-
   showSnackbar(message, duration?){
     if(!duration) duration = 2000
     this.snackBar.open(message, 'close', {
       duration: duration,
     });
-  }
-
-  loadOntologies(){
-    var url = "https://w3id.org/bot";
-    var namedGraph = "https://bot";
-    this.loadExternal(url,namedGraph);
-  }
-
-  loadExternal(url,namedGraph?){
-    this.loading = true;
-    this.loadingMessage = "Downloading triples from external source";
-    this._ss.getTriplesFromURL(url)
-      .subscribe(res => {
-
-        this.loadingMessage = "Loading triples in store";
-        this._ss.loadTriples(res.body, namedGraph)
-          .subscribe(res => {
-            this.loading = false;
-            if(res.status == '200' || res.status == '201'){
-              this.showSnackbar("Successfully loaded triples in store");
-              this.doQuery();
-            }else{
-              this.showSnackbar(res.status+': '+res.statusText);
-              console.log(res);
-            }
-          }, err => {
-            this.showSnackbar("Something went wrong");
-            console.log(err);
-          })
-
-      }, err => {
-        this.loading = false;
-        this.showSnackbar('Could not load content from '+url);
-      });
   }
 
   saveDescription(){
