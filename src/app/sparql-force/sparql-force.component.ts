@@ -295,6 +295,8 @@ export class SparqlForceComponent implements OnInit {
 
   private _triplesToGraph(triples){
 
+    if(!triples) return;
+
     //Graph
     var graph: Graph = {nodes:[], links:[], triples:[]};
     

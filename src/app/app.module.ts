@@ -25,7 +25,8 @@ import { MatButtonModule,
          MatDialogModule,
          MatProgressSpinnerModule,
          MatCheckboxModule,
-         MatChipsModule } from '@angular/material';
+         MatChipsModule,
+         MatPaginatorModule } from '@angular/material';
 
 // Pipes
 import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
@@ -110,6 +111,7 @@ const appRoutes: Routes = [
     MatProgressSpinnerModule,
     MatChipsModule,
     MatCheckboxModule,
+    MatPaginatorModule,
     FlexLayoutModule
   ],
   providers: [ ProjectSettingsService, Title, DataService ],

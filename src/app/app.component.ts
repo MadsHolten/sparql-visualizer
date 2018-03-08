@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
   public projectData: ProjectData;
   public queryType: string;
   public reasoning: boolean;
+  public queryTime: number;
 
   public loading: boolean;
   public loadingMessage: string;
@@ -113,17 +114,21 @@ export class AppComponent implements OnInit {
   }
 
   queryTriplestore(query){
+    var t1 = Date.now();
     this._ss.query(query,this.reasoning)
       .subscribe(res => {
         // show error if status 200 was not recieved
         if(res.status != '200'){
+
           if(res.body && res.body.message){
             this.showSnackbar(res.body.code+': '+res.body.message, 10000);
           }else{
             this.showSnackbar(res.status+': '+res.statusText);
           }
-          console.log(res);
+
         }else{
+          var dt = Date.now()-t1;
+          this.queryTime = dt;
 
           // Get body content
           var data = res.body;

@@ -1,6 +1,6 @@
 <div class="table-container mat-elevation-z8">
     <div class="table-header">
-        <span fxFlex="30%">{{resultLength}} results</span>
+        <span fxFlex="30%">{{resultLength}} results<span *ngIf="queryTime"> in {{queryTime/1000}} seconds</span></span>
         <span fxFlex="grow"></span>
         <span><mat-checkbox (click)="showDatatypes = !showDatatypes">Show datatypes</mat-checkbox></span>
     </div>
@@ -30,4 +30,9 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
+
+    <mat-paginator #paginator
+        [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
 </div>

@@ -39,7 +39,6 @@ export class QueryFieldComponent{
       ) {}
 
     onChange(ev){
-        console.log(ev);
         this.updatedQuery.emit(ev);
     }
 

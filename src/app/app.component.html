@@ -196,7 +196,11 @@
                             </mat-expansion-panel-header>
                         
                             <!-- Data visualization -->
-                            <sparql-table [queryResult]="queryResult" (clickedURI)="tableClick($event)"></sparql-table>
+                            <sparql-table 
+                                [queryResult]="queryResult"
+                                [queryTime]="queryTime"
+                                (clickedURI)="tableClick($event)">
+                            </sparql-table>
                             <span *ngIf="!queryResult">No result to show</span>
                         </mat-expansion-panel>
                     </mat-accordion>
