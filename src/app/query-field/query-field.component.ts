@@ -19,12 +19,13 @@ import { DataService } from '../services/data.service';
 
 export class QueryFieldComponent{
 
-    reasoning: boolean;
+    reasoning: boolean = false;
     @Input() query: string;
     @Input() tabIndex: number;
     @Input() localStore: boolean;
     @Output() updatedQuery = new EventEmitter<string>();
-    @Output() doQuery = new EventEmitter<string>();
+    @Output() doQuery = new EventEmitter<void>();
+    @Output() setReasoning = new EventEmitter<boolean>();
 
     cmConfig = { 
         lineNumbers: true,
@@ -43,7 +44,7 @@ export class QueryFieldComponent{
     }
 
     fireQuery(){
-        this.doQuery.emit(this.query);
+        this.doQuery.emit();
     }
 
     resetQuery(){
