@@ -43,7 +43,7 @@
             </button>
 
             <div fxFlex="grow"></div>
-            <mat-slide-toggle *ngIf="!localStore" [(ngModel)]="reasoning">Reasoning</mat-slide-toggle>
+            <mat-slide-toggle *ngIf="!localStore" (change)="setReasoning.emit($event.checked)">Reasoning</mat-slide-toggle>
         </div>
 
 

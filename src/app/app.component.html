@@ -161,6 +161,7 @@
                     [tabIndex]="tabIndex"
                     [localStore]="localStore"
                     (doQuery)="doQuery()"
+                    (setReasoning)="reasoning = $event"
                     (updatedQuery)="data.query = $event">
                 </query-field>
 

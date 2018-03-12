@@ -82,6 +82,8 @@ export class AppComponent implements OnInit {
     const query = this.data.query
     const data = this.data.triples;
 
+    console.log(this.reasoning);
+
     // Get the query type
     this.queryType = this._qs.getQuerytype(query);
 
