@@ -31,7 +31,8 @@ import { MatButtonModule,
 // Pipes
 import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
 import { PrefixPipe } from './pipes/prefix.pipe';
-import { PrefixSimplePipe } from './pipes/prefix-simple.pipe'
+import { PrefixSimplePipe } from './pipes/prefix-simple.pipe';
+import { CountryTooltipPipe } from './pipes/country-tooltip.pipe';
 
 // FxFlex
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -82,7 +83,8 @@ const appRoutes: Routes = [
     SettingsDialog,
     MessageDialogComponent,
     PrefixPipe,
-    PrefixSimplePipe
+    PrefixSimplePipe,
+    CountryTooltipPipe
   ],
   imports: [
     BrowserModule,
