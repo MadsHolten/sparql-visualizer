@@ -202,6 +202,8 @@ export class AppComponent implements OnInit {
             this.data = x;
             if(x.reasoning){
               this.reasoning = x.reasoning;
+            }else{
+              this.reasoning = false;
             }
             //Perform the query if the tab has a query assigned
             if(this.data.query){
