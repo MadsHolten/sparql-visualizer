@@ -200,11 +200,10 @@ export class AppComponent implements OnInit {
       this._ds.getSingle(i)
         .subscribe(x => {
             this.data = x;
-            if(x.reasoning){
-              this.reasoning = x.reasoning;
-            }else{
-              this.reasoning = false;
-            }
+
+            // Use reasoning if the JSON says so
+            this.reasoning = x.reasoning ? x.reasoning : false;
+
             //Perform the query if the tab has a query assigned
             if(this.data.query){
               this.doQuery();
