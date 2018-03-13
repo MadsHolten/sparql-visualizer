@@ -20,6 +20,7 @@ export interface TabsData {
     description: string;
     triples: string;
     query: string;
+    reasoning?: boolean;
 }
 
 export interface ProjectData {
@@ -89,7 +90,7 @@ export class DataService {
         });
     }
 
-    getTabTitles(){
+    getTabTitles(): Observable<string[]>{
         // First get file path from URL query parameter
         return this.getPath().mergeMap(path => {
             return this.http.get<any>(path)
@@ -107,7 +108,7 @@ export class DataService {
         });
     }
 
-    getSingle(index){
+    getSingle(index): Observable<TabsData>{
         // First get file path from URL query parameter
         return this.getPath().mergeMap(path => {
             return this.http.get<any>(path)
@@ -119,11 +120,10 @@ export class DataService {
                     }                
                 })
                 .map(x => {
-                    var query = Array.isArray(x.query) ? x.query.join('\n') : x.query;
-                    var description = Array.isArray(x.description) ? x.description.join('\n') : x.description;
-                    var triples = Array.isArray(x.triples) ? x.triples.join('\n') : x.triples;
-                    var title = x.title;
-                    return {title: title, query: query, triples: triples, description: description};
+                    x.query = Array.isArray(x.query) ? x.query.join('\n') : x.query;
+                    x.description = Array.isArray(x.description) ? x.description.join('\n') : x.description;
+                    x.triples = Array.isArray(x.triples) ? x.triples.join('\n') : x.triples;
+                    return x;
                 });
         });
     }
