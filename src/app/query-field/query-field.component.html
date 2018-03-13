@@ -43,6 +43,7 @@
             </button>
 
             <div fxFlex="grow"></div>
+            <mat-slide-toggle *ngIf="localStore" matTooltip="NB! reasoning is performed on a slow Heroku server and the query time is therefore considerably reduced." (change)="setReasoning.emit($event.checked)">Reasoning</mat-slide-toggle>
             <mat-slide-toggle *ngIf="!localStore" (change)="setReasoning.emit($event.checked)">Reasoning</mat-slide-toggle>
         </div>
 

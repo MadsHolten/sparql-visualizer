@@ -82,8 +82,6 @@ export class AppComponent implements OnInit {
     const query = this.data.query
     const data = this.data.triples;
 
-    console.log(this.reasoning);
-
     // Get the query type
     this.queryType = this._qs.getQuerytype(query);
 
@@ -103,16 +101,31 @@ export class AppComponent implements OnInit {
   }
 
   queryLocalstore(query,data){
-    this._qs.doQuery(query,data)
-      .then(res => {
-        this.queryResult = res;
-        this.resultFieldExpanded = true;
-      }).catch(err => {
-        console.log(err);
-        if(err.message && err.name){
-          this.showSnackbar(err.name+': '+err.message, 10000);
-        }
-      });
+    if(this.reasoning){
+      // Query Hylar based endpoint
+      this._qs.doHylarQuery(query,data)
+        .subscribe(res => {
+          this.queryResult = res;
+          this.resultFieldExpanded = true;
+        }, err => {
+          console.log(err);
+          if(err.message && err.name){
+            this.showSnackbar(err.name+': '+err.message, 10000);
+          }
+        });
+    }else{
+      // Perform query with client based rdfstore
+      this._qs.doQuery(query,data)
+        .then(res => {
+          this.queryResult = res;
+          this.resultFieldExpanded = true;
+        }).catch(err => {
+          console.log(err);
+          if(err.message && err.name){
+            this.showSnackbar(err.name+': '+err.message, 10000);
+          }
+        });
+    }
   }
 
   queryTriplestore(query){

@@ -4,6 +4,8 @@ import * as _ from 'lodash';
 import * as screenfull from 'screenfull';
 import * as d3_save_svg from 'd3-save-svg';
 
+import { PrefixSimplePipe } from '../pipes/prefix-simple.pipe';
+
 //Tell TS D3 exists as a variable/object somewhere globally
 declare const d3: any;
 
@@ -63,7 +65,7 @@ export class SparqlForceComponent implements OnInit {
   @Input() public height: number;
   @Output() clickedURI = new EventEmitter<string>();
   
-  constructor() { }
+  constructor( private prefixSimplePipe: PrefixSimplePipe ) { }
 
   ngOnInit() {
     if(this.data){
@@ -303,9 +305,9 @@ export class SparqlForceComponent implements OnInit {
     //Initial Graph from triples
     triples.forEach(triple => {
 
-      var subjId = triple.subject;
-      var predId = triple.predicate;
-      var objId = triple.object;
+      var subjId = this.prefixSimplePipe.transform(triple.subject);
+      var predId = this.prefixSimplePipe.transform(triple.predicate);
+      var objId = this.prefixSimplePipe.transform(triple.object);
 
       var subjNode: Node = this._filterNodesById(graph.nodes, subjId)[0];
       var objNode: Node  = this._filterNodesById(graph.nodes, objId)[0];

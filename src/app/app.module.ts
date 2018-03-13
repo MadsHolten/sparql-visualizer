@@ -120,7 +120,7 @@ const appRoutes: Routes = [
     MatPaginatorModule,
     FlexLayoutModule
   ],
-  providers: [ ProjectSettingsService, Title, DataService ],
+  providers: [ ProjectSettingsService, Title, DataService, PrefixSimplePipe ],
   bootstrap: [AppComponent],
   entryComponents: [
     MessageDialogComponent,

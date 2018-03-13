@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import * as rdfstore from 'rdfstore';
 import * as _ from 'lodash';
 import * as N3 from 'n3';
+import { HttpClient } from '@angular/common/http';
+
+import 'rxjs/add/operator/map';
 
 export interface Qres {
   actions?;
@@ -19,13 +22,27 @@ export interface TripleComponent {
   nominalValue;
 }
 
+export interface HylarConstruct {
+  subject: string;
+  predicate: string;
+  object: string;
+}
+
 @Injectable()
 export class QueryService {
 
   private store;
   private prefixesPromise;
 
-  constructor() { }
+  constructor( public http: HttpClient ) { }
+
+  doHylarQuery(query,triples){
+
+    // Get query type
+    const queryType = this.getQuerytype(query);
+
+    return this.http.post('https://reasoner-endpoint.herokuapp.com/', {query: query, data: triples});
+  }
 
   doQuery(query,triples,mimeType?){
 
@@ -51,6 +68,10 @@ export class QueryService {
           if(queryType == 'select'){
             return this.sparqlJSON(data).data;
           }
+
+          /**
+           * NB! THE PREFIXING SHOULD BE HANDLED BY A PIPE!
+           */
 
           // Get prefixes
           return this.prefixesPromise.then(prefixes => {
