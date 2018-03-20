@@ -37,7 +37,6 @@ export class QueryService {
   constructor( public http: HttpClient ) { }
 
   doHylarQuery(query,triples){
-    console.log(triples);
 
     // Get query type
     const queryType = this.getQuerytype(query);
