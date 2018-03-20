@@ -138,7 +138,6 @@ export class DataService {
 
     setLoaderStatus(status: boolean){
         this.loadingSource.next(status);
-        console.log(status);
     }
 
     private loadingMsgSource = new BehaviorSubject<string>("loading...");
@@ -146,7 +145,6 @@ export class DataService {
 
     setLoadingMessage(msg: string){
         this.loadingMsgSource.next(msg);
-        console.log(msg);
     }
 
     private isOldJSONFormat(data){

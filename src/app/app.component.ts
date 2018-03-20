@@ -79,7 +79,7 @@ export class AppComponent implements OnInit {
   }
 
   doQuery(){
-    const query = this.data.query
+    const query = this.data.query;
     const data = this.data.triples;
 
     // Get the query type
@@ -102,11 +102,13 @@ export class AppComponent implements OnInit {
 
   queryLocalstore(query,data){
     if(this.reasoning){
+      console.log(data)
       // Query Hylar based endpoint
       this._qs.doHylarQuery(query,data)
         .subscribe(res => {
           this.queryResult = res;
           this.resultFieldExpanded = true;
+          console.log(res);
         }, err => {
           console.log(err);
           if(err.message && err.name){

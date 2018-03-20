@@ -309,6 +309,11 @@ export class SparqlForceComponent implements OnInit {
       var predId = this.prefixSimplePipe.transform(triple.predicate);
       var objId = this.prefixSimplePipe.transform(triple.object);
 
+      // round decimal numbers to 2 decimals
+      if(!isNaN(objId)){
+        objId = Number(objId) % 1 == 0 ? String(Number(objId)) : String(Number(objId).toFixed(2));
+      }
+
       var subjNode: Node = this._filterNodesById(graph.nodes, subjId)[0];
       var objNode: Node  = this._filterNodesById(graph.nodes, objId)[0];
 
