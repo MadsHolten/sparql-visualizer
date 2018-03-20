@@ -102,14 +102,19 @@ export class AppComponent implements OnInit {
 
   queryLocalstore(query,data){
     if(this.reasoning){
-      console.log(data)
+
+      // Show loader
+      this._ds.setLoadingMessage("Performing query using Hylar.\nFirst execution will be slow.");
+      this._ds.setLoaderStatus(true);
+
       // Query Hylar based endpoint
       this._qs.doHylarQuery(query,data)
         .subscribe(res => {
           this.queryResult = res;
           this.resultFieldExpanded = true;
-          console.log(res);
+          this._ds.setLoaderStatus(false);
         }, err => {
+          this._ds.setLoaderStatus(false);
           console.log(err);
           if(err.message && err.name){
             this.showSnackbar(err.name+': '+err.message, 10000);

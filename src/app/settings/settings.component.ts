@@ -97,7 +97,9 @@ export class SettingsComponent implements OnInit, OnChanges {
       });
   
       dialogRef.afterClosed().subscribe(ng => {
-        this.wipeDB(ng);
+        if(ng){
+          this.wipeDB(ng);
+        }
       });
 
     });
