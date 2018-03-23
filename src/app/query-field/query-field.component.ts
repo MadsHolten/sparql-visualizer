@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import * as N3 from 'n3';
@@ -17,7 +17,7 @@ import { DataService } from '../services/data.service';
   templateUrl: 'query-field.component.html'
 })
 
-export class QueryFieldComponent implements OnChanges {
+export class QueryFieldComponent {
 
     @Input() reasoning: boolean = false;
     @Input() query: string;
@@ -38,11 +38,6 @@ export class QueryFieldComponent implements OnChanges {
     constructor(
         private _ds: DataService
       ) {}
-
-    ngOnChanges(changes: SimpleChanges){
-        console.log(this.reasoning);
-        console.log(changes);
-    }
 
     onChange(ev){
         this.updatedQuery.emit(ev);

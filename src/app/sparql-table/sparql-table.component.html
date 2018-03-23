@@ -16,35 +16,38 @@
             <mat-header-cell *matHeaderCellDef [ngClass]="i == 0 ? 'colFirst' : 'colRest'">{{col}}</mat-header-cell>
             <mat-cell *matCellDef="let element" [ngClass]="i == 0 ? 'colFirst' : 'colRest'">
 
-                <!-- Content -->
-                <span 
-                    [ngClass]="element[col] && element[col].type == 'uri' ? 'link' : 'text'"
-                    (click)="clickElement(element[col])">
-                    {{element[col] | prefix}}
-                </span>
-                
+                <!-- Content (can be empty if optional statement used) -->
+                <div *ngIf="element[col]">
+                    <span 
+                        
+                        [ngClass]="element[col] && element[col].type == 'uri' ? 'link' : 'text'"
+                        (click)="clickElement(element[col])">
+                        {{element[col] | prefix}}
+                    </span>
+                    
 
-                <!-- Datatype / language / time -->
-                <span *ngIf="element[col].type == 'literal'" style="padding-left: 2px;">
-                        <!-- Language tag with tooltip -->
-                        <mat-chip *ngIf="element[col]['xml:lang']" [matTooltip]="element[col]['xml:lang'] | countrytooltip">{{element[col]['xml:lang']}}</mat-chip>
+                    <!-- Datatype / language / time -->
+                    <span *ngIf="element[col].type == 'literal'" style="padding-left: 2px;">
+                            <!-- Language tag with tooltip -->
+                            <mat-chip *ngIf="element[col]['xml:lang']" [matTooltip]="element[col]['xml:lang'] | countrytooltip">{{element[col]['xml:lang']}}</mat-chip>
 
-                        <!-- Datatype tag -->
-                        <mat-chip *ngIf="element[col].datatype && showDatatypes">{{element[col].datatype | prefixstring}}</mat-chip>
-                </span>
+                            <!-- Datatype tag -->
+                            <mat-chip *ngIf="element[col].datatype && showDatatypes">{{element[col].datatype | prefixstring}}</mat-chip>
+                    </span>
 
-                <!-- Copy-icon -->
-                <mat-icon 
-                    *ngIf="element[col].type == 'uri'" 
-                    class="cp" 
-                    ngxClipboard
-                    (click)="showSnackbar('Copied URI to clipboard', 2000)"
-                    [cbContent]="element[col].value">
-                    content_copy
-                </mat-icon>
-                <!-- <span *ngIf="element[col].type == 'uri'">
-                    <mat-icon class="cp">content_copy</mat-icon>
-                </span> -->
+                    <!-- Copy-icon -->
+                    <mat-icon 
+                        *ngIf="element[col].type == 'uri'" 
+                        class="cp" 
+                        ngxClipboard
+                        (click)="showSnackbar('Copied URI to clipboard', 2000)"
+                        [cbContent]="element[col].value">
+                        content_copy
+                    </mat-icon>
+                    <!-- <span *ngIf="element[col].type == 'uri'">
+                        <mat-icon class="cp">content_copy</mat-icon>
+                    </span> -->
+                </div>
                 
             </mat-cell>
             </ng-container>

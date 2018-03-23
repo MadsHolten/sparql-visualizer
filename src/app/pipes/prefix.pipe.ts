@@ -47,7 +47,8 @@ export class PrefixPipe implements PipeTransform {
       if(value.datatype == 'http://www.w3.org/2001/XMLSchema#dateTime'){
 
         moment.locale('en-uk');
-        val = moment(val).format('LLL');
+        val = moment(val).format('LLL'); // displays something like March 22, 2018 1:00 PM
+        // val = moment(val).fromNow(); // displays something like "yesterday", "in 2 days", "19 hours ago", "a minute ago" etc.
 
       // Decimal numbers
       }else if(parseFloat(val)){
