@@ -104,7 +104,7 @@ export class AppComponent implements OnInit {
     if(this.reasoning){
 
       // Show loader
-      this._ds.setLoadingMessage("Performing query using Hylar.\nFirst execution will be slow.");
+      this._ds.setLoadingMessage("Performing query using Hylar. First execution will be slow.");
       this._ds.setLoaderStatus(true);
 
       // Query Hylar based endpoint

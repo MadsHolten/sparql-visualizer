@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 
@@ -7,6 +8,7 @@ import { DataService } from '../services/data.service';
 
 export interface Value {
   type?: string;
+  datatype?: string;
   value: string;
 }
 
@@ -32,7 +34,7 @@ export class PrefixPipe implements PipeTransform {
 
   transform(value: Value): any {
 
-    var val = value.value;
+    var val: string = value.value;
 
     if(value.type == 'uri'){
       var abr = this._abbreviate(val,this.prefixes);
@@ -40,7 +42,15 @@ export class PrefixPipe implements PipeTransform {
     }
 
     if(value.type == 'literal'){
-      if(parseFloat(val)){
+
+      // timestamps
+      if(value.datatype == 'http://www.w3.org/2001/XMLSchema#dateTime'){
+
+        moment.locale('en-uk');
+        val = moment(val).format('LLL');
+
+      // Decimal numbers
+      }else if(parseFloat(val)){
         val = parseFloat(val).toFixed(2)
       }
     }

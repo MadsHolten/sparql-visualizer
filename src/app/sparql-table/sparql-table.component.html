@@ -22,11 +22,15 @@
                     (click)="clickElement(element[col])">
                     {{element[col] | prefix}}
                 </span>
+                
 
-                <!-- Datatype / language -->
+                <!-- Datatype / language / time -->
                 <span *ngIf="element[col].type == 'literal'" style="padding-left: 2px;">
-                    <mat-chip *ngIf="element[col]['xml:lang']" [matTooltip]="element[col]['xml:lang'] | countrytooltip">{{element[col]['xml:lang']}}</mat-chip>
-                    <mat-chip *ngIf="element[col].datatype && showDatatypes">{{element[col].datatype | prefixstring}}</mat-chip>
+                        <!-- Language tag with tooltip -->
+                        <mat-chip *ngIf="element[col]['xml:lang']" [matTooltip]="element[col]['xml:lang'] | countrytooltip">{{element[col]['xml:lang']}}</mat-chip>
+
+                        <!-- Datatype tag -->
+                        <mat-chip *ngIf="element[col].datatype && showDatatypes">{{element[col].datatype | prefixstring}}</mat-chip>
                 </span>
 
                 <!-- Copy-icon -->
