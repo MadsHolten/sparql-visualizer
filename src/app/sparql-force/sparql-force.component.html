@@ -6,6 +6,21 @@
     #chart>
 
     <div class="icon-bar" fxLayout="row" [ngStyle]="{'top': fs ? '20px' : '0px'}">
+
+        <!-- Limit -->
+        <span *ngIf="data.length > 100">
+            <mat-form-field style="width: 100px">
+                <mat-select placeholder="Limit ({{data.length}} total)" [(value)]="limit" (change)="redraw()">
+                    <mat-option value="100">100</mat-option>
+                    <mat-option *ngIf="data.length > 200" value="200">200</mat-option>
+                    <mat-option *ngIf="data.length > 500" value="500">500</mat-option>
+                    <mat-option *ngIf="data.length > 1000" value="1000">1000</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </span>
+        
+        <!-- <span *ngIf="message" class="message">{{message}}</span> -->
+
         <!-- Spacer -->
         <span fxFlex="grow"></span>
 

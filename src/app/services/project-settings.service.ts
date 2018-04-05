@@ -28,7 +28,7 @@ export class ProjectSettingsService {
   public saveDataSettings(object) {
     // convert improperly formatted dropbox link
     object.filePath = object.filePath.replace('www.dropbox', 'dl.dropboxusercontent');
-    console.log(object);
+    
     // Save object to {prefix}endpointSettings
     this.lss.set('dataSettings', object);
   }

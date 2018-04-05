@@ -56,6 +56,8 @@ export class SparqlForceComponent implements OnInit {
   private divHeight;
   private widthBeforeResize;
 
+  private limit: string = "100";
+
   //Time
   private timeEnter: number;
   private timeOut: number;
@@ -94,9 +96,13 @@ export class SparqlForceComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.data.currentValue) {
       this.data = changes.data.currentValue;
-      this.cleanGraph();
-      this.attachData();
+      this.redraw();
     }
+  }
+
+  redraw(){
+    this.cleanGraph();
+    this.attachData();
   }
 
   // Redraw on resize
@@ -144,17 +150,26 @@ export class SparqlForceComponent implements OnInit {
 
   attachData(){
     this.force = d3.layout.force().size([this.divWidth, this.divHeight]);
+
+    // Limit result length
+    var limit = parseInt(this.limit);
+    if(this.data.length > limit){
+      var triples = this.data.slice(0,limit);
+    }else{
+      var triples = this.data;
+    }
+
     // If type of data is text/turtle (not array)
     // the triples must be parsed to objects instead
-    if( typeof this.data === 'string' ) {
-      this._parseTriples(this.data).then(d => {
+    if( typeof triples === 'string' ) {
+      this._parseTriples(triples).then(d => {
         console.log(d);
         var abr = this._abbreviateTriples(d);
         this.graph = this._triplesToGraph(abr);
         this.updateChart();
       })
     }else{
-      this.graph = this._triplesToGraph(this.data);
+      this.graph = this._triplesToGraph(triples);
       this.updateChart();
     }
   }
