@@ -18,14 +18,13 @@
 
                 <!-- Content (can be empty if optional statement used) -->
                 <div *ngIf="element[col]">
-                    <span 
-                        
+                    <!-- Column value -->
+                    <span
                         [ngClass]="element[col] && element[col].type == 'uri' ? 'link' : 'text'"
                         (click)="clickElement(element[col])">
                         {{element[col] | prefix}}
                     </span>
                     
-
                     <!-- Datatype / language / time -->
                     <span *ngIf="element[col].type == 'literal'" style="padding-left: 2px;">
                             <!-- Language tag with tooltip -->
@@ -47,6 +46,11 @@
                     <!-- <span *ngIf="element[col].type == 'uri'">
                         <mat-icon class="cp">content_copy</mat-icon>
                     </span> -->
+                </div>
+
+                <!-- If no value -->
+                <div *ngIf="!element[col]">
+                    <span [ngClass]="element[col] && element[col].type == 'uri' ? 'link' : 'text'">-&nbsp;&nbsp;</span>
                 </div>
                 
             </mat-cell>
