@@ -4,6 +4,9 @@
 
 This is a simple app to visualize and communicate the content of a knowledge base in the RDF format. The project is open source and we welcome all who is interested to participate.
 
+## Collaborators
+[Mathias Bonduel](researchgate.net/profile/Mathias_Bonduel)
+
 ## 1. Quickstart
 
 * You can run the app and make your own samples without having to install anything. Just use the **online version** of the app: https://madsholten.github.io/sparql-visualizer/. Read section "3. Developing new examples" for more information about adding your own samples.

@@ -63,7 +63,7 @@ export class SparqlForceComponent implements OnInit {
   private timeOut: number;
 
   @ViewChild('chart') private chartContainer: ElementRef;
-  @Input() private data: Array<any>;
+  @Input() public data: Array<any>;
   @Input() public height: number;
   @Output() clickedURI = new EventEmitter<string>();
   

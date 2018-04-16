@@ -22,7 +22,7 @@ export class ToolbarComponent {
   ]
 
   about = `
-The development of this tool was initiated by [Mads Holten Rasmussen](researchgate.net/profile/Mads_Holten_Rasmussen) and is distributed under the [GNU General Public License](https://www.gnu.org/licenses/gpl.txt).
+The development of this tool was initiated by [Mads Holten Rasmussen](researchgate.net/profile/Mads_Holten_Rasmussen) and developed in collaboration with [Mathias Bonduel](researchgate.net/profile/Mathias_Bonduel). It is distributed under the [GNU General Public License](https://www.gnu.org/licenses/gpl.txt).
 
 It is based on several open libraries; [rdfstore](https://www.npmjs.com/package/rdfstore), [D3](https://d3js.org/), [Angular](https://angular.io/) etc. and is supposed to be further developed under a copyleft licence.
 

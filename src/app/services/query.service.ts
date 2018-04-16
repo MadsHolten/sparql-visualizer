@@ -41,7 +41,7 @@ export class QueryService {
     // Get query type
     const queryType = this.getQuerytype(query);
 
-    return this.http.post('http://reasoner-endpoint.herokuapp.com/', {query: query, data: triples});
+    return this.http.post('https://reasoner-endpoint.herokuapp.com/', {query: query, data: triples});
   }
 
   doQuery(query,triples,mimeType?){
