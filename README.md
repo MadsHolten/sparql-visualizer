@@ -116,5 +116,6 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 The force graph used for visualising the results is built with [D3](https://d3js.org/). The implementation is based on [a project by Rathachai](https://github.com/Rathachai/d3rdf).
 
 ## SPARQL-visualizer in literature
-Mathias Bonduel, Mads Holten Rasmussen, Pieter Pauwels, Maarten Vergausen, Ralf Klein (2018) SPARQL-visualizer: A Communication Tool
-for Collaborative Ontology Engineering Processes, 6th Linked Data in Architecture and Construction Workshop (LDAC2018), June 19-21, 2018, London, United Kingdom, https://doi.org/10.13140/RG.2.2.13687.93603
+### Software demo report
+*Mathias Bonduel, Mads Holten Rasmussen, Pieter Pauwels, Maarten Vergausen, Ralf Klein (2018) SPARQL-visualizer: A Communication Tool
+for Collaborative Ontology Engineering Processes, 6th Linked Data in Architecture and Construction Workshop (LDAC2018), June 19-21, 2018, London, United Kingdom, https://doi.org/10.13140/RG.2.2.13687.93603*
