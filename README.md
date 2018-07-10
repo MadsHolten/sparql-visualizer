@@ -21,7 +21,7 @@ This is a simple app to visualize and communicate the content of a knowledge bas
     - Python 2.7: `python -m SimpleHTTPServer 8000`
     - Python 3.6: `python -m http.server 8000`
     - (alternatively, you can also install and use node http-server: `http-server -p 8000`
-   
+* During the LDAC 2018 workshop, the following [presentation](http://linkedbuildingdata.net/ldac2018/files/Presentations/20180619_sparql-visualizer_MathiasBonduel.pdf) was given, to introduce the functionality of and the ideas behind the SPARQL visualizer
 
 
 ## 2. Functionality of sparql-visualizer
@@ -114,3 +114,7 @@ if necessary, you can merge the local master branch with your local development 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.6. The frontend of the app is based on [Angular](https://angular.io/), [material design](https://material.angular.io/) and [D3](https://d3js.org/). The default local triplestore is based on [rdfstore](https://github.com/antoniogarrote/rdfstore-js).
 
 The force graph used for visualising the results is built with [D3](https://d3js.org/). The implementation is based on [a project by Rathachai](https://github.com/Rathachai/d3rdf).
+
+## SPARQL-visualizer in literature
+Mathias Bonduel, Mads Holten Rasmussen, Pieter Pauwels, Maarten Vergausen, Ralf Klein (2018) SPARQL-visualizer: A Communication Tool
+for Collaborative Ontology Engineering Processes, 6th Linked Data in Architecture and Construction Workshop (LDAC2018), June 19-21, 2018, London, United Kingdom, https://doi.org/10.13140/RG.2.2.13687.93603
