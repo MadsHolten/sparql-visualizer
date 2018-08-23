@@ -71,7 +71,10 @@ export class StardogService  extends ProjectSettingsService {
         // convert to JSON if not set
         var options = {
             responseType: 'text' as 'text',
-            observe: 'response' as 'response'
+            observe: 'response' as 'response',
+            headers: {
+                Accept: 'text/turtle'
+            }
         }
 
         return this.http.get(url, options);

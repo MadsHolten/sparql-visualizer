@@ -156,7 +156,7 @@ export class SettingsComponent implements OnInit, OnChanges {
   }
 
   loadOntologies(){
-    var url = "https://w3id.org/bot";
+    var url = "https://w3id.org/bot/bot.ttl";
     var namedGraph = "https://bot";
     this.loadExternal(url,namedGraph);
   }
@@ -168,6 +168,7 @@ export class SettingsComponent implements OnInit, OnChanges {
     this._ss.getTriplesFromURL(url)
       .subscribe(res => {
 
+        console.log(res);
         this._ds.setLoadingMessage("Loading triples in store");
         this._ss.loadTriples(res.body, namedGraph)
           .subscribe(res => {
