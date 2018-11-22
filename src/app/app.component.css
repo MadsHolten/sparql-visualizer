@@ -38,3 +38,9 @@
     left: 50%;
     top: 50%;
 }
+
+.showDescription{
+    position: relative;
+    left: 5px;
+    top: 5px;
+}

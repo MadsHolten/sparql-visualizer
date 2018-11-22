@@ -27,6 +27,8 @@ export class AppComponent implements OnInit {
   public queryType: string;
   public reasoning: boolean;
   public queryTime: number;
+  public textOnly: boolean;
+  public dataOnly: boolean = false; // Feature to be implemented
 
   public loading: boolean;
   public loadingMessage: string;
@@ -211,6 +213,9 @@ export class AppComponent implements OnInit {
             // Use reasoning if the JSON says so
             this.reasoning = x.reasoning ? x.reasoning : false;
 
+            // Hide triples, query and result tab if setting textOnly is true
+            this.textOnly = x.textOnly ? x.textOnly : false;;
+
             //Perform the query if the tab has a query assigned
             if(this.data.query){
               this.doQuery();
@@ -230,6 +235,10 @@ export class AppComponent implements OnInit {
     }
     this.data.query = query;
     this.doQuery();
+  }
+
+  toggleView(ev){
+    console.log(ev)
   }
 
   graphClick(URI){

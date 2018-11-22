@@ -1,3 +1,4 @@
+<!-- Toolbar -->
 <div class="container-toolbar">
     <visualizer-toolbar 
         fxFlex="100%"
@@ -7,9 +8,15 @@
     </visualizer-toolbar>
 </div>
 
+<!-- Button for show/hide data (should be implemented properly) -->
+<!-- <mat-slide-toggle class="showDescription" [checked]="!dataOnly" change="toggleView($event)">Show info?</mat-slide-toggle> -->
+
+<!-- Page content -->
 <div class="container-content">
     <div fxFlex fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-around">
-        <div fxFlex="100%" fxFlex.md="40%" fxFlex.lg="40%" fxFlex.xl="40%">
+
+        <!-- Data tabs (tabs + description) -->
+        <div *ngIf="!dataOnly" fxFlex="100%" fxFlex.md="40%" fxFlex.lg="40%" fxFlex.xl="40%">
             <mat-card class="mat-elevation-z2">
 
                 <p>
@@ -107,21 +114,23 @@
 
             </mat-card>
         </div>
+
+        <!-- Right tabs (triples, query, result) -->
         <!-- <div fxFlex="grow"></div> -->
         <div fxFlex="100%" fxFlex.md="55%" fxFlex.lg="55%" fxFlex.xl="55%">
 
             <div *ngIf="data">
             
                 <!-- Data -->
-                <mat-accordion *ngIf="localStore && data.triples">
+                <mat-accordion *ngIf="!textOnly">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
                         <mat-panel-title>
                             Triples
                         </mat-panel-title>
-                        <mat-panel-description>
+                        <!-- <mat-panel-description>
                             Turtle data to be queried
-                        </mat-panel-description>
+                        </mat-panel-description> -->
                         </mat-expansion-panel-header>
                     
                         <div>
@@ -166,7 +175,7 @@
                     (updatedQuery)="data.query = $event">
                 </query-field>
 
-                <!-- Query result -->
+                <!-- Result -->
                 <div *ngIf="queryResult">
 
                     <!-- CONSTRUCT -->
@@ -174,11 +183,11 @@
                         <mat-expansion-panel [expanded]="resultFieldExpanded">
                             <mat-expansion-panel-header>
                             <mat-panel-title>
-                                Query
+                                Result
                             </mat-panel-title>
-                            <mat-panel-description>
+                            <!-- <mat-panel-description>
                                 Query result
-                            </mat-panel-description>
+                            </mat-panel-description> -->
                             </mat-expansion-panel-header>
                         
                             <!-- Data visualization -->

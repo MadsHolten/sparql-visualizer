@@ -21,6 +21,7 @@ export interface TabsData {
     triples: string;
     query: string;
     reasoning?: boolean;
+    textOnly?: boolean;
 }
 
 export interface ProjectData {
