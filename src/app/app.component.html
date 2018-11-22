@@ -228,7 +228,7 @@
 </div>
 
 <!-- Full screen mode -->
-<div *ngIf="fullScreen" class="fullscreen-container">
+<div *ngIf="fullScreen">
 
     <div class="fullscreen-toolbar">
         <mat-accordion>
@@ -280,13 +280,13 @@
                 (setReasoning)="reasoning = $event"
                 (updatedQuery)="data.query = $event">
             </query-field>
-            
+
         </mat-accordion>
     </div>
     
     <!-- Graph -->
-    <div *ngIf="queryType == 'construct'">
-        <app-sparql-force class="full-width" height="800" *ngIf="queryResult" (clickedURI)="graphClick($event)" [data]="queryResult"></app-sparql-force>
+    <div *ngIf="queryType == 'construct'" class="fullscreen-canvas">
+        <app-sparql-force *ngIf="queryResult" (clickedURI)="graphClick($event)" [data]="queryResult"></app-sparql-force>
         <span *ngIf="!queryResult">No result to show</span>
     </div>
 

@@ -46,6 +46,9 @@
     top: 85px;
     z-index: 10;
 }
-.fullscreen-container{
-    height: 100%;
+.fullscreen-canvas{
+    position: absolute;
+    height: 95%;
+    width: 98%;
+    z-index: -1;
 }

@@ -16,7 +16,7 @@ export class ToolbarComponent {
   @Input() title: string;
   @Input() creator: string;
   @Output() toggleFullScreen = new EventEmitter<boolean>();
-  private fullScreen = false;
+  public fullScreen = false;
 
   videos = [
       {title: "1: The basics", id:"ixrhgKHKXDY"},
@@ -40,7 +40,6 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
       @Inject(DOCUMENT) private document: any) {}
 
   change(ev){
-    console.log(ev.target.value)
     this.title = ev.target.value;
   }
 

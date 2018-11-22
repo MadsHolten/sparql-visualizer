@@ -83,3 +83,7 @@ html, html * {
 .message{
     color: red;
 }
+.panel-body{
+    position: inherit;
+    height: 100%;
+}

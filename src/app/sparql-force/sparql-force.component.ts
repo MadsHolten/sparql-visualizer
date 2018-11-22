@@ -75,10 +75,12 @@ export class SparqlForceComponent implements OnInit {
       if(this.height){
         this.divHeight = this.height;
       }else{
-        this.divHeight = 500; //default to 500px
+        this.divHeight = this.getContainerHeight() ? this.getContainerHeight(): 500;
       }
       this.createChart();
     }
+
+    this.getContainerHeight();
   }
 
   fullscreen(){
@@ -98,6 +100,10 @@ export class SparqlForceComponent implements OnInit {
       this.data = changes.data.currentValue;
       this.redraw();
     }
+  }
+
+  getContainerHeight(){
+    return this.chartContainer.nativeElement.clientHeight;
   }
 
   redraw(){

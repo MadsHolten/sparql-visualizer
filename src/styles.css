@@ -17,3 +17,6 @@ table {
 th,td{
     border-bottom: 1px solid #ddd;
 }
+body{
+    overflow: hidden;
+}
