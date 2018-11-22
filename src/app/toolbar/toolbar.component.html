@@ -9,9 +9,15 @@
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="showWIP()">
-        <mat-icon>fullscreen</mat-icon>
-        <span>Switch to fullscreen</span>
+      <button mat-menu-item (click)="fullScreenToggle()">
+        <div *ngIf="!fullScreen">
+          <mat-icon>fullscreen</mat-icon>
+          <span>Switch to fullscreen</span>
+        </div>
+        <div *ngIf="fullScreen">
+          <mat-icon>fullscreen_exit</mat-icon>
+          <span>Exit fullscreen mode</span>
+        </div>
       </button>
       <button mat-menu-item (click)="downloadApp()">
         <mat-icon>file_download</mat-icon>

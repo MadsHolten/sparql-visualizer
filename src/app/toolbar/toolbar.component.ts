@@ -1,4 +1,4 @@
-import { Component, Input, Inject } from '@angular/core';
+import { Component, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DomSanitizer, DOCUMENT  } from '@angular/platform-browser';
 
@@ -15,6 +15,8 @@ export class ToolbarComponent {
 
   @Input() title: string;
   @Input() creator: string;
+  @Output() toggleFullScreen = new EventEmitter<boolean>();
+  private fullScreen = false;
 
   videos = [
       {title: "1: The basics", id:"ixrhgKHKXDY"},
@@ -48,6 +50,12 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
         width: '500px',
         data: {title: "About", message: this.about}
       });
+  }
+
+  fullScreenToggle(){
+    console.log(this.fullScreen)
+    this.fullScreen = !this.fullScreen;
+    this.toggleFullScreen.emit(this.fullScreen);
   }
 
   downloadApp(){

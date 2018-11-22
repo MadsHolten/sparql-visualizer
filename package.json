@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-git": "ng build --prod --base-href https://madsholten.github.io/sparql-visualizer/ && ngx ngh",
+    "build-git": "ng build --prod --base-href https://madsholten.github.io/sparql-visualizer/ && npx ngh",
     "electron": "electron .",
     "electron-build": "ng build --prod && electron ."
   },

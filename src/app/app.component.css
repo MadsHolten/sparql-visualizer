@@ -39,8 +39,13 @@
     top: 50%;
 }
 
-.showDescription{
-    position: relative;
-    left: 5px;
-    top: 5px;
+.fullscreen-toolbar{
+    position: absolute;
+    width: 500px;
+    left: 10px;
+    top: 85px;
+    z-index: 10;
+}
+.fullscreen-container{
+    height: 100%;
 }

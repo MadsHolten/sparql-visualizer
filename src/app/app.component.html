@@ -3,16 +3,14 @@
     <visualizer-toolbar 
         fxFlex="100%"
         *ngIf="projectData"
+        (toggleFullScreen)="fullScreen = $event"
         [title]="projectData.title"
         [creator]="projectData.creator">
     </visualizer-toolbar>
 </div>
 
-<!-- Button for show/hide data (should be implemented properly) -->
-<!-- <mat-slide-toggle class="showDescription" [checked]="!dataOnly" change="toggleView($event)">Show info?</mat-slide-toggle> -->
-
-<!-- Page content -->
-<div class="container-content">
+<!-- Regular page content -->
+<div *ngIf="!fullScreen" class="container-content">
     <div fxFlex fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-around">
 
         <!-- Data tabs (tabs + description) -->
@@ -227,4 +225,69 @@
         </div>
 
     </div>
+</div>
+
+<!-- Full screen mode -->
+<div *ngIf="fullScreen" class="fullscreen-container">
+
+    <div class="fullscreen-toolbar">
+        <mat-accordion>
+            <mat-expansion-panel>
+
+                <!-- Triples NB! This is a copy/paste - should be implemented properly -->
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Triples
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div>
+                    <mat-form-field class="full-width">
+                        <textarea 
+                            rows="15" 
+                            cols="105" 
+                            matInput 
+                            placeholder="Triple data"
+                            onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"
+                            [(ngModel)]="data.triples">
+                        </textarea>
+                    </mat-form-field>
+
+                    <div class="full-width" fxLayout="row">
+                        <button 
+                            mat-raised-button 
+                            color="primary" 
+                            (click)="doQuery()">
+                            Update <mat-icon>play_circle_outline</mat-icon>
+                        </button>
+
+                        <button 
+                            mat-raised-button 
+                            (click)="resetTriples()">
+                            Reset <mat-icon>cached</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+            </mat-expansion-panel>
+
+            <!-- Query -->
+            <query-field 
+                [reasoning]="data.reasoning"
+                [query]="data.query" 
+                [tabIndex]="tabIndex"
+                [localStore]="localStore"
+                (doQuery)="doQuery()"
+                (setReasoning)="reasoning = $event"
+                (updatedQuery)="data.query = $event">
+            </query-field>
+            
+        </mat-accordion>
+    </div>
+    
+    <!-- Graph -->
+    <div *ngIf="queryType == 'construct'">
+        <app-sparql-force class="full-width" height="800" *ngIf="queryResult" (clickedURI)="graphClick($event)" [data]="queryResult"></app-sparql-force>
+        <span *ngIf="!queryResult">No result to show</span>
+    </div>
+
 </div>

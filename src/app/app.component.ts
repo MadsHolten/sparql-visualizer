@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
   public queryTime: number;
   public textOnly: boolean;
   public dataOnly: boolean = false; // Feature to be implemented
+  public fullScreen: boolean = false;
 
   public loading: boolean;
   public loadingMessage: string;
