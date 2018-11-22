@@ -133,6 +133,11 @@ export class SparqlForceComponent implements OnInit {
     }
   }
 
+  // Resize on scroll
+  onScroll(ev){
+    console.log(ev);
+  }
+
   saveSVG() {
     var config = {
       filename: 'sparql-viz-graph',

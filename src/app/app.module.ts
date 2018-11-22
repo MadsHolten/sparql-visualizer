@@ -7,6 +7,9 @@ import { RouterModule, Routes } from '@angular/router';
 // Local storage
 import { WebStorageModule } from 'ngx-store';
 
+// Directives
+import { ScrollDirective } from './directives/scroll.directive';
+
 // Material design
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule,
@@ -84,7 +87,8 @@ const appRoutes: Routes = [
     MessageDialogComponent,
     PrefixPipe,
     PrefixSimplePipe,
-    CountryTooltipPipe
+    CountryTooltipPipe,
+    ScrollDirective
   ],
   imports: [
     BrowserModule,

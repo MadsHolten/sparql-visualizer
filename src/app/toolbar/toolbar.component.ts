@@ -52,7 +52,6 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
   }
 
   fullScreenToggle(){
-    console.log(this.fullScreen)
     this.fullScreen = !this.fullScreen;
     this.toggleFullScreen.emit(this.fullScreen);
   }

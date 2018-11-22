@@ -1,6 +1,8 @@
 <div 
     id="svg-body" 
     class="panel-body"
+    scroll-directive 
+    (onScroll)="onScroll($event)"
     [ngClass]="{'fullscreen': fs}"
     [ngStyle]="{'height': height}"
     #chart>
