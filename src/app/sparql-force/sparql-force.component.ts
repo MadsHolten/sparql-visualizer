@@ -134,8 +134,13 @@ export class SparqlForceComponent implements OnInit {
   }
 
   // Resize on scroll
-  onScroll(ev){
-    console.log(ev);
+  @HostListener('mousewheel', ['$event']) onScroll(ev) {
+    var delta = Math.max(-1, Math.min(1, (ev.wheelDelta || -ev.detail)));
+    if(delta > 0){
+      console.log("zoom in");
+    }else if(delta < 0){
+      console.log("zoom out");
+    }
   }
 
   saveSVG() {
