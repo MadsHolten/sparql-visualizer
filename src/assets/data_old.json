@@ -1,0 +1,805 @@
+[
+    {
+        "title": "0: Introduction",
+        "description": [
+            "This is a simple app to visualize and communicate the content of a knowledge base in the RDF format. The project is open source, and we welcome all who is interested to participate. Please find the Github repository [here](https://github.com/MadsHolten/sparql-visualizer).\n",
+            "The frontend of the app is based on [Angular](https://angular.io/), [material design](https://material.angular.io/) and [D3](https://d3js.org/) and the default local triplestore is based on [rdfstore](https://github.com/antoniogarrote/rdfstore-js). Since rdfstore does not fully support SPARQL 1.1 and has no reasoning capabilities, it is recomended to use a [Stardog](https://www.stardog.com/) based triplestore instead.",
+            "### Use a Stardog triplestore",
+            "To use the app with a Stardog triplestore this sparql-visualizer app must either be available online, or it must run in a local environment. You can find the instructions for installing a local version of this app under [Detailed installation guide](https://github.com/MadsHolten/sparql-visualizer)",
+            "With a local copy of the app running, make sure you have a Stardog running (defaults to port 5820) with an empty database (let's call it 'test'), so that you don't delete anything important. Then click the \"Switch to triplestore\" button and type in \"http://localhost:5820\" as endpoint and \"test\" as database. If you haven't changed the username and password they both default to \"admin\".",
+            "### Use the default local triplestore",
+            "This will work, but beware that some queries will not run properly, and INSERT/DELETE will not be possible.",
+            "### Resources",
+            "*[Documentation](https://www.w3.org/TR/sparql11-query/)\n",
+            "*[Online course in Linked Data Engineering](https://open.hpi.de/courses/semanticweb2016)"
+        ],
+        "query": "",
+        "triples": ""
+    },
+    {
+        "title": "1: Simple",
+        "description": [
+            "This is a simple way of describing requirements of a set of abstract spaces. Each space is assigned a space type as a string value, for querying for a specific type, or for updating/deleting/adding properties on a type level.",
+            "The simple approach has the disadvantage of not being able to manage provenance or history of the properties, and it is nowhere stated that the `prop:area` is a requirement rather than an actual value.",
+            "#### Triples",
+            "The dataset includes three spaces. Two of them have the datatypeproperty prop:type specified as `\"Type A\"` and the last one is specified as `\"Type B\"`. They all have datatype property `prop:area` assigned.",
+            "Assigning a property to all spaces of a certain type can be achieved with the following query:\n",
+
+            "```sparql",
+            "INSERT { ?s prop:area \"12 m2\" }",
+            "WHERE { ?s a bot:Space ; prop:type \"Type A\" }```",
+            "Updating a property can be achieved with:\n",
+
+            "```sparql",
+            "DELETE { ?s prop:area ?val }",
+            "INSERT { ?s prop:area \"14 m2\" }",
+            "WHERE { ?s a bot:Space ; prop:type \"Type A\" ; prop:area ?val }```",
+            "#### Query",
+            "The specified query retrieves all spaces of `prop:type` `\"Type A\"` and their properties."
+        ],
+        "triples": [
+            "@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .",
+            "@prefix bot:  <https://w3id.org/bot#> .",
+            "@prefix inst: <https://example.org/projectXX/> .",
+            "@prefix prop: <https://w3id.org/prop#> .\n",
+
+            "# THREE SPACE INSTANCES - TWO TYPES",
+            "inst:SpaceA a bot:Space ;",
+            "\tprop:type \"Type A\" ;",
+            "\tprop:area \"12 m2\" .",
+            "inst:SpaceB a bot:Space ;",
+            "\tprop:type \"Type A\" ;",
+            "\tprop:area \"12 m2\" .",
+            "inst:SpaceC a bot:Space ;",
+            "\tprop:type \"Type B\" ;",
+            "\tprop:area \"16 m2\" ."
+        ],
+        "query": [
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX prop: <https://w3id.org/prop#>\n",
+
+            "CONSTRUCT",
+            "WHERE {",
+            "\t?s a bot:Space ;",
+            "\t\tprop:type \"Type A\" ;",
+            "\t\t?key ?value .",
+            "}"
+        ]
+    },
+    {
+        "title": "2: OPM requirement",
+        "description": [
+            "In this example [OPM](https://github.com/w3c-lbd-cg/opm) is used to model property states, thereby allowing to track the history of a property. Further, since the property is objectified, it can be classified as \n",
+            "The states are classified as `opm:Requirements` meaning that they hold a required value of the property.\n",
+            "The latest state is classified as an `opm:CurrentState`. The query only returns properties valid for spaces of type `inst:TypeA`.",
+            "#### Triples",
+            "The dataset includes three spaces. Two of them are of type `inst:TypeA` and the last one is of type `inst:TypeB`. They all have object property `prop:area` assigned as an `opm:Requirement`. Each property requirement has at least one state, and the most recent one is classified as an `opm:CurrentState`. The states holds value restrictions and provenance data.",
+            "Assigning a property to all spaces of a certain type can be achieved with the following query:\n",
+            "```sparql",
+            "INSERT {",
+            "\t?s prop:area inst:PropA .",
+            "\tinst:PropA a opm:Requirement ;",
+            "\t\topm:hasState inst:StateA .",
+            "\tinst:StateA a opm:CurrentState ;",
+            "\t\topm:minimumValue \"12 m2\" ;",
+            "\t\tprov:generatedAtTime ?now .",
+            "}",
+            "WHERE { ?s a inst:TypeA . BIND(now() AS ?now) }```",
+            "Updating a property can be achieved with:\n",
+            "```sparql",
+            "DELETE { ?stateURI a opm:CurrentState }",
+            "INSERT {",
+            "\t?propURI opm:hasState inst:StateB .",
+            "\tinst:StateB a opm:CurrentState ;",
+            "\t\topm:minimumValue \"14 m2\" ;",
+            "\t\tprov:generatedAtTime ?now .",
+            "}",
+            "WHERE {",
+            "\t?s a bot:Space , inst:TypeA ;",
+            "\t\tprop:area ?propURI .",
+            "\t?propURI opm:hasState ?stateURI .",
+            "\tBIND(now() AS ?now)",
+            "}```",
+            "#### Query",
+            "The specified query retrieves all spaces of type `inst:TypeA` and the latest state of their properties."
+        ],
+        "triples": [
+            "@prefix bot:  <https://w3id.org/bot#> .",
+            "@prefix inst: <https://example.org/projectXX/> .",
+            "@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .",
+            "@prefix prop: <https://w3id.org/prop#> .",
+            "@prefix opm:  <https://w3id.org/opm#> .",
+            "@prefix prov: <http://www.w3.org/ns/prov#> .",
+            "@prefix cdt:  <http://w3id.org/lindt/custom_datatypes#> .\n",
+
+            "# THREE SPACE INSTANCES - TWO TYPES",
+            "inst:SpaceA a bot:Space , inst:TypeA ;",
+            "\tprop:area inst:PropA .",
+            "inst:SpaceB a bot:Space , inst:TypeA ;",
+            "\tprop:area inst:PropA .",
+            "inst:SpaceC a bot:Space , inst:TypeB ;",
+            "\tprop:area inst:PropB .\n",
+
+            "# PROPERTY A",
+            "inst:PropA a opm:Requirement ;",
+            "\t# STATE 1",
+            "\topm:hasState [ opm:minimumValue \"12 m2\" ;",
+            "\t\tprov:generatedAtTime \"2018-01-01T13:35:23Z\" ] ;",
+            "\t# STATE 2 (CURRENT STATE)",
+            "\topm:hasState[ a opm:CurrentState ;",
+            "\t\topm:minimumValue \"14 m2\" ;",
+            "\t\tprov:generatedAtTime \"2018-01-03T13:35:23Z\" ] .\n",
+
+            "# PROPERTY B",
+            "inst:PropB a opm:Requirement ;",
+            "\t# STATE 1",
+            "\topm:hasState[ a opm:CurrentState ;",
+            "\t\topm:minimumValue \"16 m2\" ;",
+            "\t\tprov:generatedAtTime \"2018-01-01T14:35:23Z\" ] ."
+            ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+            
+            "CONSTRUCT",
+            "WHERE {",
+            "\t?s a inst:TypeA .",
+            "\t?s ?property ?propURI .",
+            "\t?propURI a opm:Requirement ;",
+            "\t\topm:hasState ?stateURI .",
+            "\t?stateURI a opm:CurrentState ;",
+            "\t\t?key ?val .",
+            "}"
+        ]
+    },
+    {
+        "title": "3: OPM realised",
+        "description": [
+            "As the architect designs `inst:SpaceA`, an actual geometrically defined area exists. In the following it is illustrated how this can be attached to the graph. The query is to check if the requirement is fulfilled.",
+            "```sparql",
+            "SELECT DISTINCT ?space ?minReqViolated ?maxReqViolated ?exactMatchViolated",
+            "WHERE {",
+            "\t?s a bot:Space .",
+            "\t# GET LATEST STATE OF ACTUAL AREA",
+            "\t{ SELECT ?area ?areaState WHERE {",
+            "\t\t?s prop:area ?area .",
+            "\t\t?area opm:hasState ?areaState .",
+            "\t\t?areaState a opm:CurrentState .",
+            "\t\tMINUS { ?area a opm:Requirement }",
+            "\t} }",
+            "\t# GET GET LATEST STATE OF REQUIRED AREA",
+            "\t{ SELECT ?areaReq ?reqState WHERE {",
+            "\t\t?s prop:area ?areaReq .",
+            "\t\t?areaReq opm:hasState ?reqState .",
+            "\t\t?reqState a opm:CurrentState .",
+            "\t\t?areaReq a opm:Requirement .",
+            "\t} }",
+            "\t# MATCH",
+            "\t?space prop:area ?area , ?areaReq .",
+            "\t# GET VALUES",
+            "\tOPTIONAL{",
+            "\t\t?areaState opm:value ?areaV",
+            "\t\tBIND(strbefore(str(?areaV), ' ') AS ?areaVal)",
+            "\t}",
+            "\tOPTIONAL{",
+            "\t\t?reqState opm:minimumValue ?minReq",
+            "\t\tBIND(strbefore(str(?minReq), ' ') AS ?minReqVal)",
+            "\t}",
+            "\tOPTIONAL{",
+            "\t\t?reqState opm:maximumValue ?maxReq",
+            "\t\tBIND(strbefore(str(?maxReq), ' ') AS ?maxReqVal)",
+            "\t}",
+            "\tOPTIONAL{",
+            "\t\t?reqState opm:value ?reqV",
+            "\t\tBIND(strbefore(str(?reqV), ' ') AS ?reqVal)",
+            "\t}",
+            "\t# DO THE MATH",
+            "\tBIND(?areaVal < ?minReqVal AS ?minReqViolated)",
+            "\tBIND(?areaVal > ?maxReqVal AS ?maxReqViolated)",
+            "\tBIND(?areaVal != ?reqVal AS ?exactMatchViolated)",
+            "}",
+            "```",
+            "Returns something like:\n",
+            "space       | minReqViolated | maxReqViolated | exactMatchViolated",
+            "----------- | -------------- | -------------- | ---",
+            "inst:SpaceA | false          | -              | - "
+        ],
+        "triples": [
+            "@prefix bot:  <https://w3id.org/bot#> .",
+            "@prefix inst: <https://example.org/projectXX/> .",
+            "@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .",
+            "@prefix prop: <https://w3id.org/prop#> .",
+            "@prefix opm:  <https://w3id.org/opm#> .",
+            "@prefix prov: <http://www.w3.org/ns/prov#> .",
+            "@prefix cdt:  <http://w3id.org/lindt/custom_datatypes#> .\n",
+            
+            "### BUILDING OWNER",
+            "# THREE SPACE INSTANCES - TWO TYPES",
+            "inst:SpaceA a bot:Space , inst:TypeA ;",
+            "\tprop:area inst:PropA .",
+            "inst:SpaceB a bot:Space , inst:TypeA ;",
+            "\tprop:area inst:PropA .",
+            "inst:SpaceC a bot:Space , inst:TypeB ;",
+            "\tprop:area inst:PropB .\n",
+            
+            "# PROPERTY A",
+            "inst:PropA a opm:Requirement ;",
+            "\t# STATE 1",
+            "\topm:hasState [ opm:minimumValue \"12 m2\" ;",
+            "\t\tprov:generatedAtTime \"2018-01-01T13:35:23Z\" ] ;",
+            "\t# STATE 2 (CURRENT STATE)",
+            "\topm:hasState[ a opm:CurrentState ;",
+            "\t\topm:minimumValue \"14 m2\" ;",
+            "\t\tprov:generatedAtTime \"2018-01-03T13:35:23Z\" ] .\n",
+            
+            "# PROPERTY B",
+            "inst:PropB a opm:Requirement ;",
+            "\t# STATE 1",
+            "\topm:hasState[ a opm:CurrentState ;",
+            "\t\topm:minimumValue \"16 m2\" ;",
+            "\t\tprov:generatedAtTime \"2018-01-01T14:35:23Z\" ] .\n",
+            
+            "### ARCHITECT",
+            "# SPACE INSTANCES",
+            "inst:SpaceA prop:area inst:PropC .",
+            "inst:SpaceB prop:area inst:PropD .\n",
+            
+            "# PROPERTY C",
+            "inst:PropC a opm:Property ;",
+            "\t# STATE 1",
+            "\topm:hasState[ a opm:CurrentState ;",
+            "\t\topm:value \"15 m2\" ;",
+            "\t\tprov:generatedAtTime \"2018-02-05T11:35:23Z\" ] .\n",
+            
+            "# PROPERTY D",
+            "inst:PropD a opm:Property ;",
+            "\t# STATE 1",
+            "\topm:hasState[ a opm:CurrentState ;",
+            "\t\topm:value \"13 m2\" ;",
+            "\t\tprov:generatedAtTime \"2018-02-05T11:35:23Z\" ] ."
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>",
+            
+            "CONSTRUCT",
+            "WHERE {",
+            "\tinst:SpaceA ?property ?propURI .",
+            "\t?propURI a ?propClass ;",
+            "\t\topm:hasState ?stateURI .",
+            "\t?stateURI a opm:CurrentState ;",
+            "\t\t?key ?val .",
+            "}"
+        ]
+    },
+    {
+        "title": "4: Proposal regarding space types",
+        "description": [
+            "This tab gives some proposals to the initial data structure to make life easier when working with space types.\n",
+            "#### The following changes are proposed:",
+            "* Space types also get a place in an ontology\n",
+                "\t```sparql",
+                "\tinst:spaceType1 rdf:type prop:SpaceType```",
+            "* The relation between spaces and space types is made more clear\n",
+                "\t```sparql",
+                "\tinst:spaceA prop:hasSpaceType inst:spaceType1```",
+            "* A hierarchy can exist between space types (generic-specific)\n",
+                "\t```sparql",
+                "\tinst:spaceType1 prop:subSpaceType inst:spaceType1-1```",
+            "* The property type name will be made explicitly in an ontology.\n",
+                "\t```sparql",
+                "\tinst:propA rdf:type prop:Area```",
+                "\tinstead of:\n",
+                "\t```sparql",
+                "\tinst:spaceA prop:Area inst:propA```",
+            "* The above change makes it also possible to differentiate between properties only assigned to a specific space,",
+            "and properties that are inherited via space types. The properties assigned directly to spaces and space types:\n",
+                "\t```sparql",
+                "\tinst:spaceA prop:hasProperty inst:propA",
+                "\tinst:spaceType1 prop:hasProperty inst:propB```",
+            "* and the inherited properties (added through an algorithm, see tab 6):",
+                "```sparql",
+                "\tinst:spaceA prop:hasInheritedProperty inst:propB```",  
+            ""
+        ],
+        "triples": [
+            "@prefix bot:  <https://w3id.org/bot#> .",
+            "@prefix inst: <https://example.org/projectXX/> .",
+            "@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .",
+            "@prefix prop: <https://w3id.org/prop#> .",
+            "@prefix opm:  <https://w3id.org/opm#> .",
+            "@prefix prov: <http://www.w3.org/ns/prov#> .",
+            "@prefix cdt:  <http://w3id.org/lindt/custom_datatypes#> .",
+            "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n",
+ 
+            "### BUILDING OWNER",
+            "# step 1a: make space types and assign properties",
+            "inst:spaceType1 a prop:SpaceType ;",
+                "\trdfs:label \"Computerroom type 1\" .",
+            "inst:spaceType1-1 a prop:SpaceType ;",
+                "\tprop:hasProperty inst:propH ;",
+                "\trdfs:label \"Computerroom type 1-1\" .\n",
+
+            "# Step 1b: hierarchy of spaces",
+            "inst:spaceType1 prop:subSpaceType inst:spaceType1-1 .\n",
+
+            "# step 1c: assign propertie values and state",
+            "inst:propH a opm:Requirement , prop:Cost ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"500 euros\" ;",
+                    "\t\tprov:generatedAtTime \"2017-11-23T13:35:22Z\" ] .",
+            "inst:propJ a opm:Requirement , prop:AirChangeRate ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"5 1/h\" ;",
+                    "\t\tprov:generatedAtTime \"2017-11-23T13:35:23Z\" ] .\n",
+
+            "# step 2: make spaces from space types",
+            "inst:spaceA a bot:Space ;",
+                "\tprop:hasSpaceType inst:spaceType1-1 .\n",
+
+            "# step 3: add instance properties to the space individual",
+            "inst:spaceA prop:hasProperty inst:propJ .\n",
+
+            "# An algorithm will check which properties should be inherited",
+            "# from most generic space type to most specific space type.",
+            "# This results in:",
+            "inst:spaceA prop:hasInheritedProperty inst:propH ."
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+
+            "CONSTRUCT\n",
+
+            "WHERE {",
+                "?s ?p ?o",
+            "}"
+        ]
+    },
+    {
+        "title": "5: Use SPARQL CONSTRUCT to simplify properties",
+        "description": [
+            "The graph visualisation for larger use cases can be quite overwhelming and complex. Use adapted SPARQL CONSTRUCT to go directly from:",
+                "```sparql",
+                "\tinst:spaceA prop:hasProperty inst:propA .",
+                "\tinst:propA a opm:Required , prop:Area ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"20 m²\" ;",
+                    "\t\tprov:generatedAtTime \"2017-11-23T13:35:23Z\" ] .",
+                "\tinst:spaceA prop:hasInheritedProperty inst:propB .",
+                "\tinst:propA a opm:Required , prop:Occupancy ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"10\" ;",
+                    "\t\tprov:generatedAtTime \"2017-11-22T13:35:23Z\" ] .```",
+            "to:",
+                "```sparql",
+                "\tinst:spaceA prop:Area \"20 m²\" .",
+                "\tinst:spaceA prop:Occupancy \"10\" .```",
+            "with only the most recent value of the properties, based on opm:CurrentState. The same can be done for properties of space types. At this point, the information indicating that the value is a minimum, maximum or exact value (see OPM) not visualized. This can be resolved by adding this information to the object property name. Information on the fact if the property is inherited or not, a requirement or a designed property is also not visualized.",
+            "#### Remark: the local rdfstore cannot handle '|' in a SPARQL query. You should switch in the app to the Stardog triplestore to execute this query."
+        ],
+        "triples": [
+            "@prefix bot:  <https://w3id.org/bot#> .",
+            "@prefix inst: <https://example.org/projectXX/> .",
+            "@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .",
+            "@prefix prop: <https://w3id.org/prop#> .",
+            "@prefix opm:  <https://w3id.org/opm#> .",
+            "@prefix prov: <http://www.w3.org/ns/prov#> .",
+            "@prefix cdt:  <http://w3id.org/lindt/custom_datatypes#> .",
+            "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n",
+ 
+            "### BUILDING OWNER",
+            "# step 1a: make space types and assign properties",
+            "inst:spaceType1 a prop:SpaceType ;",
+                "\trdfs:label \"Computerroom type 1\" .",
+            "inst:spaceType1-1 a prop:SpaceType ;",
+                "\tprop:hasProperty inst:propH ;",
+                "\trdfs:label \"Computerroom type 1-1\" .\n",
+
+            "# Step 1b: hierarchy of spaces",
+            "inst:spaceType1 prop:subSpaceType inst:spaceType1-1 .\n",
+
+            "# step 1c: assign propertie values and state",
+            "inst:propH a opm:Requirement , prop:Cost ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"500 euros\" ;",
+                    "\t\tprov:generatedAtTime \"2017-11-23T13:35:22Z\" ] .",
+            "inst:propJ a opm:Requirement , prop:AirChangeRate ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"5 1/h\" ;",
+                    "\t\tprov:generatedAtTime \"2017-11-23T13:35:23Z\" ] .\n",
+
+            "# step 2: make spaces from space types",
+            "inst:spaceA a bot:Space ;",
+                "\tprop:hasSpaceType inst:spaceType1-1 .\n",
+
+            "# step 3: add instance properties to the space individual",
+            "inst:spaceA prop:hasProperty inst:propJ .\n",
+
+            "# An algorithm will check which properties should be inherited",
+            "# from most generic space type to most specific space type.",
+            "# This results in:",
+            "inst:spaceA prop:hasInheritedProperty inst:propH ."
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+
+            "CONSTRUCT { ?space ?propertyName ?propertyValue . }\n",
+
+            "WHERE {",
+                "\t?space a bot:Space ;",
+                    "\t\tprop:hasProperty|prop:hasInheritedProperty ?prop .",
+                "\t?prop a ?propertyName ;",
+                    "\t\topm:hasState ?bnodeState .",
+                "\t?bnodeState a opm:CurrentState ;",
+                    "\t\topm:minimumValue|opm:maximumValue|opm:value ?propertyValue .", 
+                "\tFILTER ( ?propertyName != <https://w3id.org/opm#Requirement> )",
+            "}"
+        ]
+    },
+    {
+        "title": "6.0: Proposal for inheritance of space type properties: introduction",
+        "description": [
+            "In the next phases under tab 6, the properties will be inherited - step by step to demonstrate the algorithm - from the most generic space types to the most specific space types (unless a similar property already exists there). In a final step, the properties of the space type assigned to a specific space, will be inherited by the space.\n",
+            "In this tab the initial situation is visualized:",
+            "* multiple space types of which some are ordered hierarchical.",
+            "* The properties of the spaces and space types are only connected to themselves using `prop:hasProperty`.\n",
+            "#### Use the Stardog triplestore for the SPARQL queries to be executed. Load the example triples once before continuing."
+        ],
+        "triples": [
+            "@prefix bot:  <https://w3id.org/bot#> .",
+            "@prefix inst: <https://example.org/projectXX/> .",
+            "@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .",
+            "@prefix prop: <https://w3id.org/prop#> .",
+            "@prefix opm:  <https://w3id.org/opm#> .",
+            "@prefix prov: <http://www.w3.org/ns/prov#> .",
+            "@prefix cdt:  <http://w3id.org/lindt/custom_datatypes#> .",
+            "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n",
+ 
+            "### BUILDING OWNER",
+            "# step 1a: make space types and assign properties",
+            "inst:spaceType1 a prop:SpaceType ;",
+                "\tprop:hasProperty inst:propF ;",
+                "\trdfs:label \"Computerroom type 1\" .",
+            "inst:spaceType1-1 a prop:SpaceType ;",
+                "\tprop:hasProperty inst:propH ;",
+                "\trdfs:label \"Computerroom type 1-1\" .",
+            "inst:spaceType1-1-1 a prop:SpaceType ;",
+                "\trdfs:label \"Computerroom type 1-1-1\" .",
+            "inst:spaceType1-2 a prop:SpaceType ;",
+                "\tprop:hasProperty inst:propG ;",
+                "\trdfs:label \"Computerroom type 1-2\" .\n",
+
+            "inst:spaceType2 a prop:SpaceType ;",
+                "\tprop:hasProperty inst:propA , inst:propB , inst:propE ;",
+                "\trdfs:label \"Classrooms type 2\" .",
+            "inst:spaceType2-1 a prop:SpaceType ;",
+                "prop:hasProperty inst:propD ;",
+                "\trdfs:label \"Classrooms type 2-1\" .\n",
+
+            "inst:spaceType3 a prop:SpaceType ;",
+                "\tprop:hasProperty inst:propI ;",
+                "\trdfs:label \"Toilet type 3\" .\n",
+
+            "# Step 1b: hierarchy of spaces",
+            "inst:spaceType1 prop:subSpaceType inst:spaceType1-1 , inst:spaceType1-2 .",
+            "inst:spaceType1-1 prop:subSpaceType inst:spaceType1-1-1 .\n",
+            
+            "inst:spaceType2 prop:subSpaceType inst:spaceType2-1 .\n",
+
+            "# step 1c: assign propertie values and state",
+            "inst:propA a opm:Requirement , prop:Area ;",
+            "opm:hasState[ a opm:Required ;",
+                "\topm:minimumValue \"12 m2\" ;",
+                "\tprov:generatedAtTime \"2018-01-01T13:35:23Z\" ] ;",
+            "opm:hasState[ a opm:CurrentState ;",
+                "\topm:minimumValue \"13 m2\" ;",
+                "\tprov:generatedAtTime \"2018-01-03T13:35:23Z\" ] .\n",
+        
+            "inst:propB a opm:Requirement , prop:Occupancy ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"10\" ;",
+                    "\t\tprov:generatedAtTime \"2017-12-23T13:35:23Z\" ] .\n",
+            
+            "inst:propC a opm:Requirement , prop:Area ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:minimumValue \"16 m2\" ;",
+                    "\t\tprov:generatedAtTime \"2018-01-02T13:35:23Z\" ] .\n",
+            
+            "inst:propD a opm:Requirement , prop:Occupancy ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"20\" ;",
+                    "\t\tprov:generatedAtTime \"2018-01-02T13:45:23Z\" ] .\n",
+            
+            "inst:propE a opm:Requirement , prop:AirChangeRate ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"4 1/h\" ;",
+                    "\t\tprov:generatedAtTime \"2018-01-04T13:45:23Z\" ] .\n",
+            
+            "inst:propF a opm:Requirement , prop:Cost ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"1000 euro\" ;",
+                    "\t\tprov:generatedAtTime \"2017-11-23T13:35:23Z\" ] .",
+            "inst:propG a opm:Requirement , prop:Cost ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"2000 euro\" ;",
+                    "\t\tprov:generatedAtTime \"2017-11-23T13:35:23Z\" ] .",
+            "inst:propH a opm:Requirement , prop:Cost ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"500 euro\" ;",
+                    "\t\tprov:generatedAtTime \"2017-11-23T13:34:23Z\" ] .",
+            "inst:propI a opm:Requirement , prop:Volume ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"10 m³\" ;",
+                    "\t\tprov:generatedAtTime \"2017-11-23T13:35:23Z\" ] .",
+            "inst:propJ a opm:Requirement , prop:AirChangeRate ;",
+                "\topm:hasState[ a opm:CurrentState ;",
+                    "\t\topm:maximumValue \"5 1/h\" ;",
+                    "\t\tprov:generatedAtTime \"2017-11-23T13:36:23Z\" ] .\n",
+
+            "# step 2: make spaces from space types",
+            "inst:spaceA a bot:Space ;",
+                "\tprop:hasSpaceType inst:spaceType2-1 .\n",
+
+            "# step 3: add instance properties to the space individual",
+            "inst:spaceA prop:hasProperty inst:propJ .\n"
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+
+            "CONSTRUCT {",
+                "\t?s a bot:Space .",
+                "\t?s prop:hasSpaceType ?connectedSpaceType .",
+                "\t?st1 a prop:SpaceType .",
+                "\t?st1 prop:subSpaceType ?st2 .",
+                "\t?all1 prop:hasProperty ?all1Props .",
+                "\t?all2 prop:hasInheritedProperty ?all2Props .",
+            "}\n",
+
+            "WHERE {",
+                "\t?s a bot:Space .",
+                "\tOPTIONAL { ?s prop:hasSpaceType ?connectedSpaceType . }",
+                "\t?st1 a prop:SpaceType .",
+                "\tOPTIONAL { ?st1 prop:subSpaceType ?st2 . }",
+                "\t?all1 prop:hasProperty ?all1Props .",
+                "\tOPTIONAL { ?all2 prop:hasInheritedProperty ?all2Props . }",
+            "}"
+        ]
+    },
+    {
+        "title": "6.1: Proposal for inheritance of space type properties: counting",
+        "description": [
+            "In this tab, the maximum number of `prop:hasSubSpaceType` relations between space types are counted. This number is equal to the maximum number of iterations that have to take place.\n",
+            "#### Use the Stardog triplestore for the SPARQL queries to be executed."
+        ],
+        "triples": [
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+
+            "SELECT ?start ?end (count(?mid) as ?length)\n",
+
+            "WHERE {",
+                "\t?start a prop:SpaceType .",
+                "\tFILTER NOT EXISTS { ?otherSpaceType prop:subSpaceType ?start }",
+                "\tOPTIONAL {",
+                    "\t\t?end a prop:SpaceType .",
+                    "\t\tFILTER NOT EXISTS { ?end prop:subSpaceType ?otherSpaceType2}",
+                    "\t\t?start prop:subSpaceType+ ?mid .",
+                    "\t\t?mid prop:subSpaceType* ?end .",
+                "\t}",
+            "}\n",
+
+            "GROUP BY ?start ?end\n",
+
+            "# only return highest path lenth",
+            "ORDER BY DESC(?length) LIMIT 1"
+        ]
+    },
+    {
+        "title": "6.2: Proposal for inheritance of space type properties: first round of inheritance",
+        "description": [
+            "In this tab, the properties inheritance starts from the most generic space types to the second most generic space types of a tree. Note that a lower (more specific) space type will only inherit a property from a higher (more generic) space type if the type of property does not yet exist on the lower level.\n",
+            "#### Use the Stardog triplestore for the SPARQL queries to be executed."
+        ],
+        "triples": [
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+
+            "INSERT { ?next prop:hasInheritedProperty ?prop .}\n",
+
+            "WHERE {",
+                "\t?start a prop:SpaceType .",
+                "\tFILTER NOT EXISTS { ?otherSpaceType prop:subSpaceType ?start }",
+                "\t?start prop:subSpaceType ?next .\n",
+                
+                "\t# properties related to most generic space types",
+                "\t?start prop:hasProperty ?propStart .",
+                "\t?propStart a ?propNameStart .",
+                "\tFILTER ( ?propNameStart != <https://w3id.org/opm#Requirement> )\n",
+            
+                "\t# properties related to second most generic space types",
+                "\tOPTIONAL { ",
+                    "\t\t?next prop:hasProperty ?propNext .",
+                    "\t\t?propNext a ?propNameNext .",
+                    "\t\tFILTER ( ?propNameNext != <https://w3id.org/opm#Requirement> )",
+                "\t}\n",
+                
+                "\tBIND ( EXISTS {?next prop:hasProperty ?propNext} as ?exists )\n",
+                
+                "\t# override properties of second most generic space type only if there's not already a similar property",
+                "\tBIND ( IF (?exists , IF (?propNameNext = ?propNameStart , ?propNext , ?propStart) , ?propStart) AS ?prop)",
+                "\tFILTER (?prop != ?propNext )",
+            "}"
+        ]
+    },
+    {
+        "title": "6.3: Proposal for inheritance of space type properties: second round of inheritance",
+        "description": [
+            "In this tab, the properties inheritance starts from the second most generic space types to the third most generic space types of a tree. Note that a lower (more specific) space type will only inherit a property from a higher (more generic) space type if the type of property does not yet exist on the lower level.\n",
+            "#### Use the Stardog triplestore for the SPARQL queries to be executed."
+        ],
+        "triples": [
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+
+            "INSERT { ?next prop:hasInheritedProperty ?prop .}\n",
+
+            "WHERE {",
+                "\t?start a prop:SpaceType .",
+                "\tFILTER NOT EXISTS { ?otherSpaceType prop:subSpaceType ?start }",
+                "\t?start prop:subSpaceType ?mid1 . #changed line (second loop)",
+                "\t?mid1 prop:subSpaceType ?next . #extra line (second loop)\n",
+
+                "\t# properties related to second most generic space types",
+                "\t?mid1 prop:hasProperty|prop:hasInheritedProperty ?propMid1 . #changed line (second loop)",
+                "\t?propMid1 a ?propNameMid1 . #changed line (second loop)",
+                "\tFILTER ( ?propNameMid1 != <https://w3id.org/opm#Requirement> ) #changed line (second loop)\n",
+            
+                "\t# properties related to third most generic space types",
+                "\tOPTIONAL { ",
+                    "\t\t?next prop:hasProperty ?propNext .",
+                    "\t\t?propNext a ?propNameNext .",
+                    "\t\tFILTER ( ?propNameNext != <https://w3id.org/opm#Requirement> )",
+                "\t}\n",
+                
+                "\tBIND ( EXISTS {?next prop:hasProperty ?propNext} as ?exists )\n",
+                
+                "\t# add properties to third most generic space type only if there's not already a similar property",
+                "\tBIND ( IF (?exists , IF (?propNameNext = ?propNameMid1 , ?propNext , ?propMid1) , ?propMid1) AS ?prop) #changed line (second loop)",
+                "\tFILTER (?prop != ?propNext )",
+            "}"
+        ]
+    },
+    {
+        "title": "6.4: Proposal for inheritance of space type properties: last round of inheritance",
+        "description": [
+            "In this tab, the properties inheritance starts from the space types to the connected spaces. Note that a space will only inherit a property from a connected space type if the type of property does not yet exist on the space.\n",
+            "#### Use the Stardog triplestore for the SPARQL queries to be executed."
+        ],
+        "triples": [
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+
+            "INSERT { ?space prop:hasInheritedProperty ?prop .}\n",
+
+            "WHERE {",
+                "\t?space a bot:Space ;",
+                    "\t\tprop:hasSpaceType ?spaceType .\n",
+            
+                "\t# properties related to space types",
+                "\t?spaceType prop:hasProperty|prop:hasInheritedProperty ?propSpaceType .",
+                "\t?propSpaceType a ?propNameSpaceType .",
+                "\tFILTER ( ?propNameSpaceType != <https://w3id.org/opm#Requirement> )\n",
+            
+                "\t# properties directly related to a specific space",
+                "\tOPTIONAL { ",
+                    "\t\t?space prop:hasProperty ?propSpace .",
+                    "\t\t?propSpace a ?propNameSpace .",
+                    "\t\tFILTER ( ?propNameSpace != <https://w3id.org/opm#Requirement> )",
+                "\t}\n",
+                
+                "\tBIND ( EXISTS {?space prop:hasProperty ?propSpace} as ?exists )\n",
+            
+                "\t# add properties from space type only if there's no similar property on space level",
+                "\tBIND ( IF (?exists , IF (?propNameSpace = ?propNameSpaceType , ?propSpace , ?propSpaceType) , ?propSpaceType) AS ?prop)",
+                "\tFILTER (?prop != ?propSpace )",
+            "}"
+        ]
+    },
+    {
+        "title": "6.5: Proposal for inheritance of space type properties: overview",
+        "description": [
+            "In this tab, an overview on the standard properties (`prop:hasProperty`) and the inherited properties (`prop:hasInheritedProperty`) is given. Note that a space will only inherit a property from a connected space type if the type of property does not yet exist on the space.\n",
+            "#### Use the Stardog triplestore for the SPARQL queries to be executed."
+        ],
+        "triples": [
+        ],
+        "query": [
+            "PREFIX bot:  <https://w3id.org/bot#>",
+            "PREFIX inst: <https://example.org/projectXX/>",
+            "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+            "PREFIX prop: <https://w3id.org/prop#>",
+            "PREFIX opm:  <https://w3id.org/opm#>",
+            "PREFIX prov: <http://www.w3.org/ns/prov#>",
+            "PREFIX cdt:  <http://w3id.org/lindt/custom_datatypes#>\n",
+
+            "SELECT *\n",
+
+            "WHERE {",
+                "\t{SELECT * WHERE{",
+                    "\t\t?spaces_spaceTypes prop:hasProperty ?instanceProp .",
+                    "\t\t?instanceProp a ?instancePropType .",
+                    "\t\tFILTER ( ?instancePropType != <https://w3id.org/opm#Requirement> )",
+                    "\t\t}",
+                "\t}\n",
+              
+                "\tUNION\n",
+            
+                "\t{SELECT * WHERE{",
+                    "\t\t?spaces_spaceTypes prop:hasInheritedProperty ?inheritedProp .",
+                    "\t\t?inheritedProp a ?inheritedPropType .",
+                    "\t\tFILTER ( ?inheritedPropType != <https://w3id.org/opm#Requirement> )",
+                    "\t\t}",
+                "\t}",
+            "}",
+            "ORDER by ?spaces_spaceTypes"
+        ]
+    }
+]
