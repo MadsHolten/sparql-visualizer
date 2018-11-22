@@ -1,4 +1,4 @@
-import { Component, Input, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Inject, Output, EventEmitter, HostListener } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DomSanitizer, DOCUMENT  } from '@angular/platform-browser';
 
@@ -54,6 +54,11 @@ A special thanks to [Niras](https://www.niras.com/) for co-funding the Industria
   fullScreenToggle(){
     this.fullScreen = !this.fullScreen;
     this.toggleFullScreen.emit(this.fullScreen);
+  }
+
+  // Escape full screen on escape key press
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+      if(this.fullScreen) this.fullScreenToggle();
   }
 
   downloadApp(){

@@ -64,6 +64,9 @@ import { SelectDialogComponent } from './dialogs/select-dialog.component';
 import { ProjectSettingsService } from './services/project-settings.service';
 import { DataService } from './services/data.service';
 
+// Draggable
+import { AngularDraggableModule } from 'angular2-draggable';
+
 
 const appRoutes: Routes = [
   { path: '**', component: AppComponent }
@@ -118,7 +121,8 @@ const appRoutes: Routes = [
     MatChipsModule,
     MatCheckboxModule,
     MatPaginatorModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    AngularDraggableModule
   ],
   providers: [ ProjectSettingsService, Title, DataService, PrefixSimplePipe ],
   bootstrap: [AppComponent],

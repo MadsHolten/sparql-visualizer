@@ -201,13 +201,14 @@
                             <mat-panel-title>
                                 Query
                             </mat-panel-title>
-                            <mat-panel-description>
+                            <!-- <mat-panel-description>
                                 Query result
-                            </mat-panel-description>
+                            </mat-panel-description> -->
                             </mat-expansion-panel-header>
                         
                             <!-- Data visualization -->
                             <sparql-table 
+                                maxHeight="500px"
                                 [queryResult]="queryResult"
                                 [queryTime]="queryTime"
                                 (clickedURI)="tableClick($event)">
@@ -230,11 +231,12 @@
 <!-- Full screen mode -->
 <div *ngIf="fullScreen">
 
-    <div class="fullscreen-toolbar">
+    <div class="fullscreen-draggable" ngDraggable [handle]="DragArea">
+        <div #DragArea class="fullscreen-toolbar"></div>
         <mat-accordion>
-            <mat-expansion-panel>
 
-                <!-- Triples NB! This is a copy/paste - should be implemented properly -->
+            <!-- Triples NB! This is a copy/paste - should be implemented properly -->
+            <mat-expansion-panel>
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         Triples
@@ -267,7 +269,6 @@
                         </button>
                     </div>
                 </div>
-
             </mat-expansion-panel>
 
             <!-- Query -->
@@ -287,7 +288,14 @@
     <!-- Graph -->
     <div *ngIf="queryType == 'construct'" class="fullscreen-canvas">
         <app-sparql-force *ngIf="queryResult" (clickedURI)="graphClick($event)" [data]="queryResult"></app-sparql-force>
-        <span *ngIf="!queryResult">No result to show</span>
     </div>
+
+    <!-- Table -->
+    <sparql-table
+        *ngIf="queryType == 'select'"
+        [queryResult]="queryResult"
+        [queryTime]="queryTime"
+        (clickedURI)="tableClick($event)">
+    </sparql-table>
 
 </div>

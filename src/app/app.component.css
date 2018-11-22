@@ -39,16 +39,25 @@
     top: 50%;
 }
 
-.fullscreen-toolbar{
+.fullscreen-draggable{
     position: absolute;
+    margin: 5px;
     width: 500px;
     left: 10px;
     top: 85px;
+    background-color: rgba(220,220,220,.6);
+    border-radius: 5px;
     z-index: 10;
+}
+.fullscreen-toolbar{
+    height: 25px;
+    cursor: move;
+    z-index: 20;
 }
 .fullscreen-canvas{
     position: absolute;
-    height: 95%;
+    height: 90%;
     width: 98%;
     z-index: -1;
+    overflow: hidden;
 }

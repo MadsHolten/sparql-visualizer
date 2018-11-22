@@ -1,4 +1,4 @@
-<div class="table-container mat-elevation-z8">
+<div class="table-container mat-elevation-z8" [ngStyle]="{'max-height': maxHeight}">
     <div class="table-header">
         <span fxFlex="40%">{{resultLength}} results<span *ngIf="queryTime"> in {{queryTime/1000}} seconds</span></span>
         <span fxFlex="grow"></span>

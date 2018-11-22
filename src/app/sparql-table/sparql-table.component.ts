@@ -29,6 +29,7 @@ export class SparqlTableComponent implements OnChanges, OnInit{
   prefixes: object;
   showDatatypes: boolean = false;
   @Input() queryResult: Object;
+  @Input() maxHeight;
   @Input() queryTime: Object;
   @Output() clickedURI = new EventEmitter<string>();
 
