@@ -1,6 +1,7 @@
 .title {
-    margin-left: 10px;
-    margin-top: 11px;
+    margin-left: 12px;
+    /* margin-top: 11px; */
+    margin-bottom: 5px;
     font-size: 25px;
 }
 .creator {
@@ -8,4 +9,15 @@
 }
 .mat-toolbar {
     margin-bottom: 10px;
+}
+/* .logo-group{
+    position: absolute;
+    left: 10px;
+    top: 10px;
+} */
+.logo{
+    height:20px;
+    padding: 0px;
+    margin: 0px;
+    width: 20px;
 }
