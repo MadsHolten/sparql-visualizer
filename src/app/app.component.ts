@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { Title } from '@angular/platform-browser'; // To override title
+import 'codemirror/mode/turtle/turtle';
 
 import { QueryService } from './services/query.service';
 import { DataService, TabsData, ProjectData } from './services/data.service';
@@ -40,6 +41,15 @@ export class AppComponent implements OnInit {
   // Toggle store
   public localStore: boolean = true;
   public toggleTooltip: string = 'Switch to triplestore';
+
+  // Codemirror
+  cmConfig = { 
+    lineNumbers: true,
+    firstLineNumber: 1,
+    lineWrapping: true,
+    matchBrackets: true,
+    mode: 'text/turtle'
+  };
 
   constructor(
     private _qs: QueryService,
@@ -107,7 +117,7 @@ export class AppComponent implements OnInit {
     if(this.reasoning){
 
       // Show loader
-      this._ds.setLoadingMessage("Performing query using Hylar. First execution will be slow.");
+      this._ds.setLoadingMessage("Performing query using Hylar");
       this._ds.setLoaderStatus(true);
 
       // Query Hylar based endpoint
@@ -118,7 +128,10 @@ export class AppComponent implements OnInit {
           this._ds.setLoaderStatus(false);
         }, err => {
           this._ds.setLoaderStatus(false);
-          console.log(err);
+          this.queryResult = '';
+          if(err.indexOf("undefined") != -1){
+            this.showSnackbar("The query did not return any results", 10000);
+          }
           if(err.message && err.name){
             this.showSnackbar(err.name+': '+err.message, 10000);
           }
@@ -129,9 +142,13 @@ export class AppComponent implements OnInit {
         .then(res => {
           this.queryResult = res;
           this.resultFieldExpanded = true;
+          console.log(res);
         }).catch(err => {
-          console.log(err);
+          this.queryResult = '';
           if(err.message && err.name){
+            if(err.indexOf("undefined") != -1){
+              this.showSnackbar("The query did not return any results", 10000);
+            }
             this.showSnackbar(err.name+': '+err.message, 10000);
           }
         });

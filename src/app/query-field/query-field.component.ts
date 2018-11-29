@@ -1,10 +1,8 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { DataSource } from '@angular/cdk/collections';
-import { Observable } from 'rxjs/Observable';
-import * as N3 from 'n3';
 import * as _ from 'lodash';
 import 'rxjs/add/observable/of';
 import 'codemirror/mode/go/go';
+import 'codemirror/mode/sparql/sparql';
 
 import { DataService } from '../services/data.service';
 
@@ -32,7 +30,7 @@ export class QueryFieldComponent {
         firstLineNumber: 1,
         lineWrapping: true,
         matchBrackets: true,
-        mode: 'text/x-go'
+        mode: 'application/sparql-query'
     };
 
     constructor(

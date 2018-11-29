@@ -2,9 +2,12 @@ import { Injectable } from '@angular/core';
 import * as rdfstore from 'rdfstore';
 import * as _ from 'lodash';
 import * as N3 from 'n3';
+import * as Hylar from 'hylar';
 import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/fromPromise';
+import { Observable } from "rxjs/Observable";
 
 export interface Qres {
   actions?;
@@ -38,10 +41,44 @@ export class QueryService {
 
   doHylarQuery(query,triples){
 
-    // Get query type
-    const queryType = this.getQuerytype(query);
+    var h = new Hylar();
 
-    return this.http.post('https://reasoner-endpoint.herokuapp.com/', {query: query, data: triples});
+    var saturateAndQuery = async (query,triples) => {
+
+        var start = Date.now();
+        var mimeType = "text/turtle";
+        var keepOldValues = false;
+
+        var saturation = await h.load(triples, mimeType, keepOldValues);
+        if(!saturation) console.log('Graph saturation failed.');
+    
+        var res = await h.query(query);
+
+        // Register query time
+        var end = Date.now();
+        var elapsed = (end-start)/1000;
+        var message = `Returned ${res.length} triples in ${elapsed} seconds`;
+        console.log(message);
+
+        // Process result
+        if(res.triples) res = res.triples;
+
+        var queryType = this.getQuerytype(query);
+
+        // Return JSON formatted results for SELECT queries
+        if(queryType == 'select'){
+            res = this.sparqlJSON(res).data;
+        }
+        // Return {subjext: "", predicate: "", object: ""} for CONSTRUCT queries
+        else{
+          res = _.map(res, x => _.mapValues<any>(x, y => y.nominalValue));
+        }
+    
+        return res;
+    
+    }
+
+    return Observable.fromPromise(saturateAndQuery(query,triples));
   }
 
   doQuery(query,triples,mimeType?){
