@@ -9,6 +9,10 @@
     {"prefix": "bot", "uri": "https://w3id.org/bot#"},
     {"prefix": "cdt", "uri": "http://w3id.org/lindt/custom_datatypes#"},
     {"prefix": "props", "uri": "https://w3id.org/props#"},
+    {"prefix": "p4bldg", "uri": "https://w3id.org/product/BuildingElements#"},
+    {"prefix": "mep", "uri": "https://w3id.org/product/MEP#"},
+    {"prefix": "furn", "uri": "https://w3id.org/product/Furnishing#"},
+    {"prefix": "geo", "uri": "http://www.opengis.net/ont/geosparql#"},
     {"prefix": "inst", "uri": "https://www.niras.dk/proj100/"},
     {"prefix": "owl", "uri": "http://www.w3.org/2002/07/owl#"}
 ]
