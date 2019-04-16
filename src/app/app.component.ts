@@ -97,22 +97,8 @@ export class AppComponent implements OnInit {
 
     // If no prefix is defined in the query, get it from the turtle file
     if(query.toLowerCase().indexOf('prefix') == -1){
-      // Get prefixes from triples
-      var prefixes = this._qs.extractPrefixesFromTTL(data);
 
-      // Get prefixes in query
-      var namespaces = this._qs.nameSpacesInQuery(query);
-
-      // Append the used namespaces to the query
-      var keys = Object.keys(prefixes);
-      var pfxString = '';
-      keys.forEach(key => {
-        if(namespaces.indexOf(key.slice(0, -1)) != -1){
-          pfxString+= `PREFIX ${key} ${prefixes[key]}\n`;
-        }
-      })
-
-      query = pfxString + "\n" + query;
+      query = this._qs.appendPrefixesToQuery(query, data);
       this.data.query = query;
 
     }

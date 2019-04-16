@@ -228,6 +228,31 @@ export class QueryService {
       return array;
   }
 
+  public appendPrefixesToQuery(query, triples){
+
+      // Get prefixes from triples
+      var prefixes = this.extractPrefixesFromTTL(triples);
+
+      // Get prefixes in query
+      var namespaces = this.nameSpacesInQuery(query);
+
+      // Append the used namespaces to the query
+      var keys = Object.keys(prefixes);
+      var pfxString = '';
+      keys.forEach(key => {
+        if(namespaces.indexOf(key.slice(0, -1)) != -1){
+          pfxString+= `PREFIX ${key} ${prefixes[key]}\n`;
+        }
+      })
+
+      if(pfxString != ''){
+        query = pfxString + "\n" + query;
+      }
+
+      return query;
+    
+  }
+
   private _createStore(){
     return new Promise( (resolve, reject) => {
       rdfstore.create((err, store) => {
