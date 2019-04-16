@@ -92,8 +92,30 @@ export class AppComponent implements OnInit {
   }
 
   doQuery(){
-    const query = this.data.query;
+    var query = this.data.query;
     const data = this.data.triples;
+
+    // If no prefix is defined in the query, get it from the turtle file
+    if(query.toLowerCase().indexOf('prefix') == -1){
+      // Get prefixes from triples
+      var prefixes = this._qs.extractPrefixesFromTTL(data);
+
+      // Get prefixes in query
+      var namespaces = this._qs.nameSpacesInQuery(query);
+
+      // Append the used namespaces to the query
+      var keys = Object.keys(prefixes);
+      var pfxString = '';
+      keys.forEach(key => {
+        if(namespaces.indexOf(key.slice(0, -1)) != -1){
+          pfxString+= `PREFIX ${key} ${prefixes[key]}\n`;
+        }
+      })
+
+      query = pfxString + "\n" + query;
+      this.data.query = query;
+
+    }
 
     // Get the query type
     this.queryType = this._qs.getQuerytype(query);

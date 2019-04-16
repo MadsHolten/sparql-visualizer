@@ -186,6 +186,48 @@ export class QueryService {
       return {status: 200, data: reformatted};
   }
 
+  public extractPrefixesFromTTL(triples){
+    // Replace all whitespace characters with a single space and split by space
+    // remove empty values
+    var arr = triples.replace(/\s/g, " ").split(" ").filter(el => el != "");
+
+    // Get index of all occurences of @prefix
+    var pfxIndexes = arr.reduce((a, e, i) => {
+      if(e === '@prefix') a.push(i);
+      return a;
+    }, []);
+
+    var obj = {};
+    pfxIndexes.forEach(i => {
+      obj[arr[i+1]] = arr[i+2];
+    })
+    
+    return obj;
+  }
+
+  public nameSpacesInQuery = (str) => {
+      var array = [];
+
+      const regex = /[a-zA-Z]+\:/g;
+      let m;
+      
+      while ((m = regex.exec(str)) !== null) {
+          // This is necessary to avoid infinite loops with zero-width matches
+          if (m.index === regex.lastIndex) {
+              regex.lastIndex++;
+          }
+          
+          // The result can be accessed through the `m`-variable.
+          m.forEach((match) => {
+              match = match.slice(0, -1);
+              if(array.indexOf(match) == -1){
+                  array.push(match);
+              }
+          });
+      }
+      return array;
+  }
+
   private _createStore(){
     return new Promise( (resolve, reject) => {
       rdfstore.create((err, store) => {

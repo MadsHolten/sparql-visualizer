@@ -10,9 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-git": "ng build --prod --base-href https://madsholten.github.io/sparql-visualizer/ && npx ngh",
-    "electron": "electron .",
-    "electron-build": "ng build --prod && electron ."
+    "build-git": "ng build --prod --base-href https://madsholten.github.io/sparql-visualizer/ && npx ngh"
   },
   "private": true,
   "dependencies": {
@@ -58,8 +56,6 @@
     "@types/node": "~6.0.60",
     "angular-cli-ghpages": "^0.5.3",
     "codelyzer": "~3.2.0",
-    "electron": "^1.8.3",
-    "electron-packager": "^11.1.0",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~1.7.0",
