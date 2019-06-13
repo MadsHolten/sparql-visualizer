@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { Title } from '@angular/platform-browser'; // To override title
 import 'codemirror/mode/turtle/turtle';
@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
 
   private queryResult;
   private resultFieldExpanded: boolean = false;
+  public filePath;  // Store URI of file if one is specified in the URL params
   public tabIndex: number;
   public showJSON: boolean = false;
   public editDescription: boolean = false; // true if in edit mode
@@ -56,18 +57,29 @@ export class AppComponent implements OnInit {
     private _ds: DataService,
     private _ss: StardogService,
     private route: ActivatedRoute,
+    private router: Router,
     public snackBar: MatSnackBar,
     private titleService: Title
   ) {}
 
   ngOnInit(){
+
+    this.changeTab(0);
     
     this.route.queryParams.subscribe(map => {
       // If a tab is specified, use this. Else default to first tab
       this.tabIndex = map.tab ? parseInt(map.tab) : 0;
+      if(this.tabIndex){
+        this.changeTab(this.tabIndex);
+      }
 
       // If triplestore mode is defined, use this
       this.localStore = map.local == 0 ? false : true;
+
+      // If fullscreen is set to true, enable fullscreen mode
+      if(map.fs == 'true') this.toggleFullScreen(true);
+
+      if(map.file) this.filePath = map.file;
       
       // Get tab titles
       this._ds.getTabTitles().subscribe(res => this.tabTitles = res);
@@ -79,7 +91,6 @@ export class AppComponent implements OnInit {
         this.titleService.setTitle(this.projectData.title);
       });
 
-      this.changeTab(this.tabIndex);
     });
 
     // Inject shared services
@@ -227,11 +238,28 @@ export class AppComponent implements OnInit {
     this.toggleTooltip = this.toggleTooltip == 'Switch to datasets' ? 'Switch to triplestore' : 'Switch to datasets';
   }
 
+  updateURLQueryParams(){
+    /**
+     * THIS CAN BE USED TO LET THE USER SHARE THE FULL URL
+     */
+
+    // var qp: any = { tab: this.tabIndex, fs: this.fullScreen };
+    // if(this.filePath) qp.file = this.filePath;
+
+    // this.router.navigate(['.'], { relativeTo: this.route, queryParams: qp });
+  }
+
+  toggleFullScreen(value){
+    this.fullScreen = value;
+    this.updateURLQueryParams();
+  }
+
   changeTab(i){
     if(i == 'new'){
       console.log('Add new dataset');
     }else{
       this.tabIndex = i;
+
       this._ds.getSingle(i)
         .subscribe(x => {
             this.data = x;
@@ -249,7 +277,7 @@ export class AppComponent implements OnInit {
               this.queryResult = null;
             }
         });
-    
+      this.updateURLQueryParams()
     }
   }
 

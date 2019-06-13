@@ -3,7 +3,8 @@
     <visualizer-toolbar 
         fxFlex="100%"
         *ngIf="projectData"
-        (toggleFullScreen)="fullScreen = $event"
+        [fullScreen]="fullScreen"
+        (toggleFullScreen)="toggleFullScreen($event)"
         [title]="projectData.title"
         [creator]="projectData.creator">
     </visualizer-toolbar>

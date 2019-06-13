@@ -15,8 +15,8 @@ export class ToolbarComponent {
 
   @Input() title: string;
   @Input() creator: string;
+  @Input() fullScreen: boolean = false;
   @Output() toggleFullScreen = new EventEmitter<boolean>();
-  public fullScreen = false;
 
   videos = [
       {title: "1: The basics", id:"ixrhgKHKXDY"},
