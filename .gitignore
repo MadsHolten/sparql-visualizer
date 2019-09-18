@@ -1,5 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# VS code history
+.history/*
+
 # compiled output
 /dist
 /tmp

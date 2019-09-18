@@ -33,51 +33,13 @@ export class StardogService  extends ProjectSettingsService {
         // return Observable.fromPromise(db.graph.doGet(this.conn, 'test'));
     }
 
-    query(q,reasoning?): Observable<any>{
+    async query(q,reasoning?): Promise<any>{
         if(!reasoning) reasoning = false;
         const conn = this._getConn();
         const database = this._getDB();
-        return Observable.fromPromise(
-            query.execute(conn, database, q, undefined, {reasoning: reasoning})
-            // query.execute(conn, database, q)
-        );
-    }
 
-    getNamedGraphs(): Observable<any>{
-        var q = 'SELECT DISTINCT ?g WHERE { GRAPH ?g { ?s ?p ?o}}';
-        return this.query(q).map(res => {
-            if(res.status == '200'){
-                return _.map(res.body.results.bindings, obj => {
-                    var x: any = obj;
-                    return x.g.value;
-                });
-            }
-            return null;
-        });
-    }
-
-    wipeDB(namedGraph?){
-        if(!namedGraph){
-            var q = "DELETE WHERE { ?s ?p ?o }";
-        }else{
-            var q = `DELETE WHERE { Graph <${namedGraph}> { ?s ?p ?o }}`;
-        }
-        return this.query(q);
-    }
-
-    getTriplesFromURL(url){
-        // set options
-        // NB! responsetype is necessary as Angular tries to
-        // convert to JSON if not set
-        var options = {
-            responseType: 'text' as 'text',
-            observe: 'response' as 'response',
-            headers: {
-                Accept: 'text/turtle'
-            }
-        }
-
-        return this.http.get(url, options);
+        const qRes = await query.execute(conn, database, q, undefined, {reasoning: reasoning});
+        return qRes.body;
     }
 
     private _getConn(){

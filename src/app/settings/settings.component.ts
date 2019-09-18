@@ -4,16 +4,19 @@ import { MatDialog } from '@angular/material';
 
 // Services
 import { ProjectSettingsService } from '../services/project-settings.service';
-import { StardogService } from '../services/stardog.service';
 import { DataService } from '../services/data.service';
 
 // Dialogs
 import { InputDialogComponent } from '../dialogs/input-dialog.component';
 import { SelectDialogComponent } from '../dialogs/select-dialog.component';
+import { SPARQLService } from '../services/sparql.service';
 
 export interface ProjectSettings {
   endpoint: string;
-  database: string;
+  tripleStore: string;
+  updateEndpoint?: string;
+  dataEndpoint?: string;
+  database?: string;
   username?: string;
   password?: string;
 }
@@ -22,20 +25,22 @@ export interface ProjectSettings {
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css'],
-  providers: [ ProjectSettingsService, StardogService ]
+  providers: [ ProjectSettingsService, SPARQLService ]
 })
 export class SettingsComponent implements OnInit, OnChanges {
 
   panelOpenState: boolean = false;
-  projectSettings: ProjectSettings = {endpoint: '', database: ''};
+  projectSettings: ProjectSettings = {endpoint: '', tripleStore: ''};
   loading: boolean;
   loadingMessage: string;
+
+  triplestoreOptions = ['Fuseki', 'Stardog'];
 
   @Input() triples: string;
 
   constructor(
     private _pss: ProjectSettingsService,
-    private _ss: StardogService,
+    private _ss: SPARQLService,
     private _ds: DataService,
     private dialog: MatDialog,
     public snackBar: MatSnackBar
@@ -47,7 +52,10 @@ export class SettingsComponent implements OnInit, OnChanges {
     if(data){
       this.projectSettings = data;
     }else{
-      this.projectSettings.endpoint = "http://localhost:5820"; //default
+      this.projectSettings.endpoint = "http://localhost:3030/db/query"; //default
+      this.projectSettings.updateEndpoint = "http://localhost:3030/db/update"; //default
+      this.projectSettings.dataEndpoint = "http://localhost:3030/db/data"; //default
+      this.projectSettings.tripleStore = "Fuseki"; //default
       this.projectSettings.username = "admin"; //default
       this.projectSettings.password = "admin"; //default
     }
@@ -83,26 +91,27 @@ export class SettingsComponent implements OnInit, OnChanges {
       });
   }
 
-  showWipeNamed(){
-    this._ss.getNamedGraphs().subscribe(namedGraphs => {
+  async showWipeNamed(){
 
-      let dialogRef = this.dialog.open(SelectDialogComponent, {
-        height: '300px',
-        width: '500px',
-        data: {
-          title: "Named graph URI", 
-          description: "Select the named graph you wish to wipe",
-          selectText: "named graph",
-          list: namedGraphs}
-      });
-  
-      dialogRef.afterClosed().subscribe(ng => {
-        if(ng){
-          this.wipeDB(ng);
-        }
-      });
-
+    // Get list of named graphs
+    const namedGraphs = await this._ss.getNamedGraphs();
+    
+    let dialogRef = this.dialog.open(SelectDialogComponent, {
+      height: '300px',
+      width: '500px',
+      data: {
+        title: "Named graph URI", 
+        description: "Select the named graph you wish to wipe",
+        selectText: "named graph",
+        list: namedGraphs}
     });
+
+    dialogRef.afterClosed().subscribe(ng => {
+      if(ng){
+        this.wipeDB(ng);
+      }
+    });
+
   }
 
   loadDataset(namedGraph?){
@@ -122,74 +131,68 @@ export class SettingsComponent implements OnInit, OnChanges {
         // Load user defined triples
         const triples = this.triples;
 
-        this._ss.loadTriples(triples, namedGraph)
-          .subscribe(res => {
-            if(res.status == '200'){
-              this.showSnackbar("Successfully loaded dataset");
-              // this.doQuery();
-            }else{
-              this.showSnackbar(res.status+': '+res.statusText);
-              console.log(res);
-            }
-          }, err => {
-            this.showSnackbar("Something went wrong");
-            console.log(err);
-          })
+        try{
+          this._ss.loadTriples(triples, namedGraph);
+        }catch(err){
+          this.showSnackbar(err);
+          console.log(err);
+          return;
+        }
+
+        this.showSnackbar("Successfully loaded dataset");
 
       }
     });
   }
 
-  wipeDB(namedGraph?){
-    this._ss.wipeDB(namedGraph)
-      .subscribe(res => {
-        if(res.status == '200'){
-          this.showSnackbar("Successfully wiped database");
-        }else{
-          this.showSnackbar(res.status+': '+res.statusText);
-          console.log(res);
-        }
-      }, err => {
-        this.showSnackbar("Something went wrong");
-        console.log(err);
-      })
+  async wipeDB(namedGraph?){
+
+    try{
+      this._ss.wipeDB(namedGraph);
+      this.showSnackbar("Successfully wiped database");
+    }catch(err){
+      this.showSnackbar(err);
+      console.log(err);
+    }
+    
   }
 
   loadOntologies(){
-    var url = "https://w3id.org/bot/bot.ttl";
+    var url = "https://w3c-lbd-cg.github.io/bot/bot.ttl";
     var namedGraph = "https://bot";
     this.loadExternal(url,namedGraph);
   }
 
-  loadExternal(url,namedGraph?){
+  async loadExternal(url,namedGraph?){
     this._ds.setLoaderStatus(true);
     this._ds.setLoadingMessage("Downloading triples from external source");
 
-    this._ss.getTriplesFromURL(url)
-      .subscribe(res => {
+    var triplesTTL;
+    try{
+      var res = await this._ss.getTriplesFromURL(url);
+      triplesTTL = res.body;
+    }catch(err){
+      this._ds.setLoaderStatus(false);
+      this.showSnackbar('Could not load content from '+url);
+      return;
+    }
 
-        console.log(res);
-        this._ds.setLoadingMessage("Loading triples in store");
-        this._ss.loadTriples(res.body, namedGraph)
-          .subscribe(res => {
-            this._ds.setLoaderStatus(false);
-            if(res.status == '200' || res.status == '201'){
-              this.showSnackbar("Successfully loaded triples in store");
-              // this.doQuery();
-            }else{
-              this.showSnackbar(res.status+': '+res.statusText);
-              console.log(res);
-            }
-          }, err => {
-            this.showSnackbar("Something went wrong");
-            this._ds.setLoaderStatus(false);
-            console.log(err);
-          })
+    this._ds.setLoadingMessage("Loading triples in store");
 
-      }, err => {
-        this._ds.setLoaderStatus(false);
-        this.showSnackbar('Could not load content from '+url);
-      });
+    // Load triples in store
+    try{
+      await this._ss.loadTriples(triplesTTL, namedGraph);
+    }catch(err){
+      this.showSnackbar(err);
+      this._ds.setLoaderStatus(false);
+      console.log(err);
+      return;
+    }
+
+    this._ds.setLoaderStatus(false);
+
+    this.showSnackbar("Successfully loaded triples in store");
+    
   }
 
   showSnackbar(message, duration?){

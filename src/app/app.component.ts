@@ -6,13 +6,13 @@ import 'codemirror/mode/turtle/turtle';
 
 import { QueryService } from './services/query.service';
 import { DataService, TabsData, ProjectData } from './services/data.service';
-import { StardogService } from './services/stardog.service';
+import { SPARQLService } from './services/sparql.service';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  providers: [ QueryService, StardogService ]
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
 
@@ -54,7 +54,7 @@ export class AppComponent implements OnInit {
   constructor(
     private _qs: QueryService,
     private _ds: DataService,
-    private _ss: StardogService,
+    private _ss: SPARQLService,
     private route: ActivatedRoute,
     public snackBar: MatSnackBar,
     private titleService: Title
@@ -95,6 +95,8 @@ export class AppComponent implements OnInit {
     var query = this.data.query;
     const data = this.data.triples;
 
+    if(!data) return;
+
     // If no prefix is defined in the query, get it from the turtle file
     if(query.toLowerCase().indexOf('prefix') == -1){
 
@@ -121,7 +123,8 @@ export class AppComponent implements OnInit {
     console.log(ev);
   }
 
-  queryLocalstore(query,data){
+  async queryLocalstore(query,data){
+
     if(this.reasoning){
 
       // Show loader
@@ -144,75 +147,93 @@ export class AppComponent implements OnInit {
             this.showSnackbar(err.name+': '+err.message, 10000);
           }
         });
+
     }else{
+
       // Perform query with client based rdfstore
-      this._qs.doQuery(query,data)
-        .then(res => {
-          this.queryResult = res;
-          this.resultFieldExpanded = true;
-          console.log(res);
-        }).catch(err => {
-          this.queryResult = '';
-          if(err.message && err.name){
-            if(err.indexOf("undefined") != -1){
-              this.showSnackbar("The query did not return any results", 10000);
-            }
-            this.showSnackbar(err.name+': '+err.message, 10000);
+      try{
+        const res = await this._qs.doQuery(query,data);
+
+        this.queryResult = res;
+        this.resultFieldExpanded = true;
+      }catch(err){
+
+        this.queryResult = '';
+        if(err.message && err.name){
+          if(err.indexOf("undefined") != -1){
+            this.showSnackbar("The query did not return any results", 10000);
           }
-        });
+          this.showSnackbar(err.name+': '+err.message, 10000);
+        }
+      }
+
     }
   }
 
-  queryTriplestore(query){
+  async queryTriplestore(query){
+
     var t1 = Date.now();
-    this._ss.query(query,this.reasoning)
-      .subscribe(res => {
-        // show error if status 200 was not recieved
-        if(res.status != '200'){
 
-          if(res.body && res.body.message){
-            this.showSnackbar(res.body.code+': '+res.body.message, 10000);
-          }else{
-            this.showSnackbar(res.status+': '+res.statusText);
-          }
+    // Perform query
+    var qRes;
+    try{
+      if(this.queryType == 'update'){
+        qRes = await this._ss.updateQuery(query);
+        this.showSnackbar("Query successful");
+        return; // Stop here
+      }else{
+        qRes = await this._ss.getQuery(query, this.reasoning);
+      }
+    }catch(err){
+      return this.showSnackbar(err.statusText);
+    }
 
-        }else{
-          var dt = Date.now()-t1;
-          this.queryTime = dt;
+    // Show Stardog error message
+    if(qRes.message){
+      console.log(qRes.message);
+      return this.showSnackbar(qRes.message);
+    }
 
-          // Get body content
-          var data = res.body;
+    // Capture query time
+    var dt = Date.now()-t1;
+    this.queryTime = dt;
 
-          if(data == null){
-            // If it's an update query, it will not return a result. Just show snackbar
-            this.showSnackbar("Query successful");
 
-          // If it's a select query, just return the result as it is
-          }else if(this.queryType == 'select'){
-            this.queryResult = data;
-            this.resultFieldExpanded = true;
-          
-          // If it's a construct query, parse it first
-          }else{
 
-            // To parse the result to the correct format, we run a query on it
-            var query = "CONSTRUCT WHERE {?s ?p ?o}";
-            this._qs.doQuery(query,data)
-              .then(res => {
-                if(res.length == 0){
-                  this.queryResult = null;
-                  this.showSnackbar("Query returned no results. Did you load the correct dataset?");
-                }else{
-                  this.queryResult = res;
-                  this.resultFieldExpanded = true;
-                }
-              }, err => console.log(err));
-          }
-        }
-    
-      }, err => {
-        this.showSnackbar("Something went wrong");
-      });
+    // POST PROCESSING
+
+    // If it's a select query, just return the result as it is
+    if(this.queryType == 'select'){
+      this.queryResult = qRes;
+      this.resultFieldExpanded = true;
+    }
+
+    // If it is a construct query, process data
+    if(this.queryType == 'construct'){
+
+      const q = "CONSTRUCT WHERE {?s ?p ?o}";
+
+      var processed;
+      try{
+        processed = await this._qs.doQuery(q,qRes);
+      }catch(err){
+        console.log(err);
+        return this.showSnackbar(err);
+      }
+
+      if(!processed){
+        this.queryResult = null;
+        this.showSnackbar("Query returned no results. Did you load the correct dataset?");
+        return;
+      }
+
+      this.queryResult = processed;
+      this.resultFieldExpanded = true;
+      
+    }
+
+    // Support for COUNT and DESCRIBE + SHOW RAW
+
   }
 
   resetTriples(){
@@ -272,7 +293,7 @@ export class AppComponent implements OnInit {
   }
 
   showSnackbar(message, duration?){
-    if(!duration) duration = 2000
+    if(!duration) duration = 10000
     this.snackBar.open(message, 'close', {
       duration: duration,
     });

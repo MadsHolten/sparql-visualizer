@@ -63,9 +63,12 @@ import { SelectDialogComponent } from './dialogs/select-dialog.component';
 // Services
 import { ProjectSettingsService } from './services/project-settings.service';
 import { DataService } from './services/data.service';
+import { SPARQLService } from './services/sparql.service';
 
 // Draggable
 import { AngularDraggableModule } from 'angular2-draggable';
+import { QueryService } from './services/query.service';
+import { StardogService } from './services/stardog.service';
 
 
 const appRoutes: Routes = [
@@ -124,7 +127,7 @@ const appRoutes: Routes = [
     FlexLayoutModule,
     AngularDraggableModule
   ],
-  providers: [ ProjectSettingsService, Title, DataService, PrefixSimplePipe ],
+  providers: [ ProjectSettingsService, Title, DataService, PrefixSimplePipe, SPARQLService, QueryService, StardogService ],
   bootstrap: [AppComponent],
   entryComponents: [
     MessageDialogComponent,

@@ -41,6 +41,8 @@ export class QueryService {
 
   doHylarQuery(query,triples){
 
+    console.log("Do Hylar query");
+
     var h = new Hylar();
 
     var saturateAndQuery = async (query,triples) => {
@@ -138,20 +140,42 @@ export class QueryService {
   }
 
   public getQuerytype(query){
-    // Get index of select and construct
-    var selIndex = query.toLowerCase().indexOf('select');
-    var consIndex = query.toLowerCase().indexOf('construct');
 
-    // If both are found in the string, take the one with the lowest index
-    // That means that we can still allow someone to for instance query for
-    // a string that has "select" in it
-    if(selIndex != -1 && consIndex !=-1){
-      return selIndex < consIndex ? 'select' : 'construct';
-    }
-    if(selIndex != -1) return 'select';
-    if(consIndex != -1) return 'construct';
-    // If it is an insert query or something else return null
-    return null;
+    var keyWords = [
+      {text: 'select', index: -1},
+      {text: 'construct', index: -1},
+      {text: 'count', index: -1},
+      {text: 'describe', index: -1},
+      {text: 'insert', index: -1},
+      {text: 'delete', index: -1}
+    ];
+
+    // Get indexes and set a variable if at least one matches + store lowest index
+
+    var match = false;  // Set to true if some keyword match is found
+    var low = Infinity;
+
+    keyWords = keyWords.map(item => {
+      item.index = query.toLowerCase().indexOf(item.text);
+      if(item.index != -1){
+        match = true;
+        if(item.index < low) low = item.index;
+      }
+      return item;
+    });
+
+    // If none of the keywords match return null
+    if(!match) return null;
+
+    // If more exist, take the lowest
+    var lowest = keyWords.find(item => item.index == low);
+    if(!lowest) return null;
+    const type = lowest.text;
+
+    if(type == 'insert' || type == 'delete') return 'update';
+
+    return type;
+
   }
 
   public sparqlJSON(data){

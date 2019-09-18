@@ -15,6 +15,15 @@
 
     <!-- Open -->
     <mat-form-field class="full-width">
+        <mat-label>Triplestore</mat-label>
+        <mat-select [(ngModel)]="projectSettings.tripleStore" (selectionChange)="onDataChange()">
+            <mat-option *ngFor="let item of triplestoreOptions" [value]="item">
+                {{item}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
         <input matInput 
         type="text"
         placeholder="Project endpoint" 
@@ -22,7 +31,23 @@
         (input)="onDataChange()">
     </mat-form-field>
 
-    <mat-form-field class="full-width">
+    <mat-form-field class="full-width" *ngIf="projectSettings.tripleStore == 'Fuseki'">
+        <input matInput 
+        type="text"
+        placeholder="Project update endpoint" 
+        [(ngModel)]="projectSettings.updateEndpoint" 
+        (input)="onDataChange()">
+    </mat-form-field>
+
+    <mat-form-field class="full-width" *ngIf="projectSettings.tripleStore == 'Fuseki'">
+        <input matInput 
+        type="text"
+        placeholder="Project data endpoint" 
+        [(ngModel)]="projectSettings.dataEndpoint" 
+        (input)="onDataChange()">
+    </mat-form-field>
+
+    <mat-form-field class="full-width" *ngIf="projectSettings.tripleStore == 'Stardog'">
         <input matInput 
         type="text"
         placeholder="Project database" 
