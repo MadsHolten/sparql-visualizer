@@ -42,10 +42,20 @@ export class SPARQLService {
 
         this.getTriplestoreSettings();
 
+        // Escape plus
+        query = query.replace(/\+/g, "%2B");
+
+        var options: any = {};
+
         if(!mimeType){
             // Get query type
             const queryType = this._qs.getQuerytype(query);
-            if(queryType == 'construct') mimeType = 'text/turtle';
+            if(queryType == 'construct'){
+                options.responseType = 'text';
+                options.headers = {'Accept': 'text/turtle'};
+            }else{
+                options.headers = {'Accept': 'application/sparql-results+json'};
+            }
         }
 
         if(this.triplestore == 'stardog'){
@@ -53,24 +63,20 @@ export class SPARQLService {
         }
 
         // Default behavior is Fuseki
+        options.headers['Authorization'] = this.auth;
+        options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 
-        var params: any = {query};
-        var headers: any = {'Authorization': this.auth};
-        var options: any = {headers};
+        const body = `query=${query}`;
 
-        if(mimeType){
-            params.mimeType = mimeType;
-            options.responseType = 'text';
-        }
-
-        options.params = params;
-
-        return this._http.get(this.endpoint, options).toPromise();
+        return this._http.post(this.endpoint, body, options).toPromise();
     }
 
     public updateQuery(query): Promise<any>{
 
         this.getTriplestoreSettings();
+
+        // Escape plus
+        query = query.replace(/\+/g, "%2B");
 
         if(this.triplestore == 'stardog'){
             return this._ss.query(query);
