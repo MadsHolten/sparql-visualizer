@@ -311,4 +311,26 @@ export class AppComponent implements OnInit {
     console.log(ev);
   }
 
+  buildInsertQuery(){
+    let t = this.data.triples;
+
+    let lines = t.split('\n');
+
+    const prefixes = lines
+                      .filter(l => l.includes('@prefix'))       // Get lines with @prefix
+                      .map(l => l.trim())                       // Remove whitespace from both ends of a string
+                      .map(l => l.replace('@prefix', "PREFIX")) // Replace @prefix with PREFIX
+                      .map(l => l.slice(0, -1))                 // Remove dots at end
+                      .map(l => l.trim())                       // Remove whitespace from both ends of a string
+                      .join('\n');                              // Concat to newline seperated string
+
+    const rest = lines
+                  .filter(l => !l.includes('@prefix'))
+                  .filter(l => l.trim() != "")
+                  .map(l => `\t${l}`)
+                  .join('\n');
+
+    this.data.query = `${prefixes}\n\nINSERT DATA{\n${rest}\n}`;
+  }
+
 }

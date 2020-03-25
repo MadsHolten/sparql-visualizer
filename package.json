@@ -10,7 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-git": "ng build --prod --base-href https://madsholten.github.io/sparql-visualizer/ && npx ngh"
+    "build-git": "ng build --prod --base-href https://madsholten.github.io/sparql-visualizer/ && npx ngh",
+    "build-zip": "ng build --prod && cd ./dist && zip -r sparql-viz.zip * && cd .."
   },
   "private": true,
   "dependencies": {

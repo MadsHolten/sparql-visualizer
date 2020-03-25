@@ -28,15 +28,17 @@
             [config]="cmConfig">
         </codemirror>
 
-        <div class="full-width" fxLayout="row">
-            <button 
+        <div class="full-width" fxLayout="row" fxLayoutGap="10px">
+            <button
+                fxFlex="20%"
                 mat-raised-button 
                 color="primary" 
                 (click)="fireQuery()">
                 Query <mat-icon>play_circle_outline</mat-icon>
             </button>
 
-            <button 
+            <button
+                fxFlex="20%"
                 mat-raised-button 
                 (click)="resetQuery()">
                 Reset <mat-icon>cached</mat-icon>

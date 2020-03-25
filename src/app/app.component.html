@@ -134,19 +134,31 @@
                                 [config]="cmConfig">
                             </codemirror>
 
-                            <div class="full-width" fxLayout="row">
-                                <button 
+                            <div class="full-width" fxLayout="row" fxLayoutGap="10px">
+                                
+                                <button fxFlex="20%"
                                     mat-raised-button 
                                     color="primary" 
                                     (click)="doQuery()">
                                     Update <mat-icon>play_circle_outline</mat-icon>
                                 </button>
 
-                                <button 
+                                <button fxFlex="20%"
                                     mat-raised-button 
                                     (click)="resetTriples()">
                                     Reset <mat-icon>cached</mat-icon>
                                 </button>
+
+                                <span fxFlex="grow"></span>
+                        
+                                <button
+                                    *ngIf="!localStore"
+                                    fxFlex="30%"
+                                    mat-raised-button 
+                                    (click)="buildInsertQuery()">
+                                    Build INSERT query
+                                </button>
+
                             </div>
                         </div>
 
@@ -234,7 +246,7 @@
                         [config]="cmConfig">
                     </codemirror>
 
-                    <div class="full-width" fxLayout="row">
+                    <div class="full-width" fxLayout="row" fxLayoutGap="10px">
                         <button 
                             mat-raised-button 
                             color="primary" 
@@ -247,6 +259,7 @@
                             (click)="resetTriples()">
                             Reset <mat-icon>cached</mat-icon>
                         </button>
+
                     </div>
                 </div>
             </mat-expansion-panel>

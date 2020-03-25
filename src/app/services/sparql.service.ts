@@ -83,10 +83,10 @@ export class SPARQLService {
         }
 
         // Default behavior is Fuseki
-        var headers: any = {'Authorization': this.auth, 'Content-Type': 'application/x-www-form-urlencoded'};
+        var headers: any = {'Authorization': this.auth, 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'};
         var options: any = {observe: 'response', responseType: 'text', headers};
 
-        const body = `update=${query}`;
+        const body = `update=${encodeURIComponent(query)}`;
 
         return this._http.post(this.updateEndpoint, body, options).toPromise();
 
