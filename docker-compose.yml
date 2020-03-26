@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+
+  sparql-visualizer:
+    container_name: sparql-visualizer
+    #command: ng build
+    command: sh -c "cd /usr/src/app; node_modules/.bin/ng serve --host 0.0.0.0 --poll 1 --disableHostCheck"
+    build: .
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./e2e:/usr/src/app/e2e
+      - ./src:/usr/src/app/src
+      - ./angular-cli.json:/usr/src/app/angular-cli.json
+      - ./tsconfig.json:/usr/src/app/tsconfig.json
+      - ./tslint.json:/usr/src/app/tslint.json
+    depends_on:
+      - fuseki
+
+  fuseki:
+    container_name: fuseki
+    restart: on-failure
+    image: stain/jena-fuseki
+    ports:
+      - "3030:3030"
+    environment:
+      - JVM_ARGS=-Xmx10g
+    volumes:
+      - fuseki-data:/fuseki
+      - ./fuseki-staging:/staging
+      - ./shiro.ini:/fuseki/shiro.ini
+      - ./test-ds-in-mem.ttl:/fuseki/configuration/test-ds-in-mem.ttl
+      - ./test-ds-reasoning.ttl:/fuseki/configuration/test-ds-reasoning.ttl
+
+volumes:
+  fuseki-data:

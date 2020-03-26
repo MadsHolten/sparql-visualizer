@@ -7,6 +7,14 @@ This is a simple app to visualize and communicate the content of a knowledge bas
 ## Collaborators
 [Mathias Bonduel](researchgate.net/profile/Mathias_Bonduel)
 
+## 0. Run in DOCKER
+1. Install DOCKER
+2. `docker-compose build`
+3. `docker-compose up`
+4. Open [http://localhost:3030](http://localhost:3030) to confirm that Fuseki is running *(user: admin, pw: admin)* and that two dataset are available (*/Reasoning* and */ds*). The first one is a persistent store with reasoning and the latter is an in-mem store. Both expose a SHACL-endpoint
+5. Open [http://localhost:4200](http://localhost:4200) to confirm that the app is running
+6. Click the double arrows *(switch to datasets)* and use Fuseki as triplestore option and *http://localhost:3030/Reasoning/sparql*, *http://localhost:3030/Reasoning/update* and *http://localhost:3030/Reasoning/data* as *endpoint*, *update endpoint* and *data endpoint* respectively
+
 ## 1. Quickstart
 
 * You can run the app and make your own samples without having to install anything. Just use the **online version** of the app: https://madsholten.github.io/sparql-visualizer/. Read section "3. Developing new examples" for more information about adding your own samples.

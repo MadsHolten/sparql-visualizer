@@ -1,0 +1,50 @@
+@prefix :      <http://base/#> .
+@prefix tdb:   <http://jena.hpl.hp.com/2008/tdb#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ja:    <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix fuseki: <http://jena.apache.org/fuseki#> .
+
+:service_tdb_all
+        a                                       fuseki:Service ;
+        rdfs:label                              "TDB Reasoning" ;
+        fuseki:dataset                          :tdb_dataset_readwrite ;
+        fuseki:name                             "Reasoning" ;
+        fuseki:endpoint [ 
+            fuseki:operation fuseki:query ; 
+            fuseki:name "sparql"
+        ] , [
+            fuseki:operation fuseki:query ; 
+            fuseki:name "query"
+        ] , [
+            fuseki:operation fuseki:shacl ;
+            fuseki:name "shacl" 
+        ] , [
+            fuseki:operation fuseki:update ; 
+            fuseki:name "update" 
+        ] , [
+            fuseki:operation fuseki:gsp-r ; 
+            fuseki:name "get" 
+        ] , [
+            fuseki:operation fuseki:gsp-rw ; 
+            fuseki:name "data"
+        ] , [ 
+            fuseki:operation fuseki:upload ;
+            fuseki:name "upload"
+        ] .
+
+:tdb_dataset_readwrite
+        a                                       ja:RDFDataset ;
+        ja:defaultGraph                         :tdb_dataset_reasoning .
+
+:tdb_dataset_reasoning
+        ja:baseModel                            :tdb_dataset_graph ;
+        a                                       ja:InfModel ;
+        ja:reasoner                             [
+            ja:reasonerURL <http://jena.hpl.hp.com/2003/OWLFBRuleReasoner>
+        ] .
+
+:tdb_dataset_graph
+        a                                       tdb:GraphTDB ;
+        a                                       ja:Model ;
+        tdb:location                            "/fuseki/databases/Reasoning" .

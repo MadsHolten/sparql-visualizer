@@ -10,6 +10,7 @@ import { DataService } from '../services/data.service';
 import { InputDialogComponent } from '../dialogs/input-dialog.component';
 import { SelectDialogComponent } from '../dialogs/select-dialog.component';
 import { SPARQLService } from '../services/sparql.service';
+import { FusekiService } from '../services/fuseki.service';
 
 export interface ProjectSettings {
   endpoint: string;
@@ -19,13 +20,14 @@ export interface ProjectSettings {
   database?: string;
   username?: string;
   password?: string;
+  host?: string;
 }
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css'],
-  providers: [ ProjectSettingsService, SPARQLService ]
+  providers: [ ProjectSettingsService, SPARQLService , FusekiService ]
 })
 export class SettingsComponent implements OnInit, OnChanges {
 
@@ -43,7 +45,8 @@ export class SettingsComponent implements OnInit, OnChanges {
     private _ss: SPARQLService,
     private _ds: DataService,
     private dialog: MatDialog,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private _fs: FusekiService
   ) { }
 
   ngOnInit() {
@@ -194,6 +197,28 @@ export class SettingsComponent implements OnInit, OnChanges {
     this.showSnackbar("Successfully loaded triples in store");
     
   }
+
+  // NB! TRIED IMPLEMENTING DS CREATION BUT THIS REQUEST IS NOT POSSIBLE DUE TO CORS POLICY
+  // async addFusekiTestStore(){
+
+  //   try{
+  //     const res = this._fs.getDatasets(this.projectSettings.host, this.projectSettings.username, this.projectSettings.password);
+  //     console.log(res);
+  //   }catch(e){
+  //     console.log(e)
+  //   }
+
+
+  //   console.log("add test store")
+  //   // if(!this.projectSettings.host) return this.showSnackbar("Please specify a host");
+  //   // try{
+  //   //   const res = await this._fs.createNewDataset(this.projectSettings.host, this.projectSettings.username, this.projectSettings.password);
+  //   //   console.log(res);
+  //   //   this.showSnackbar("Successfully created store");
+  //   // }catch(e){
+  //   //   this.showSnackbar(e);
+  //   // }
+  // }
 
   showSnackbar(message, duration?){
     if(!duration) duration = 2000

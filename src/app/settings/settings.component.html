@@ -23,6 +23,15 @@
         </mat-select>
     </mat-form-field>
 
+    <!-- NB! TRIED IMPLEMENTING DS LOOKUP BUT THIS REQUEST IS NOT POSSIBLE DUE TO CORS POLICY -->
+    <!-- <mat-form-field class="full-width">
+        <input matInput 
+        type="text"
+        placeholder="Project host" 
+        [(ngModel)]="projectSettings.host"
+        (input)="onDataChange()">
+    </mat-form-field> -->
+
     <mat-form-field class="full-width">
         <input matInput 
         type="text"
@@ -70,6 +79,16 @@
         [(ngModel)]="projectSettings.password" 
         (input)="onDataChange()">
     </mat-form-field>
+
+    <!-- NB! TRIED IMPLEMENTING DS CREATION BUT THIS REQUEST IS NOT POSSIBLE DUE TO CORS POLICY -->
+    <!-- <div *ngIf="projectSettings.tripleStore == 'Fuseki'">
+        <button 
+            fxFlex="100%"
+            mat-raised-button 
+            (click)="addFusekiTestStore()">
+            Add test store
+        </button>
+    </div> -->
 
     </mat-expansion-panel>
 
