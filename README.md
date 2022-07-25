@@ -77,6 +77,8 @@ The easiest way to make new samples, is by using the online version of the app, 
 
 ## 4. Local development
 
+**NB!** The app is running in an old version of Angular, so in order to develop on it the easiest way is to use nvm and use version `9.4.0` of node and then serve the app using a version of Angular CLI that corresponds to Angular version 5 (`npx -p @angular/cli@1.7.4 ng serve`).
+
 All participants are invited to improve this app. Simply fork the project and run `npm install` to install the dependencies. Then run `ng serve` to run a local development server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change and save any of the source files. See section 5, for a more detailed installation guide.
 
 The tabs (and their title, descriptions, triples and queries components) are generated based on `src/assets/data.json`.
