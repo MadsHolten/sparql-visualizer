@@ -5,7 +5,7 @@
 This is a simple app to visualize and communicate the content of a knowledge base in the RDF format. The project is open source and we welcome all who is interested to participate.
 
 ## Collaborators
-[Mathias Bonduel](researchgate.net/profile/Mathias_Bonduel)
+[Mathias Bonduel](https://www.researchgate.net/profile/Mathias-Bonduel)
 
 ## 0. Run in DOCKER
 1. Install DOCKER
