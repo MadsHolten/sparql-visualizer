@@ -45,7 +45,7 @@
     "rdfstore": "^0.9.17",
     "rxjs": "^5.5.2",
     "screenfull": "^3.3.2",
-    "stardog": "^1.0.1",
+    "stardog": "^4.6.1",
     "url-join": "^4.0.1",
     "zone.js": "^0.8.14"
   },
